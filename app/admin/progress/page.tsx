@@ -14,6 +14,9 @@ const [users,setUsers] = useState<any[]>([]);
 const [progressData,setProgressData] = useState<any[]>([]);
 const [totalSessions,setTotalSessions] = useState(0);
 
+const [search,setSearch] = useState("");
+const [clusterFilter,setClusterFilter] = useState("");
+
 useEffect(()=>{
 
 const loadData = async ()=>{
@@ -31,6 +34,8 @@ id:doc.id,
 ...doc.data()
 });
 });
+
+setUsers(usersList);
 
 /* SESSIONS */
 
@@ -63,8 +68,8 @@ const completed =
 userProgress.length;
 
 const percentage =
-totalSessions
-? Math.round((completed/totalSessions)*100)
+sessionsSnap.size
+? Math.round((completed/sessionsSnap.size)*100)
 :0;
 
 return{
@@ -84,7 +89,28 @@ setProgressData(results);
 
 loadData();
 
-},[totalSessions]);
+},[]);
+
+const filteredData =
+progressData.filter(user=>{
+
+const matchName =
+user.name?.toLowerCase()
+.includes(search.toLowerCase());
+
+const matchCluster =
+clusterFilter
+? user.cluster === clusterFilter
+: true;
+
+return matchName && matchCluster;
+
+});
+
+/* clusters únicos */
+
+const clusters =
+[...new Set(progressData.map(u=>u.cluster))];
 
 return(
 
@@ -96,6 +122,53 @@ color:"white"
 }}>
 
 <h1>Panel de progreso de extensionistas</h1>
+
+{/* filtros */}
+
+<div style={{
+marginTop:"20px",
+display:"flex",
+gap:"20px"
+}}>
+
+<input
+placeholder="Buscar extensionista"
+value={search}
+onChange={(e)=>setSearch(e.target.value)}
+style={{
+padding:"8px",
+background:"#222",
+border:"1px solid #444",
+color:"white"
+}}
+/>
+
+<select
+value={clusterFilter}
+onChange={(e)=>setClusterFilter(e.target.value)}
+style={{
+padding:"8px",
+background:"#222",
+border:"1px solid #444",
+color:"white"
+}}
+>
+
+<option value="">Todos los clusters</option>
+
+{clusters.map((cluster,i)=>(
+
+<option key={i} value={cluster}>
+{cluster}
+</option>
+
+))}
+
+</select>
+
+</div>
+
+{/* tabla */}
 
 <table style={{
 width:"100%",
@@ -121,7 +194,7 @@ borderBottom:"1px solid #444"
 
 <tbody>
 
-{progressData.map((user,i)=>(
+{filteredData.map((user,i)=>(
 
 <tr key={i} style={{
 borderBottom:"1px solid #333"
