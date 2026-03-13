@@ -3,68 +3,89 @@
 import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase/config";
+import { useRouter } from "next/navigation";
 
-export default function Login() {
+export default function Login(){
+
+  const router = useRouter();
 
   const [email,setEmail] = useState("");
   const [password,setPassword] = useState("");
 
-  const handleLogin = async () => {
+  const login = async ()=>{
 
-    try {
+    try{
 
-      await signInWithEmailAndPassword(auth,email,password);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
 
-      alert("Login exitoso");
+      const user = userCredential.user;
 
-      window.location.href="/dashboard";
+      // ADMIN EMAIL
+      if(user.email === "santiago@biodiversal.co"){
+        router.push("/admin");
+      }else{
+        router.push("/dashboard");
+      }
 
-    } catch(error){
+    }catch(error){
 
-      alert("Error en login");
+      alert("Error al iniciar sesión");
 
     }
 
-  }
+  };
 
-  return (
+  return(
 
     <main style={{
       minHeight:"100vh",
+      background:"#111",
+      color:"white",
       display:"flex",
       flexDirection:"column",
-      justifyContent:"center",
       alignItems:"center",
-      background:"#1A1A1A",
-      color:"white"
+      justifyContent:"center",
+      fontFamily:"Arial"
     }}>
 
-      <h1>Coffee Biochar Academy</h1>
-
-      <h2>Login</h2>
+      <h1>Iniciar sesión</h1>
 
       <input
-        placeholder="Email"
+        placeholder="Correo"
         value={email}
         onChange={(e)=>setEmail(e.target.value)}
-        style={{margin:"10px",padding:"10px"}}
+        style={{
+          margin:"10px",
+          padding:"10px",
+          width:"250px"
+        }}
       />
 
       <input
         type="password"
-        placeholder="Password"
+        placeholder="Contraseña"
         value={password}
         onChange={(e)=>setPassword(e.target.value)}
-        style={{margin:"10px",padding:"10px"}}
+        style={{
+          margin:"10px",
+          padding:"10px",
+          width:"250px"
+        }}
       />
 
       <button
-        onClick={handleLogin}
+        onClick={login}
         style={{
+          marginTop:"20px",
           padding:"10px 20px",
           background:"#2E7D32",
           border:"none",
-          color:"white"
+          color:"white",
+          cursor:"pointer"
         }}
       >
         Entrar
@@ -72,6 +93,6 @@ export default function Login() {
 
     </main>
 
-  )
+  );
 
 }
