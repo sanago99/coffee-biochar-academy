@@ -347,6 +347,27 @@ Join Session
 
 </a>
 
+{session.material && (
+
+<a
+href={session.material}
+target="_blank"
+style={{
+marginLeft:"10px",
+padding:"6px 12px",
+background:"#1E88E5",
+color:"white",
+textDecoration:"none",
+borderRadius:"4px"
+}}
+>
+
+Material
+
+</a>
+
+)}
+
 {completed.includes(session.id) ? (
 
 <span
