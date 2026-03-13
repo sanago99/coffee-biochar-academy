@@ -18,19 +18,17 @@ onAuthStateChanged
 
 import { useRouter } from "next/navigation";
 
-import jsPDF from "jspdf";
-import QRCode from "qrcode";
-
 export default function Dashboard(){
 
 const router = useRouter();
 
 const [modules,setModules] = useState<any[]>([]);
 const [sessions,setSessions] = useState<any[]>([]);
-const [evaluations,setEvaluations] = useState<any[]>([]);
 const [completed,setCompleted] = useState<string[]>([]);
 
 const [studentName,setStudentName] = useState("");
+const [moduleScores,setModuleScores] = useState<any>({});
+
 const [completedCount,setCompletedCount] = useState(0);
 
 const [openModule,setOpenModule] =
@@ -46,7 +44,10 @@ await getDoc(doc(db,"users",uid));
 if(userDoc.exists()){
 
 const data:any = userDoc.data();
+
 setStudentName(data.name);
+
+setModuleScores(data.moduleScores || {});
 
 }
 
@@ -67,8 +68,6 @@ id:doc.id,
 ...doc.data()
 });
 });
-
-/* ordenar por order */
 
 modulesList.sort((a,b)=>a.order - b.order);
 
@@ -109,19 +108,6 @@ setCompletedCount(completedSessions.length);
 setCompleted(
 completedSessions.map(p=>p.sessionId)
 );
-
-/* evaluations */
-
-const evalSnap =
-await getDocs(collection(db,"evaluations"));
-
-const evalList:any[]=[];
-
-evalSnap.forEach(doc=>{
-evalList.push(doc.data());
-});
-
-setEvaluations(evalList);
 
 };
 
@@ -170,89 +156,6 @@ completedAt:new Date()
 
 setCompleted([...completed,sessionId]);
 setCompletedCount(completedCount+1);
-
-};
-
-/* verificar módulo aprobado */
-
-const modulePassed = (order:number)=>{
-
-const uid = auth.currentUser?.uid;
-
-const evaluation = evaluations.find(e =>
-e.userId === uid &&
-e.moduleOrder === order &&
-e.passed === true
-);
-
-return !!evaluation;
-
-};
-
-/* certificado */
-
-const generateCertificate = async ()=>{
-
-const uid = auth.currentUser?.uid;
-
-const certSnap =
-await getDocs(collection(db,"certificates"));
-
-let certificateId="";
-
-const existing =
-certSnap.docs.find(
-doc => doc.data().userId === uid
-);
-
-if(existing){
-
-certificateId =
-existing.data().certificateId;
-
-}else{
-
-certificateId =
-"CBA-" + Date.now();
-
-await addDoc(collection(db,"certificates"),{
-
-certificateId,
-name:studentName,
-userId:uid,
-date:new Date().toISOString()
-
-});
-
-}
-
-const verificationUrl =
-"https://coffeebiochar.academy/certificate/"
-+certificateId;
-
-const qr =
-await QRCode.toDataURL(verificationUrl);
-
-const pdf = new jsPDF("landscape");
-
-pdf.setFontSize(28);
-pdf.text("Coffee Biochar Academy",148,60,{align:"center"});
-
-pdf.setFontSize(18);
-pdf.text("CERTIFICATE OF COMPLETION",148,80,{align:"center"});
-
-pdf.setFontSize(26);
-pdf.text(studentName,148,110,{align:"center"});
-
-pdf.setFontSize(16);
-pdf.text("Certified Coffee Biochar Extensionist",148,130,{align:"center"});
-
-pdf.setFontSize(12);
-pdf.text("Certificate ID: "+certificateId,148,150,{align:"center"});
-
-pdf.addImage(qr,"PNG",230,140,40,40);
-
-pdf.save("coffee-biochar-certificate.pdf");
 
 };
 
@@ -320,9 +223,10 @@ unlocked = true;
 
 }else{
 
-const previousOrder = module.order - 1;
+const previousScore =
+moduleScores[module.order - 1];
 
-unlocked = modulePassed(previousOrder);
+unlocked = previousScore >= 60;
 
 }
 
@@ -482,24 +386,6 @@ Tomar evaluación del módulo
 );
 
 })}
-
-{completedCount >= sessions.length && (
-
-<button
-onClick={generateCertificate}
-style={{
-marginTop:"30px",
-padding:"12px 24px",
-background:"#2E7D32",
-border:"none",
-color:"white",
-cursor:"pointer"
-}}
->
-Descargar certificado
-</button>
-
-)}
 
 </main>
 
