@@ -21,7 +21,7 @@ export default function AdminProgress(){
 
 const [progressData,setProgressData] = useState<any[]>([]);
 const [clusterStats,setClusterStats] = useState<any[]>([]);
-const [totalSessions,setTotalSessions] = useState(0);
+const [moduleStats,setModuleStats] = useState<any[]>([]);
 
 const [stats,setStats] = useState({
 users:0,
@@ -52,7 +52,7 @@ id:doc.id,
 const sessionsSnap =
 await getDocs(collection(db,"sessions"));
 
-setTotalSessions(sessionsSnap.size);
+const totalSessions = sessionsSnap.size;
 
 /* PROGRESS */
 
@@ -78,8 +78,8 @@ const completed =
 userProgress.length;
 
 const percentage =
-sessionsSnap.size
-? Math.round((completed/sessionsSnap.size)*100)
+totalSessions
+? Math.round((completed/totalSessions)*100)
 :0;
 
 return{
@@ -87,7 +87,8 @@ return{
 name:user.name,
 cluster:user.cluster,
 municipio:user.municipio,
-progress:percentage
+progress:percentage,
+moduleScores:user.moduleScores || {}
 
 };
 
@@ -141,6 +142,43 @@ progress:Math.round(c.total/c.count)
 
 setClusterStats(clusterData);
 
+/* AGRUPAR POR MODULO */
+
+const moduleMap:any = {};
+
+usersList.forEach(user=>{
+
+const scores = user.moduleScores || {};
+
+Object.keys(scores).forEach(module=>{
+
+if(!moduleMap[module]){
+
+moduleMap[module] = {
+module:"M"+module,
+total:0,
+count:0
+};
+
+}
+
+moduleMap[module].total += scores[module];
+moduleMap[module].count++;
+
+});
+
+});
+
+const moduleData =
+Object.values(moduleMap).map((m:any)=>({
+
+module:m.module,
+score:Math.round(m.total/m.count)
+
+}));
+
+setModuleStats(moduleData);
+
 };
 
 loadData();
@@ -172,7 +210,9 @@ padding:"20px",
 borderRadius:"8px"
 }}>
 <h3>👩‍🌾 Extensionistas</h3>
-<p style={{fontSize:"24px"}}>{stats.users}</p>
+<p style={{fontSize:"24px"}}>
+{stats.users}
+</p>
 </div>
 
 <div style={{
@@ -181,7 +221,9 @@ padding:"20px",
 borderRadius:"8px"
 }}>
 <h3>📊 Progreso promedio</h3>
-<p style={{fontSize:"24px"}}>{stats.avgProgress}%</p>
+<p style={{fontSize:"24px"}}>
+{stats.avgProgress}%
+</p>
 </div>
 
 <div style={{
@@ -190,12 +232,14 @@ padding:"20px",
 borderRadius:"8px"
 }}>
 <h3>🎓 Certificados</h3>
-<p style={{fontSize:"24px"}}>{stats.certificates}</p>
+<p style={{fontSize:"24px"}}>
+{stats.certificates}
+</p>
 </div>
 
 </div>
 
-{/* GRÁFICO */}
+{/* GRAFICO CLUSTER */}
 
 <h2 style={{marginTop:"40px"}}>
 Progreso promedio por cluster
@@ -210,13 +254,42 @@ height:"300px"
 
 <BarChart data={clusterStats}>
 
-<XAxis dataKey="cluster" />
+<XAxis dataKey="cluster"/>
 
-<YAxis />
+<YAxis/>
 
-<Tooltip />
+<Tooltip/>
 
-<Bar dataKey="progress" />
+<Bar dataKey="progress"/>
+
+</BarChart>
+
+</ResponsiveContainer>
+
+</div>
+
+{/* GRAFICO MODULOS */}
+
+<h2 style={{marginTop:"40px"}}>
+Score promedio por módulo
+</h2>
+
+<div style={{
+width:"100%",
+height:"300px"
+}}>
+
+<ResponsiveContainer>
+
+<BarChart data={moduleStats}>
+
+<XAxis dataKey="module"/>
+
+<YAxis/>
+
+<Tooltip/>
+
+<Bar dataKey="score"/>
 
 </BarChart>
 
@@ -238,11 +311,25 @@ borderCollapse:"collapse"
 borderBottom:"1px solid #444"
 }}>
 
-<th style={{textAlign:"left",padding:"10px"}}>Extensionista</th>
-<th style={{textAlign:"left",padding:"10px"}}>Cluster</th>
-<th style={{textAlign:"left",padding:"10px"}}>Municipio</th>
-<th style={{textAlign:"left",padding:"10px"}}>Progreso</th>
-<th style={{textAlign:"left",padding:"10px"}}>Certificado</th>
+<th style={{textAlign:"left",padding:"10px"}}>
+Extensionista
+</th>
+
+<th style={{textAlign:"left",padding:"10px"}}>
+Cluster
+</th>
+
+<th style={{textAlign:"left",padding:"10px"}}>
+Municipio
+</th>
+
+<th style={{textAlign:"left",padding:"10px"}}>
+Progreso
+</th>
+
+<th style={{textAlign:"left",padding:"10px"}}>
+Certificado
+</th>
 
 </tr>
 
@@ -273,12 +360,7 @@ borderBottom:"1px solid #333"
 </td>
 
 <td style={{padding:"10px"}}>
-
-{user.progress === 100
-? "✔"
-: "❌"
-}
-
+{user.progress===100 ? "✔" : "❌"}
 </td>
 
 </tr>
