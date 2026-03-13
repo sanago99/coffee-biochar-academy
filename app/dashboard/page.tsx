@@ -54,7 +54,7 @@ setStudentName(data.name);
 
 const loadData = async (uid:string)=>{
 
-/* modules */
+/* MODULES */
 
 const modulesSnap =
 await getDocs(collection(db,"modules"));
@@ -72,7 +72,7 @@ modulesList.sort((a,b)=>a.order - b.order);
 
 setModules(modulesList);
 
-/* sessions */
+/* SESSIONS */
 
 const sessionsSnap =
 await getDocs(collection(db,"sessions"));
@@ -88,7 +88,7 @@ id:doc.id,
 
 setSessions(sessionsList);
 
-/* progress */
+/* PROGRESS */
 
 const progressSnap =
 await getDocs(collection(db,"progress"));
@@ -108,7 +108,7 @@ setCompleted(
 completedSessions.map(p=>p.sessionId)
 );
 
-/* evaluations */
+/* EVALUATIONS */
 
 const evalSnap =
 await getDocs(collection(db,"evaluations"));
@@ -142,12 +142,16 @@ return () => unsubscribe();
 
 },[]);
 
+/* LOGOUT */
+
 const logout = async ()=>{
 
 await signOut(auth);
 router.push("/login");
 
 };
+
+/* COMPLETE SESSION */
 
 const completeSession = async (sessionId:string)=>{
 
@@ -167,17 +171,23 @@ setCompletedCount(completedCount+1);
 
 };
 
+/* CHECK IF MODULE APPROVED */
+
 const modulePassed = (moduleId:string)=>{
 
-const result = evaluations.find(
-e =>
-e.userId === auth.currentUser?.uid &&
-e.moduleId === moduleId
+const uid = auth.currentUser?.uid;
+
+const result = evaluations.find(e =>
+e.userId === uid &&
+e.moduleId === moduleId &&
+e.passed === true
 );
 
-return result?.passed === true;
+return !!result;
 
 };
+
+/* CERTIFICATE */
 
 const generateCertificate = async ()=>{
 
@@ -275,9 +285,7 @@ cursor:"pointer",
 borderRadius:"6px"
 }}
 >
-
 Cerrar sesión
-
 </button>
 
 <h1>Coffee Biochar Academy</h1>
@@ -303,9 +311,13 @@ s=>s.module===module.id
 const previousModule =
 modules[index-1];
 
-const unlocked =
-index === 0 ||
-modulePassed(previousModule?.id);
+let unlocked=false;
+
+if(index===0){
+unlocked=true;
+}else{
+unlocked = modulePassed(previousModule.id);
+}
 
 const isOpen =
 openModule===module.id;
@@ -376,9 +388,7 @@ textDecoration:"none",
 borderRadius:"4px"
 }}
 >
-
 Join Session
-
 </a>
 
 {session.material && (
@@ -395,9 +405,7 @@ textDecoration:"none",
 borderRadius:"4px"
 }}
 >
-
 Material
-
 </a>
 
 )}
@@ -411,9 +419,7 @@ color:"#2E7D32",
 fontWeight:"bold"
 }}
 >
-
 ✓ Completada
-
 </span>
 
 ) : (
@@ -429,9 +435,7 @@ color:"white",
 cursor:"pointer"
 }}
 >
-
 Completar
-
 </button>
 
 )}
@@ -457,9 +461,7 @@ textDecoration:"none",
 borderRadius:"6px"
 }}
 >
-
 Tomar evaluación del módulo
-
 </a>
 
 )}
@@ -487,9 +489,7 @@ color:"white",
 cursor:"pointer"
 }}
 >
-
 Descargar certificado
-
 </button>
 
 )}
