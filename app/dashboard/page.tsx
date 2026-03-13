@@ -6,8 +6,9 @@ import { collection, getDocs, addDoc } from "firebase/firestore";
 import { signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import jsPDF from "jspdf";
+import QRCode from "qrcode";
 
-export default function Dashboard() {
+export default function Dashboard(){
 
   const router = useRouter();
 
@@ -48,7 +49,6 @@ export default function Dashboard() {
   const logout = async ()=>{
 
     await signOut(auth);
-
     router.push("/login");
 
   };
@@ -79,12 +79,17 @@ export default function Dashboard() {
 
       const certificateId = "CBA-" + Date.now();
 
+      const verificationUrl =
+        "https://coffeebiochar.academy/certificate/" + certificateId;
+
       await addDoc(collection(db,"certificates"),{
         certificateId: certificateId,
         name: studentName,
         userId: auth.currentUser?.uid,
         date: new Date().toISOString()
       });
+
+      const qrImage = await QRCode.toDataURL(verificationUrl);
 
       const doc = new jsPDF();
 
@@ -103,6 +108,11 @@ export default function Dashboard() {
       doc.setFontSize(12);
       doc.text("Certificate ID:",105,130,{align:"center"});
       doc.text(certificateId,105,138,{align:"center"});
+
+      doc.text("Verify:",105,150,{align:"center"});
+      doc.text(verificationUrl,105,158,{align:"center"});
+
+      doc.addImage(qrImage,"PNG",90,170,30,30);
 
       doc.save("coffee-biochar-certificate.pdf");
 
