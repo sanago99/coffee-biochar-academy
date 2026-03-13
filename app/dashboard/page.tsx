@@ -68,6 +68,8 @@ id:doc.id,
 });
 });
 
+/* ordenar por order */
+
 modulesList.sort((a,b)=>a.order - b.order);
 
 setModules(modulesList);
@@ -173,13 +175,13 @@ setCompletedCount(completedCount+1);
 
 /* verificar módulo aprobado */
 
-const modulePassed = (moduleId:string)=>{
+const modulePassed = (order:number)=>{
 
 const uid = auth.currentUser?.uid;
 
 const evaluation = evaluations.find(e =>
 e.userId === uid &&
-e.moduleId === moduleId &&
+e.moduleOrder === order &&
 e.passed === true
 );
 
@@ -301,26 +303,26 @@ Sesiones completadas:
 
 <h2 style={{marginTop:"40px"}}>Módulos</h2>
 
-{modules.map((module,index)=>{
+{modules.map((module)=>{
 
 const moduleSessions =
 sessions.filter(
 s=>s.module===module.id
 );
 
-/* desbloqueo */
+/* lógica de desbloqueo */
 
-let unlocked=false;
+let unlocked = false;
 
-if(index===0){
+if(module.order === 1){
 
-unlocked=true;
+unlocked = true;
 
 }else{
 
-const previousModule = modules[index-1];
+const previousOrder = module.order - 1;
 
-unlocked = modulePassed(previousModule.id);
+unlocked = modulePassed(previousOrder);
 
 }
 
