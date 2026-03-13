@@ -3,43 +3,49 @@
 import { useEffect, useState } from "react";
 import { db, auth } from "../../firebase/config";
 import { collection, getDocs } from "firebase/firestore";
+import { signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { signOut } from "firebase/auth";
 
-export default function AdminDashboard(){
+export default function AdminPage(){
 
   const router = useRouter();
 
   const [usersCount,setUsersCount] = useState(0);
   const [modulesCount,setModulesCount] = useState(0);
   const [sessionsCount,setSessionsCount] = useState(0);
-  const [progressCount,setProgressCount] = useState(0);
+  const [certificatesCount,setCertificatesCount] = useState(0);
 
   useEffect(()=>{
 
-    const user = auth.currentUser;
+    const checkAdmin = async ()=>{
 
-    if(!user || user.email !== "santiago@biodiversal.co"){
-      router.push("/login");
-      return;
-    }
+      const user = auth.currentUser;
 
-    loadStats();
+      if(!user){
+        router.push("/login");
+        return;
+      }
+
+      loadStats();
+
+    };
+
+    checkAdmin();
 
   },[]);
 
   const loadStats = async ()=>{
 
-    const usersSnapshot = await getDocs(collection(db,"users"));
-    const modulesSnapshot = await getDocs(collection(db,"modules"));
-    const sessionsSnapshot = await getDocs(collection(db,"sessions"));
-    const progressSnapshot = await getDocs(collection(db,"progress"));
+    const usersSnap = await getDocs(collection(db,"users"));
+    const modulesSnap = await getDocs(collection(db,"modules"));
+    const sessionsSnap = await getDocs(collection(db,"sessions"));
+    const certSnap = await getDocs(collection(db,"certificates"));
 
-    setUsersCount(usersSnapshot.size);
-    setModulesCount(modulesSnapshot.size);
-    setSessionsCount(sessionsSnapshot.size);
-    setProgressCount(progressSnapshot.size);
+    setUsersCount(usersSnap.size);
+    setModulesCount(modulesSnap.size);
+    setSessionsCount(sessionsSnap.size);
+    setCertificatesCount(certSnap.size);
 
   };
 
@@ -64,9 +70,9 @@ export default function AdminDashboard(){
         onClick={logout}
         style={{
           position:"absolute",
-          top:"20px",
           right:"20px",
-          padding:"8px 15px",
+          top:"20px",
+          padding:"8px 16px",
           background:"#444",
           border:"none",
           color:"white",
@@ -77,7 +83,7 @@ export default function AdminDashboard(){
         Cerrar sesión
       </button>
 
-      <h1>Panel de Administración</h1>
+      <h1>Admin Panel</h1>
 
       <p style={{color:"#aaa"}}>
         Coffee Biochar Academy
@@ -92,29 +98,29 @@ export default function AdminDashboard(){
         gap:"20px"
       }}>
 
-        <div style={{background:"#222",padding:"20px",borderRadius:"6px"}}>
+        <div style={card}>
           <h2>{usersCount}</h2>
-          <p>Extensionistas registrados</p>
+          <p>Extensionistas</p>
         </div>
 
-        <div style={{background:"#222",padding:"20px",borderRadius:"6px"}}>
+        <div style={card}>
           <h2>{modulesCount}</h2>
-          <p>Módulos creados</p>
+          <p>Módulos</p>
         </div>
 
-        <div style={{background:"#222",padding:"20px",borderRadius:"6px"}}>
+        <div style={card}>
           <h2>{sessionsCount}</h2>
-          <p>Sesiones creadas</p>
+          <p>Sesiones</p>
         </div>
 
-        <div style={{background:"#222",padding:"20px",borderRadius:"6px"}}>
-          <h2>{progressCount}</h2>
-          <p>Sesiones completadas</p>
+        <div style={card}>
+          <h2>{certificatesCount}</h2>
+          <p>Certificados emitidos</p>
         </div>
 
       </div>
 
-      {/* Botones principales */}
+      {/* Navegación */}
 
       <div style={{
         marginTop:"50px",
@@ -123,42 +129,27 @@ export default function AdminDashboard(){
         flexWrap:"wrap"
       }}>
 
-        <Link href="/admin/content">
-          <button style={{
-            padding:"15px 25px",
-            background:"#2E7D32",
-            border:"none",
-            color:"white",
-            cursor:"pointer",
-            borderRadius:"6px"
-          }}>
-            Gestionar módulos y sesiones
+        <Link href="/admin/create-user">
+          <button style={btn}>
+            Crear extensionista
           </button>
         </Link>
 
         <Link href="/admin/users">
-          <button style={{
-            padding:"15px 25px",
-            background:"#444",
-            border:"none",
-            color:"white",
-            cursor:"pointer",
-            borderRadius:"6px"
-          }}>
+          <button style={btn}>
             Ver extensionistas
           </button>
         </Link>
 
-        <Link href="/admin/create-user">
-          <button style={{
-            padding:"15px 25px",
-            background:"#1976D2",
-            border:"none",
-            color:"white",
-            cursor:"pointer",
-            borderRadius:"6px"
-          }}>
-            Crear extensionista
+        <Link href="/admin/content">
+          <button style={btn}>
+            Gestionar módulos y sesiones
+          </button>
+        </Link>
+
+        <Link href="/admin/progress">
+          <button style={btnGreen}>
+            Progreso extensionistas
           </button>
         </Link>
 
@@ -169,3 +160,27 @@ export default function AdminDashboard(){
   );
 
 }
+
+const card = {
+  background:"#222",
+  padding:"20px",
+  borderRadius:"8px"
+};
+
+const btn = {
+  padding:"14px 24px",
+  background:"#444",
+  border:"none",
+  color:"white",
+  cursor:"pointer",
+  borderRadius:"6px"
+};
+
+const btnGreen = {
+  padding:"14px 24px",
+  background:"#2E7D32",
+  border:"none",
+  color:"white",
+  cursor:"pointer",
+  borderRadius:"6px"
+};
