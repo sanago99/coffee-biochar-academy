@@ -8,8 +8,7 @@ collection,
 getDocs,
 query,
 where,
-doc,
-getDoc
+addDoc
 } from "firebase/firestore";
 
 import { onAuthStateChanged, signOut } from "firebase/auth";
@@ -34,10 +33,8 @@ const unsubscribe =
 onAuthStateChanged(auth, async(user)=>{
 
 if(!user){
-
 router.push("/login");
 return;
-
 }
 
 /* USER DATA */
@@ -50,10 +47,7 @@ where("email","==",user.email)
 const snap = await getDocs(q);
 
 if(!snap.empty){
-
-const data = snap.docs[0].data();
-setUserData(data);
-
+setUserData(snap.docs[0].data());
 }
 
 /* MODULES */
@@ -64,17 +58,10 @@ await getDocs(collection(db,"modules"));
 const modulesList:any[]=[];
 
 modulesSnap.forEach(doc=>{
-
-modulesList.push({
-id:doc.id,
-...doc.data()
+modulesList.push({id:doc.id,...doc.data()});
 });
 
-});
-
-modulesList.sort(
-(a,b)=>a.order-b.order
-);
+modulesList.sort((a,b)=>a.order-b.order);
 
 setModules(modulesList);
 
@@ -86,12 +73,7 @@ await getDocs(collection(db,"sessions"));
 const sessionsList:any[]=[];
 
 sessionsSnap.forEach(doc=>{
-
-sessionsList.push({
-id:doc.id,
-...doc.data()
-});
-
+sessionsList.push({id:doc.id,...doc.data()});
 });
 
 setSessions(sessionsList);
@@ -103,8 +85,7 @@ collection(db,"progress"),
 where("userId","==",user.uid)
 );
 
-const progressSnap =
-await getDocs(progressQ);
+const progressSnap = await getDocs(progressQ);
 
 const completedSessions:string[]=[];
 
@@ -121,8 +102,7 @@ collection(db,"evaluations"),
 where("userId","==",user.uid)
 );
 
-const evalSnap =
-await getDocs(evalQ);
+const evalSnap = await getDocs(evalQ);
 
 const evalList:any[]=[];
 
@@ -132,17 +112,15 @@ evalList.push(doc.data());
 
 setEvaluations(evalList);
 
-/* PROGRESS CALCULATION */
+/* CALCULATE PROGRESS */
 
 const totalSessions = sessionsList.length;
 const completedCount = completedSessions.length;
 
 if(totalSessions>0){
-
 setProgress(
 Math.round((completedCount/totalSessions)*100)
 );
-
 }
 
 });
@@ -159,14 +137,13 @@ let approved = 0;
 
 modules.forEach(module=>{
 
-const evaluation = evaluations.find(
+const evaluation =
+evaluations.find(
 e=>e.moduleId === module.id && e.passed
 );
 
 if(evaluation){
-
 approved++;
-
 }
 
 });
@@ -178,47 +155,63 @@ setApprovedModules(approved);
 /* LOGOUT */
 
 const logout = async()=>{
-
 await signOut(auth);
 router.push("/login");
-
 };
 
-/* STATUS */
+/* MODULE STATUS */
 
 const getModuleStatus = (module:any)=>{
 
-const evaluation = evaluations.find(
+const evaluation =
+evaluations.find(
 e=>e.moduleId === module.id
 );
 
 if(evaluation && evaluation.passed){
-
 return "approved";
-
 }
 
-const index = modules.findIndex(m=>m.id===module.id);
+const index =
+modules.findIndex(m=>m.id===module.id);
 
 if(index===0){
-
 return "available";
-
 }
 
 const prevModule = modules[index-1];
 
-const prevEvaluation = evaluations.find(
+const prevEvaluation =
+evaluations.find(
 e=>e.moduleId === prevModule.id && e.passed
 );
 
 if(prevEvaluation){
-
 return "available";
-
 }
 
 return "locked";
+
+};
+
+/* COMPLETE SESSION */
+
+const completeSession = async(session:any)=>{
+
+if(completed.includes(session.id)){
+return;
+}
+
+const user = auth.currentUser;
+
+if(!user) return;
+
+await addDoc(collection(db,"progress"),{
+userId:user.uid,
+sessionId:session.id
+});
+
+setCompleted([...completed,session.id]);
 
 };
 
@@ -233,16 +226,13 @@ padding:"30px"
 }}
 >
 
+{/* HEADER */}
+
 <div style={{display:"flex",justifyContent:"space-between"}}>
 
 <div>
-
 <h2>Coffee Biochar Academy</h2>
-
-{userData && (
-<p>Bienvenido {userData.name}</p>
-)}
-
+{userData && <p>Bienvenido {userData.name}</p>}
 </div>
 
 <button
@@ -293,22 +283,16 @@ transition:"width 0.5s"
 </div>
 
 <p style={{marginTop:"5px"}}>
-
 {progress}% completado
-
 </p>
 
 </div>
 
-{/* MODULES APPROVED */}
-
 <p style={{marginTop:"10px"}}>
-
 Módulos aprobados: {approvedModules} / {modules.length}
-
 </p>
 
-{/* COURSE TIMELINE */}
+{/* TIMELINE */}
 
 <div
 style={{
@@ -356,24 +340,20 @@ M{index+1}
 
 {/* MODULES */}
 
-<h3 style={{marginTop:"30px"}}>
-
-Módulos
-
-</h3>
+<h3 style={{marginTop:"30px"}}>Módulos</h3>
 
 {modules.map(module=>{
 
 const moduleSessions =
 sessions.filter(
-s=>s.moduleId===module.id
+s=>s.moduleId === module.id
 );
 
 const status = getModuleStatus(module);
 
 const evaluation =
 evaluations.find(
-e=>e.moduleId===module.id
+e=>e.moduleId === module.id
 );
 
 return(
@@ -408,11 +388,88 @@ marginTop:"15px"
 </p>
 )}
 
-<p>{moduleSessions.length} sesiones</p>
+<p style={{color:"#888"}}>
+{moduleSessions.length} sesiones
+</p>
+
+{/* SESSIONS */}
+
+{status !== "locked" && (
+
+<div style={{marginTop:"10px"}}>
+
+{moduleSessions.map(session=>{
+
+const isCompleted =
+completed.includes(session.id);
+
+return(
+
+<div
+key={session.id}
+style={{
+border:"1px solid #444",
+borderRadius:"6px",
+padding:"10px",
+marginTop:"10px"
+}}
+>
+
+<p>{session.title}</p>
+
+<div style={{display:"flex",gap:"10px"}}>
+
+<button
+onClick={()=>{
+window.open(session.link,"_blank");
+completeSession(session);
+}}
+style={{
+background:"#4CAF50",
+border:"none",
+color:"white",
+padding:"6px 10px",
+borderRadius:"4px"
+}}
+>
+▶ Ver sesión
+</button>
+
+{isCompleted && (
+<span style={{color:"#4CAF50"}}>
+✔ Completada
+</span>
+)}
 
 </div>
 
-);
+{session.material && (
+<a
+href={session.material}
+target="_blank"
+style={{
+display:"block",
+marginTop:"5px",
+color:"#FFC107"
+}}
+>
+Material adicional
+</a>
+)}
+
+</div>
+
+)
+
+})}
+
+</div>
+
+)}
+
+</div>
+
+)
 
 })}
 
