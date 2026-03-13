@@ -26,21 +26,41 @@ export default function Home() {
           Formación de extensionistas del proyecto Coffee Biochar
         </p>
 
-        <Link href="/login">
-          <button
-            style={{
-              padding: "14px 28px",
-              fontSize: "16px",
-              background: "#2E7D32",
-              border: "none",
-              borderRadius: "6px",
-              color: "white",
-              cursor: "pointer",
-            }}
-          >
-            Iniciar sesión
-          </button>
-        </Link>
+        <div style={{ display: "flex", justifyContent: "center", gap: "20px" }}>
+          
+          <Link href="/login">
+            <button
+              style={{
+                padding: "14px 28px",
+                fontSize: "16px",
+                background: "#2E7D32",
+                border: "none",
+                borderRadius: "6px",
+                color: "white",
+                cursor: "pointer",
+              }}
+            >
+              Iniciar sesión
+            </button>
+          </Link>
+
+          <Link href="/register">
+            <button
+              style={{
+                padding: "14px 28px",
+                fontSize: "16px",
+                background: "#444",
+                border: "none",
+                borderRadius: "6px",
+                color: "white",
+                cursor: "pointer",
+              }}
+            >
+              Registrarse
+            </button>
+          </Link>
+
+        </div>
       </section>
 
       {/* STATS */}
