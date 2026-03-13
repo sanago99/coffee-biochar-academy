@@ -2,166 +2,166 @@
 
 import { useEffect, useState } from "react";
 import { db } from "../../../firebase/config";
+
 import {
-  collection,
-  getDocs
+collection,
+getDocs
 } from "firebase/firestore";
 
 export default function AdminProgress(){
 
-  const [users,setUsers] = useState<any[]>([]);
-  const [progress,setProgress] = useState<any[]>([]);
-  const [certificates,setCertificates] = useState<any[]>([]);
-  const [sessions,setSessions] = useState<any[]>([]);
+const [users,setUsers] = useState<any[]>([]);
+const [progressData,setProgressData] = useState<any[]>([]);
+const [totalSessions,setTotalSessions] = useState(0);
 
-  useEffect(()=>{
+useEffect(()=>{
 
-    const loadData = async ()=>{
+const loadData = async ()=>{
 
-      const usersSnap = await getDocs(collection(db,"users"));
-      const progressSnap = await getDocs(collection(db,"progress"));
-      const certSnap = await getDocs(collection(db,"certificates"));
-      const sessionsSnap = await getDocs(collection(db,"sessions"));
+/* USERS */
 
-      const usersList:any[]=[];
-      const progressList:any[]=[];
-      const certList:any[]=[];
-      const sessionsList:any[]=[];
+const usersSnap =
+await getDocs(collection(db,"users"));
 
-      usersSnap.forEach(doc=>{
-        usersList.push({id:doc.id,...doc.data()});
-      });
+const usersList:any[]=[];
 
-      progressSnap.forEach(doc=>{
-        progressList.push(doc.data());
-      });
+usersSnap.forEach(doc=>{
+usersList.push({
+id:doc.id,
+...doc.data()
+});
+});
 
-      certSnap.forEach(doc=>{
-        certList.push(doc.data());
-      });
+/* SESSIONS */
 
-      sessionsSnap.forEach(doc=>{
-        sessionsList.push(doc.data());
-      });
+const sessionsSnap =
+await getDocs(collection(db,"sessions"));
 
-      setUsers(usersList);
-      setProgress(progressList);
-      setCertificates(certList);
-      setSessions(sessionsList);
+setTotalSessions(sessionsSnap.size);
 
-    };
+/* PROGRESS */
 
-    loadData();
+const progressSnap =
+await getDocs(collection(db,"progress"));
 
-  },[]);
+const progressList:any[]=[];
 
-  const totalSessions = sessions.length;
+progressSnap.forEach(doc=>{
+progressList.push(doc.data());
+});
 
-  const getProgress = (userId:string)=>{
+/* CALCULAR PROGRESO */
 
-    const completed = progress.filter(
-      p=>p.userId===userId
-    ).length;
+const results:any[] = usersList.map(user=>{
 
-    if(!totalSessions) return 0;
+const userProgress =
+progressList.filter(
+p=>p.userId === user.id
+);
 
-    return Math.round((completed / totalSessions)*100);
+const completed =
+userProgress.length;
 
-  };
+const percentage =
+totalSessions
+? Math.round((completed/totalSessions)*100)
+:0;
 
-  const hasCertificate = (userId:string)=>{
+return{
 
-    return certificates.some(
-      c=>c.userId===userId
-    );
+name:user.name,
+cluster:user.cluster,
+municipio:user.municipio,
+progress:percentage
 
-  };
+};
 
-  return(
+});
 
-    <main style={{
-      minHeight:"100vh",
-      background:"#111",
-      color:"white",
-      padding:"40px",
-      fontFamily:"Arial"
-    }}>
+setProgressData(results);
 
-      <h1>Progreso de Extensionistas</h1>
+};
 
-      <table style={{
-        width:"100%",
-        marginTop:"30px",
-        borderCollapse:"collapse"
-      }}>
+loadData();
 
-        <thead>
+},[totalSessions]);
 
-          <tr style={{background:"#222"}}>
+return(
 
-            <th style={{padding:"12px"}}>Extensionista</th>
-            <th>Cluster</th>
-            <th>Municipio</th>
-            <th>Progreso</th>
-            <th>Certificado</th>
+<div style={{
+padding:"40px",
+background:"#111",
+minHeight:"100vh",
+color:"white"
+}}>
 
-          </tr>
+<h1>Panel de progreso de extensionistas</h1>
 
-        </thead>
+<table style={{
+width:"100%",
+marginTop:"30px",
+borderCollapse:"collapse"
+}}>
 
-        <tbody>
+<thead>
 
-          {users.map(user=>{
+<tr style={{
+borderBottom:"1px solid #444"
+}}>
 
-            const progressPercent =
-              getProgress(user.id);
+<th style={{textAlign:"left",padding:"10px"}}>Extensionista</th>
+<th style={{textAlign:"left",padding:"10px"}}>Cluster</th>
+<th style={{textAlign:"left",padding:"10px"}}>Municipio</th>
+<th style={{textAlign:"left",padding:"10px"}}>Progreso</th>
+<th style={{textAlign:"left",padding:"10px"}}>Certificado</th>
 
-            const certificate =
-              hasCertificate(user.id);
+</tr>
 
-            return(
+</thead>
 
-              <tr
-                key={user.id}
-                style={{
-                  borderBottom:"1px solid #333"
-                }}
-              >
+<tbody>
 
-                <td style={{padding:"12px"}}>
-                  {user.name}
-                </td>
+{progressData.map((user,i)=>(
 
-                <td>
-                  {user.cluster}
-                </td>
+<tr key={i} style={{
+borderBottom:"1px solid #333"
+}}>
 
-                <td>
-                  {user.municipio}
-                </td>
+<td style={{padding:"10px"}}>
+{user.name}
+</td>
 
-                <td>
-                  {progressPercent}%
-                </td>
+<td style={{padding:"10px"}}>
+{user.cluster}
+</td>
 
-                <td>
+<td style={{padding:"10px"}}>
+{user.municipio}
+</td>
 
-                  {certificate ? "✔" : "—"}
+<td style={{padding:"10px"}}>
+{user.progress}%
+</td>
 
-                </td>
+<td style={{padding:"10px"}}>
 
-              </tr>
+{user.progress === 100
+? "✔"
+: "❌"
+}
 
-            );
+</td>
 
-          })}
+</tr>
 
-        </tbody>
+))}
 
-      </table>
+</tbody>
 
-    </main>
+</table>
 
-  );
+</div>
+
+);
 
 }
