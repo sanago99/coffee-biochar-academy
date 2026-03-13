@@ -2,36 +2,37 @@
 
 import { useEffect, useState } from "react";
 import { db, auth } from "../../firebase/config";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, addDoc } from "firebase/firestore";
 import { signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import jsPDF from "jspdf";
 
-export default function Dashboard() {
+export default function Dashboard(){
 
   const router = useRouter();
 
-  const [modules, setModules] = useState<any[]>([]);
-  const [sessions, setSessions] = useState<any[]>([]);
-  const [openModule, setOpenModule] = useState<string | null>(null);
+  const [modules,setModules] = useState<any[]>([]);
+  const [sessions,setSessions] = useState<any[]>([]);
+  const [openModule,setOpenModule] = useState<string | null>(null);
+  const [completed,setCompleted] = useState<string[]>([]);
 
   const studentName = "Extensionista Coffee Biochar";
 
-  useEffect(() => {
+  useEffect(()=>{
 
-    const loadData = async () => {
+    const loadData = async ()=>{
 
       const modulesSnapshot = await getDocs(collection(db,"modules"));
       const sessionsSnapshot = await getDocs(collection(db,"sessions"));
 
-      const modulesList:any[] = [];
-      const sessionsList:any[] = [];
+      const modulesList:any[]=[];
+      const sessionsList:any[]=[];
 
-      modulesSnapshot.forEach((doc)=>{
+      modulesSnapshot.forEach(doc=>{
         modulesList.push({id:doc.id,...doc.data()});
       });
 
-      sessionsSnapshot.forEach((doc)=>{
+      sessionsSnapshot.forEach(doc=>{
         sessionsList.push({id:doc.id,...doc.data()});
       });
 
@@ -44,7 +45,7 @@ export default function Dashboard() {
 
   },[]);
 
-  const logout = async () => {
+  const logout = async ()=>{
 
     await signOut(auth);
 
@@ -52,17 +53,27 @@ export default function Dashboard() {
 
   };
 
+  const completeSession = async (sessionId:string)=>{
+
+    await addDoc(collection(db,"progress"),{
+      userId:auth.currentUser?.uid,
+      sessionId:sessionId,
+      completed:true
+    });
+
+    setCompleted([...completed,sessionId]);
+
+    alert("Sesión completada");
+
+  };
+
   const totalSessions = sessions.length;
 
-  const unlockedSessions = sessions.filter(
-    s => !s.locked
-  ).length;
-
   const progress = totalSessions
-    ? Math.round((unlockedSessions / totalSessions) * 100)
+    ? Math.round((completed.length / totalSessions) * 100)
     : 0;
 
-  const generateCertificate = () => {
+  const generateCertificate = ()=>{
 
     const doc = new jsPDF();
 
@@ -113,7 +124,7 @@ export default function Dashboard() {
 
   };
 
-  return (
+  return(
 
     <main style={{
       minHeight:"100vh",
@@ -122,8 +133,6 @@ export default function Dashboard() {
       padding:"40px",
       fontFamily:"Arial"
     }}>
-
-      {/* BOTON CERRAR SESION */}
 
       <button
         onClick={logout}
@@ -145,8 +154,6 @@ export default function Dashboard() {
       <h1>Coffee Biochar Academy</h1>
 
       <h2>Certified Coffee Biochar Extensionist</h2>
-
-      {/* PROGRESS */}
 
       <div style={{marginTop:"30px"}}>
 
@@ -192,17 +199,15 @@ export default function Dashboard() {
 
       </div>
 
-      {/* MODULES */}
-
       <h2 style={{marginTop:"40px"}}>Módulos</h2>
 
       {modules.map(module=>{
 
         const moduleSessions = sessions.filter(
-          s => s.module === module.id
+          s=>s.module===module.id
         );
 
-        const isOpen = openModule === module.id;
+        const isOpen = openModule===module.id;
 
         return(
 
@@ -214,9 +219,7 @@ export default function Dashboard() {
           }}>
 
             <div
-              onClick={() =>
-                setOpenModule(isOpen ? null : module.id)
-              }
+              onClick={()=>setOpenModule(isOpen ? null : module.id)}
               style={{cursor:"pointer"}}
             >
 
@@ -288,6 +291,20 @@ export default function Dashboard() {
                           </a>
 
                         )}
+
+                        <button
+                          onClick={()=>completeSession(session.id)}
+                          style={{
+                            marginLeft:"10px",
+                            padding:"6px 12px",
+                            background:"#555",
+                            border:"none",
+                            color:"white",
+                            cursor:"pointer"
+                          }}
+                        >
+                          Completar
+                        </button>
 
                       </div>
 
