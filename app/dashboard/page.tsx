@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { db, auth } from "../../firebase/config";
-import { collection, getDocs, addDoc } from "firebase/firestore";
+import { collection, getDocs, addDoc, doc, getDoc } from "firebase/firestore";
 import { signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import jsPDF from "jspdf";
@@ -43,17 +43,21 @@ export default function Dashboard(){
 
     const loadUser = async ()=>{
 
-      const snapshot = await getDocs(collection(db,"users"));
+      const uid = auth.currentUser?.uid;
 
-      snapshot.forEach(doc=>{
+      if(!uid) return;
 
-        const data:any = doc.data();
+      const userRef = doc(db,"users",uid);
 
-        if(data.uid === auth.currentUser?.uid){
-          setStudentName(data.name);
-        }
+      const userSnap = await getDoc(userRef);
 
-      });
+      if(userSnap.exists()){
+
+        const data:any = userSnap.data();
+
+        setStudentName(data.name);
+
+      }
 
     };
 
@@ -107,41 +111,41 @@ export default function Dashboard(){
 
       const qrImage = await QRCode.toDataURL(verificationUrl);
 
-      const doc = new jsPDF("landscape");
+      const docPDF = new jsPDF("landscape");
 
-      doc.setDrawColor(40,120,70);
-      doc.setLineWidth(3);
-      doc.rect(10,10,277,190);
+      docPDF.setDrawColor(40,120,70);
+      docPDF.setLineWidth(3);
+      docPDF.rect(10,10,277,190);
 
-      doc.addImage("/logo.png","PNG",130,20,40,20);
+      docPDF.addImage("/logo.png","PNG",130,20,40,20);
 
-      doc.setFontSize(28);
-      doc.text("Coffee Biochar Academy",148,60,{align:"center"});
+      docPDF.setFontSize(28);
+      docPDF.text("Coffee Biochar Academy",148,60,{align:"center"});
 
-      doc.setFontSize(18);
-      doc.text("CERTIFICATE OF COMPLETION",148,80,{align:"center"});
+      docPDF.setFontSize(18);
+      docPDF.text("CERTIFICATE OF COMPLETION",148,80,{align:"center"});
 
-      doc.setFontSize(26);
-      doc.text(studentName,148,110,{align:"center"});
+      docPDF.setFontSize(26);
+      docPDF.text(studentName,148,110,{align:"center"});
 
-      doc.setFontSize(16);
-      doc.text("Certified Coffee Biochar Extensionist",148,130,{align:"center"});
+      docPDF.setFontSize(16);
+      docPDF.text("Certified Coffee Biochar Extensionist",148,130,{align:"center"});
 
-      doc.setFontSize(12);
-      doc.text("Cohorte Coffee Biochar 2026",148,145,{align:"center"});
+      docPDF.setFontSize(12);
+      docPDF.text("Cohorte Coffee Biochar 2026",148,145,{align:"center"});
 
-      doc.text("Certificate ID: "+certificateId,148,160,{align:"center"});
+      docPDF.text("Certificate ID: "+certificateId,148,160,{align:"center"});
 
-      doc.text("Verify:",240,150);
+      docPDF.text("Verify:",240,150);
 
-      doc.addImage(qrImage,"PNG",230,155,40,40);
+      docPDF.addImage(qrImage,"PNG",230,155,40,40);
 
-      doc.addImage("/signature.png","PNG",40,150,60,20);
+      docPDF.addImage("/signature.png","PNG",40,150,60,20);
 
-      doc.setFontSize(10);
-      doc.text("Program Director",60,175);
+      docPDF.setFontSize(10);
+      docPDF.text("Program Director",60,175);
 
-      doc.save("coffee-biochar-certificate.pdf");
+      docPDF.save("coffee-biochar-certificate.pdf");
 
     }catch(error){
 
