@@ -17,6 +17,8 @@ Tooltip,
 ResponsiveContainer
 } from "recharts";
 
+import AdminGuard from "../../components/AdminGuard";
+
 export default function AdminProgress(){
 
 const [progressData,setProgressData] = useState<any[]>([]);
@@ -112,7 +114,7 @@ avgProgress:Math.round(avg),
 certificates
 });
 
-/* CLUSTER STATS */
+/* PROGRESO POR CLUSTER */
 
 const clusterMap:any = {};
 
@@ -143,7 +145,7 @@ progress:Math.round(c.total/c.count)
 
 setClusterStats(clusterData);
 
-/* MODULE STATS */
+/* SCORE POR MODULO */
 
 const moduleMap:any = {};
 
@@ -187,6 +189,8 @@ loadData();
 },[]);
 
 return(
+
+<AdminGuard>
 
 <div style={{
 padding:"40px",
@@ -298,7 +302,7 @@ height:"300px"
 
 </div>
 
-{/* TABLA */}
+{/* TABLA EXTENSIONISTAS */}
 
 <table style={{
 width:"100%",
@@ -390,6 +394,8 @@ Ver progreso
 </table>
 
 </div>
+
+</AdminGuard>
 
 );
 
