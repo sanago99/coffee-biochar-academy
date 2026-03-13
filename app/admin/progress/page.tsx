@@ -10,12 +10,17 @@ getDocs
 
 export default function AdminProgress(){
 
-const [users,setUsers] = useState<any[]>([]);
 const [progressData,setProgressData] = useState<any[]>([]);
 const [totalSessions,setTotalSessions] = useState(0);
 
 const [search,setSearch] = useState("");
 const [clusterFilter,setClusterFilter] = useState("");
+
+const [stats,setStats] = useState({
+users:0,
+avgProgress:0,
+certificates:0
+});
 
 useEffect(()=>{
 
@@ -34,8 +39,6 @@ id:doc.id,
 ...doc.data()
 });
 });
-
-setUsers(usersList);
 
 /* SESSIONS */
 
@@ -85,6 +88,21 @@ progress:percentage
 
 setProgressData(results);
 
+/* MÉTRICAS */
+
+const avg =
+results.reduce((acc,u)=>acc+u.progress,0) /
+(results.length || 1);
+
+const certificates =
+results.filter(u=>u.progress===100).length;
+
+setStats({
+users:results.length,
+avgProgress:Math.round(avg),
+certificates
+});
+
 };
 
 loadData();
@@ -123,10 +141,47 @@ color:"white"
 
 <h1>Panel de progreso de extensionistas</h1>
 
-{/* filtros */}
+{/* MÉTRICAS */}
 
 <div style={{
-marginTop:"20px",
+display:"flex",
+gap:"30px",
+marginTop:"20px"
+}}>
+
+<div style={{
+background:"#1a1a1a",
+padding:"20px",
+borderRadius:"8px"
+}}>
+<h3>👩‍🌾 Extensionistas</h3>
+<p style={{fontSize:"24px"}}>{stats.users}</p>
+</div>
+
+<div style={{
+background:"#1a1a1a",
+padding:"20px",
+borderRadius:"8px"
+}}>
+<h3>📊 Progreso promedio</h3>
+<p style={{fontSize:"24px"}}>{stats.avgProgress}%</p>
+</div>
+
+<div style={{
+background:"#1a1a1a",
+padding:"20px",
+borderRadius:"8px"
+}}>
+<h3>🎓 Certificados</h3>
+<p style={{fontSize:"24px"}}>{stats.certificates}</p>
+</div>
+
+</div>
+
+{/* FILTROS */}
+
+<div style={{
+marginTop:"30px",
 display:"flex",
 gap:"20px"
 }}>
@@ -168,7 +223,7 @@ color:"white"
 
 </div>
 
-{/* tabla */}
+{/* TABLA */}
 
 <table style={{
 width:"100%",
