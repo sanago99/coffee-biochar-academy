@@ -8,7 +8,9 @@ collection,
 getDocs,
 addDoc,
 doc,
-getDoc
+getDoc,
+query,
+where
 } from "firebase/firestore";
 
 import {
@@ -36,14 +38,19 @@ useState<string | null>(null);
 
 useEffect(()=>{
 
-const loadUser = async (uid:string)=>{
+/* cargar usuario */
 
-const userDoc =
-await getDoc(doc(db,"users",uid));
+const loadUser = async (email:string)=>{
 
-if(userDoc.exists()){
+const usersRef = collection(db,"users");
 
-const data:any = userDoc.data();
+const q = query(usersRef, where("email","==",email));
+
+const snap = await getDocs(q);
+
+if(!snap.empty){
+
+const data:any = snap.docs[0].data();
 
 setStudentName(data.name);
 
@@ -53,9 +60,9 @@ setModuleScores(data.moduleScores || {});
 
 };
 
-const loadData = async (uid:string)=>{
+/* cargar módulos y sesiones */
 
-/* modules */
+const loadData = async (uid:string)=>{
 
 const modulesSnap =
 await getDocs(collection(db,"modules"));
@@ -73,7 +80,7 @@ modulesList.sort((a,b)=>a.order - b.order);
 
 setModules(modulesList);
 
-/* sessions */
+/* sesiones */
 
 const sessionsSnap =
 await getDocs(collection(db,"sessions"));
@@ -89,7 +96,7 @@ id:doc.id,
 
 setSessions(sessionsList);
 
-/* progress */
+/* progreso */
 
 const progressSnap =
 await getDocs(collection(db,"progress"));
@@ -111,6 +118,8 @@ completedSessions.map(p=>p.sessionId)
 
 };
 
+/* escuchar login */
+
 const unsubscribe =
 onAuthStateChanged(auth, async (user)=>{
 
@@ -121,7 +130,8 @@ return;
 
 }
 
-await loadUser(user.uid);
+await loadUser(user.email || "");
+
 await loadData(user.uid);
 
 });
@@ -135,6 +145,7 @@ return () => unsubscribe();
 const logout = async ()=>{
 
 await signOut(auth);
+
 router.push("/login");
 
 };
@@ -155,9 +166,12 @@ completedAt:new Date()
 });
 
 setCompleted([...completed,sessionId]);
+
 setCompletedCount(completedCount+1);
 
 };
+
+/* progreso curso */
 
 const totalSessions = sessions.length;
 
@@ -272,7 +286,7 @@ style={{cursor:"pointer"}}
 
 <h3>{module.title}</h3>
 
-{/* Estado LMS */}
+{/* estado módulo */}
 
 {status === "approved" && (
 
