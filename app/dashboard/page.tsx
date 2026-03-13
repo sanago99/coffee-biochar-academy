@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { db, auth } from "../../firebase/config";
+
 import {
 collection,
 getDocs,
@@ -10,7 +11,11 @@ doc,
 getDoc
 } from "firebase/firestore";
 
-import { signOut } from "firebase/auth";
+import {
+signOut,
+onAuthStateChanged
+} from "firebase/auth";
+
 import { useRouter } from "next/navigation";
 
 import jsPDF from "jspdf";
@@ -22,19 +27,34 @@ const router = useRouter();
 
 const [modules,setModules] = useState<any[]>([]);
 const [sessions,setSessions] = useState<any[]>([]);
+
 const [completed,setCompleted] = useState<string[]>([]);
 
 const [studentName,setStudentName] = useState("");
 
 const [completedCount,setCompletedCount] = useState(0);
-const [nextSession,setNextSession] = useState("");
 
 const [openModule,setOpenModule] =
 useState<string | null>(null);
 
 useEffect(()=>{
 
-const loadData = async ()=>{
+const loadUser = async (uid:string)=>{
+
+const userDoc =
+await getDoc(doc(db,"users",uid));
+
+if(userDoc.exists()){
+
+const data:any = userDoc.data();
+
+setStudentName(data.name);
+
+}
+
+};
+
+const loadData = async (uid:string)=>{
 
 const modulesSnap =
 await getDocs(collection(db,"modules"));
@@ -70,8 +90,6 @@ progressList.push(doc.data());
 setModules(modulesList);
 setSessions(sessionsList);
 
-const uid = auth.currentUser?.uid;
-
 const completedSessions =
 progressList.filter(p=>p.userId===uid);
 
@@ -81,36 +99,24 @@ setCompleted(
 completedSessions.map(p=>p.sessionId)
 );
 
-const next =
-sessionsList[completedSessions.length];
-
-if(next){
-setNextSession(next.title);
-}
-
 };
 
-const loadUser = async ()=>{
+const unsubscribe =
+onAuthStateChanged(auth, async (user)=>{
 
-const user = auth.currentUser;
+if(!user){
 
-if(!user) return;
-
-const userDoc =
-await getDoc(doc(db,"users",user.uid));
-
-if(userDoc.exists()){
-
-const data:any = userDoc.data();
-
-setStudentName(data.name);
+router.push("/login");
+return;
 
 }
 
-};
+await loadUser(user.uid);
+await loadData(user.uid);
 
-loadData();
-loadUser();
+});
+
+return () => unsubscribe();
 
 },[]);
 
@@ -123,6 +129,10 @@ router.push("/login");
 };
 
 const completeSession = async (sessionId:string)=>{
+
+if(completed.includes(sessionId)){
+return;
+}
 
 await addDoc(collection(db,"progress"),{
 
@@ -142,23 +152,26 @@ alert("Sesión completada");
 
 const totalSessions = sessions.length;
 
-const progress = totalSessions
+const progress =
+totalSessions
 ? Math.round((completedCount/totalSessions)*100)
 :0;
 
 const generateCertificate = async ()=>{
 
 if(!studentName){
+
 alert("Nombre no cargado");
 return;
+
 }
 
 const certificateId =
 "CBA-" + Date.now();
 
 const verificationUrl =
-"https://coffeebiochar.academy/certificate/" +
-certificateId;
+"https://coffeebiochar.academy/certificate/"
++certificateId;
 
 await addDoc(collection(db,"certificates"),{
 
@@ -249,38 +262,31 @@ cursor:"pointer",
 borderRadius:"6px"
 }}
 >
+
 Cerrar sesión
+
 </button>
 
 <h1>Coffee Biochar Academy</h1>
 
-<div style={{
-marginTop:"30px",
-background:"#1a1a1a",
-padding:"20px",
-borderRadius:"10px"
-}}>
+<h2>
 
-<h2>Bienvenido {studentName}</h2>
+Bienvenido {studentName}
+
+</h2>
 
 <p>
-Curso: Certified Coffee Biochar Extensionist
-</p>
 
-<p>
 Progreso del curso: {progress}%
+
 </p>
 
 <p>
+
 Sesiones completadas:
 {completedCount} / {sessions.length}
-</p>
 
-<p>
-Próxima sesión: {nextSession}
 </p>
-
-</div>
 
 <h2 style={{marginTop:"40px"}}>
 
@@ -311,9 +317,11 @@ padding:"15px"
 >
 
 <div
-onClick={()=>setOpenModule(
+onClick={()=>
+setOpenModule(
 isOpen ? null : module.id
-)}
+)
+}
 style={{cursor:"pointer"}}
 >
 
@@ -341,12 +349,18 @@ marginTop:"10px"
 }}
 >
 
-<p><b>{session.title}</b></p>
+<p>
+
+<b>{session.title}</b>
+
+</p>
 
 {session.locked ?(
 
 <p style={{color:"#777"}}>
+
 Sesión bloqueada
+
 </p>
 
 ):(
