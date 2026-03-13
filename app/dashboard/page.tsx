@@ -73,52 +73,31 @@ export default function Dashboard(){
     ? Math.round((completed.length / totalSessions) * 100)
     : 0;
 
-  const generateCertificate = ()=>{
+  const generateCertificate = async ()=>{
+
+    const certificateId = "CBA-" + Math.floor(Math.random()*100000);
+
+    await addDoc(collection(db,"certificates"),{
+      certificateId:certificateId,
+      name:studentName,
+      date:new Date().toISOString()
+    });
 
     const doc = new jsPDF();
 
     doc.setFontSize(24);
-
-    doc.text(
-      "Coffee Biochar Academy",
-      105,
-      40,
-      {align:"center"}
-    );
+    doc.text("Coffee Biochar Academy",105,40,{align:"center"});
 
     doc.setFontSize(18);
-
-    doc.text(
-      "Certificate of Completion",
-      105,
-      60,
-      {align:"center"}
-    );
+    doc.text("Certificate of Completion",105,60,{align:"center"});
 
     doc.setFontSize(20);
-
-    doc.text(
-      studentName,
-      105,
-      90,
-      {align:"center"}
-    );
+    doc.text(studentName,105,90,{align:"center"});
 
     doc.setFontSize(14);
+    doc.text("Certified Coffee Biochar Extensionist",105,110,{align:"center"});
 
-    doc.text(
-      "Certified Coffee Biochar Extensionist",
-      105,
-      110,
-      {align:"center"}
-    );
-
-    doc.text(
-      "Coffee Biochar Academy",
-      105,
-      140,
-      {align:"center"}
-    );
+    doc.text("Certificate ID: "+certificateId,105,130,{align:"center"});
 
     doc.save("coffee-biochar-certificate.pdf");
 
