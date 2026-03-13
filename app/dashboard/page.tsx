@@ -463,6 +463,31 @@ Material adicional
 
 })}
 
+{/* EVALUATION BUTTON */}
+
+{status === "available" &&
+moduleSessions.length > 0 &&
+moduleSessions.every(s => completed.includes(s.id)) && (
+
+<div style={{marginTop:"15px"}}>
+
+<button
+onClick={()=>window.open(module.formLink,"_blank")}
+style={{
+background:"#2196F3",
+border:"none",
+color:"white",
+padding:"10px 14px",
+borderRadius:"5px"
+}}
+>
+Tomar evaluación
+</button>
+
+</div>
+
+)}
+
 </div>
 
 )}
