@@ -213,7 +213,7 @@ sessions.filter(
 s=>s.module===module.id
 );
 
-/* lógica de desbloqueo */
+/* lógica desbloqueo */
 
 let unlocked = false;
 
@@ -224,9 +224,27 @@ unlocked = true;
 }else{
 
 const previousScore =
-moduleScores[module.order - 1];
+Number(moduleScores[String(module.order - 1)] || 0);
 
 unlocked = previousScore >= 60;
+
+}
+
+/* estado visual */
+
+let status = "locked";
+
+if(module.order === 1){
+
+status = "available";
+
+}else if(moduleScores[String(module.order)]){
+
+status = "approved";
+
+}else if(unlocked){
+
+status = "available";
 
 }
 
@@ -254,19 +272,37 @@ style={{cursor:"pointer"}}
 
 <h3>{module.title}</h3>
 
-<p style={{color:"#888"}}>
-{moduleSessions.length} sesiones
+{/* Estado LMS */}
+
+{status === "approved" && (
+
+<p style={{color:"#4CAF50"}}>
+🟢 Aprobado — Score: {moduleScores[String(module.order)]}
 </p>
 
-</div>
+)}
 
-{!unlocked && (
+{status === "available" && (
+
+<p style={{color:"#FFC107"}}>
+🟡 Disponible
+</p>
+
+)}
+
+{status === "locked" && (
 
 <p style={{color:"#777"}}>
 🔒 Completa el módulo anterior para desbloquear
 </p>
 
 )}
+
+<p style={{color:"#888"}}>
+{moduleSessions.length} sesiones
+</p>
+
+</div>
 
 {isOpen && unlocked &&(
 
