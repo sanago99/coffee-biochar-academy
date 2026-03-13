@@ -3,403 +3,430 @@
 import { useEffect, useState } from "react";
 import { db, auth } from "../../firebase/config";
 import {
-  collection,
-  getDocs,
-  addDoc,
-  doc,
-  getDoc
+collection,
+getDocs,
+addDoc,
+doc,
+getDoc
 } from "firebase/firestore";
 
 import { signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
+
 import jsPDF from "jspdf";
 import QRCode from "qrcode";
 
 export default function Dashboard(){
 
-  const router = useRouter();
+const router = useRouter();
 
-  const [modules,setModules] = useState<any[]>([]);
-  const [sessions,setSessions] = useState<any[]>([]);
-  const [openModule,setOpenModule] = useState<string | null>(null);
-  const [completed,setCompleted] = useState<string[]>([]);
-  const [studentName,setStudentName] = useState("");
+const [modules,setModules] = useState<any[]>([]);
+const [sessions,setSessions] = useState<any[]>([]);
+const [completed,setCompleted] = useState<string[]>([]);
 
-  useEffect(()=>{
+const [studentName,setStudentName] = useState("");
 
-    const loadData = async ()=>{
+const [completedCount,setCompletedCount] = useState(0);
+const [nextSession,setNextSession] = useState("");
 
-      const modulesSnapshot = await getDocs(collection(db,"modules"));
-      const sessionsSnapshot = await getDocs(collection(db,"sessions"));
+const [openModule,setOpenModule] =
+useState<string | null>(null);
 
-      const modulesList:any[]=[];
-      const sessionsList:any[]=[];
+useEffect(()=>{
 
-      modulesSnapshot.forEach(doc=>{
-        modulesList.push({
-          id:doc.id,
-          ...doc.data()
-        });
-      });
+const loadData = async ()=>{
 
-      sessionsSnapshot.forEach(doc=>{
-        sessionsList.push({
-          id:doc.id,
-          ...doc.data()
-        });
-      });
+const modulesSnap =
+await getDocs(collection(db,"modules"));
 
-      setModules(modulesList);
-      setSessions(sessionsList);
+const sessionsSnap =
+await getDocs(collection(db,"sessions"));
 
-    };
+const progressSnap =
+await getDocs(collection(db,"progress"));
 
-    const loadUser = async ()=>{
+const modulesList:any[]=[];
+const sessionsList:any[]=[];
+const progressList:any[]=[];
 
-      const user = auth.currentUser;
+modulesSnap.forEach(doc=>{
+modulesList.push({
+id:doc.id,
+...doc.data()
+});
+});
 
-      if(!user) return;
+sessionsSnap.forEach(doc=>{
+sessionsList.push({
+id:doc.id,
+...doc.data()
+});
+});
 
-      const userDoc = await getDoc(doc(db,"users",user.uid));
+progressSnap.forEach(doc=>{
+progressList.push(doc.data());
+});
 
-      if(userDoc.exists()){
+setModules(modulesList);
+setSessions(sessionsList);
 
-        const data:any = userDoc.data();
+const uid = auth.currentUser?.uid;
 
-        setStudentName(data.name);
+const completedSessions =
+progressList.filter(p=>p.userId===uid);
 
-        console.log("Nombre cargado:",data.name);
+setCompletedCount(completedSessions.length);
 
-      }
+setCompleted(
+completedSessions.map(p=>p.sessionId)
+);
 
-    };
+const next =
+sessionsList[completedSessions.length];
 
-    loadData();
-    loadUser();
+if(next){
+setNextSession(next.title);
+}
 
-  },[]);
+};
 
-  const logout = async ()=>{
+const loadUser = async ()=>{
 
-    await signOut(auth);
-    router.push("/login");
+const user = auth.currentUser;
 
-  };
+if(!user) return;
 
-  const completeSession = async (sessionId:string)=>{
+const userDoc =
+await getDoc(doc(db,"users",user.uid));
 
-    await addDoc(collection(db,"progress"),{
+if(userDoc.exists()){
 
-      userId:auth.currentUser?.uid,
-      sessionId:sessionId,
-      completed:true
+const data:any = userDoc.data();
 
-    });
+setStudentName(data.name);
 
-    setCompleted([...completed,sessionId]);
+}
 
-    alert("Sesión completada");
+};
 
-  };
+loadData();
+loadUser();
 
-  const totalSessions = sessions.length;
+},[]);
 
-  const progress = totalSessions
-    ? Math.round((completed.length / totalSessions) * 100)
-    : 0;
+const logout = async ()=>{
 
-  const generateCertificate = async ()=>{
+await signOut(auth);
 
-    if(!studentName){
+router.push("/login");
 
-      alert("El nombre aún no se ha cargado");
+};
 
-      return;
+const completeSession = async (sessionId:string)=>{
 
-    }
+await addDoc(collection(db,"progress"),{
 
-    try{
+userId:auth.currentUser?.uid,
+sessionId:sessionId,
+completed:true
 
-      const certificateId = "CBA-" + Date.now();
+});
 
-      const verificationUrl =
-        "https://coffeebiochar.academy/certificate/" + certificateId;
+setCompleted([...completed,sessionId]);
 
-      await addDoc(collection(db,"certificates"),{
+setCompletedCount(completedCount+1);
 
-        certificateId:certificateId,
-        name:studentName,
-        userId:auth.currentUser?.uid,
-        date:new Date().toISOString()
+alert("Sesión completada");
 
-      });
+};
 
-      const qrImage = await QRCode.toDataURL(verificationUrl);
+const totalSessions = sessions.length;
 
-      const pdf = new jsPDF("landscape");
+const progress = totalSessions
+? Math.round((completedCount/totalSessions)*100)
+:0;
 
-      pdf.setDrawColor(40,120,70);
-      pdf.setLineWidth(3);
-      pdf.rect(10,10,277,190);
+const generateCertificate = async ()=>{
 
-      pdf.setFontSize(28);
-      pdf.text("Coffee Biochar Academy",148,60,{align:"center"});
+if(!studentName){
+alert("Nombre no cargado");
+return;
+}
 
-      pdf.setFontSize(18);
-      pdf.text("CERTIFICATE OF COMPLETION",148,80,{align:"center"});
+const certificateId =
+"CBA-" + Date.now();
 
-      pdf.setFontSize(26);
-      pdf.text(studentName,148,110,{align:"center"});
+const verificationUrl =
+"https://coffeebiochar.academy/certificate/" +
+certificateId;
 
-      pdf.setFontSize(16);
-      pdf.text(
-        "Certified Coffee Biochar Extensionist",
-        148,
-        130,
-        {align:"center"}
-      );
-
-      pdf.setFontSize(12);
-      pdf.text(
-        "Coffee Biochar Program",
-        148,
-        145,
-        {align:"center"}
-      );
+await addDoc(collection(db,"certificates"),{
 
-      pdf.text(
-        "Certificate ID: "+certificateId,
-        148,
-        160,
-        {align:"center"}
-      );
+certificateId,
+name:studentName,
+userId:auth.currentUser?.uid,
+date:new Date().toISOString()
 
-      pdf.addImage(qrImage,"PNG",230,150,40,40);
+});
 
-      pdf.save("coffee-biochar-certificate.pdf");
+const qr =
+await QRCode.toDataURL(verificationUrl);
 
-    }catch(error){
+const pdf = new jsPDF("landscape");
 
-      console.error(error);
+pdf.setFontSize(28);
 
-      alert("Error generando certificado");
+pdf.text(
+"Coffee Biochar Academy",
+148,
+60,
+{align:"center"}
+);
 
-    }
+pdf.setFontSize(18);
 
-  };
+pdf.text(
+"CERTIFICATE OF COMPLETION",
+148,
+80,
+{align:"center"}
+);
 
-  return(
+pdf.setFontSize(26);
 
-    <main style={{
-      minHeight:"100vh",
-      background:"#111",
-      color:"white",
-      padding:"40px",
-      fontFamily:"Arial"
-    }}>
+pdf.text(
+studentName,
+148,
+110,
+{align:"center"}
+);
 
-      <button
-        onClick={logout}
-        style={{
-          position:"absolute",
-          top:"20px",
-          right:"20px",
-          padding:"8px 15px",
-          background:"#444",
-          border:"none",
-          color:"white",
-          cursor:"pointer",
-          borderRadius:"6px"
-        }}
-      >
-        Cerrar sesión
-      </button>
+pdf.setFontSize(16);
 
-      <h1>Coffee Biochar Academy</h1>
+pdf.text(
+"Certified Coffee Biochar Extensionist",
+148,
+130,
+{align:"center"}
+);
 
-      <h2>Bienvenido {studentName}</h2>
+pdf.setFontSize(12);
 
-      <div style={{marginTop:"30px"}}>
+pdf.text(
+"Certificate ID: "+certificateId,
+148,
+150,
+{align:"center"}
+);
 
-        <p>Progreso del curso</p>
+pdf.addImage(qr,"PNG",230,140,40,40);
 
-        <div style={{
-          width:"400px",
-          height:"10px",
-          background:"#333",
-          borderRadius:"5px"
-        }}>
+pdf.save("coffee-biochar-certificate.pdf");
 
-          <div style={{
-            width:progress+"%",
-            height:"10px",
-            background:"#2E7D32",
-            borderRadius:"5px"
-          }}></div>
+};
 
-        </div>
+return(
 
-        <p style={{marginTop:"5px"}}>
-          {progress}% completado
-        </p>
+<main style={{
+minHeight:"100vh",
+background:"#111",
+color:"white",
+padding:"40px",
+fontFamily:"Arial"
+}}>
 
-        {progress===100 &&(
+<button
+onClick={logout}
+style={{
+position:"absolute",
+right:"20px",
+top:"20px",
+padding:"8px 16px",
+background:"#444",
+border:"none",
+color:"white",
+cursor:"pointer",
+borderRadius:"6px"
+}}
+>
+Cerrar sesión
+</button>
 
-          <button
-            onClick={generateCertificate}
-            style={{
-              marginTop:"15px",
-              padding:"10px 20px",
-              background:"#2E7D32",
-              border:"none",
-              color:"white",
-              cursor:"pointer"
-            }}
-          >
-            Descargar certificado
-          </button>
-
-        )}
-
-      </div>
-
-      <h2 style={{marginTop:"40px"}}>Módulos</h2>
-
-      {modules.map(module=>{
-
-        const moduleSessions =
-          sessions.filter(s=>s.module===module.id);
-
-        const isOpen =
-          openModule===module.id;
-
-        return(
-
-          <div
-            key={module.id}
-            style={{
-              border:"1px solid #333",
-              borderRadius:"8px",
-              marginTop:"20px",
-              padding:"15px"
-            }}
-          >
-
-            <div
-              onClick={()=>
-                setOpenModule(
-                  isOpen ? null : module.id
-                )
-              }
-              style={{cursor:"pointer"}}
-            >
-
-              <h3>{module.title}</h3>
-
-              <p style={{color:"#888"}}>
-                {moduleSessions.length} sesiones
-              </p>
+<h1>Coffee Biochar Academy</h1>
 
-            </div>
+<div style={{
+marginTop:"30px",
+background:"#1a1a1a",
+padding:"20px",
+borderRadius:"10px"
+}}>
 
-            {isOpen &&(
+<h2>Bienvenido {studentName}</h2>
 
-              <div style={{marginTop:"10px"}}>
+<p>
+Curso: Certified Coffee Biochar Extensionist
+</p>
 
-                {moduleSessions.map(session=>(
+<p>
+Progreso del curso: {progress}%
+</p>
 
-                  <div
-                    key={session.id}
-                    style={{
-                      border:"1px solid #444",
-                      borderRadius:"6px",
-                      padding:"10px",
-                      marginTop:"10px"
-                    }}
-                  >
+<p>
+Sesiones completadas:
+{completedCount} / {sessions.length}
+</p>
 
-                    <p><b>{session.title}</b></p>
+<p>
+Próxima sesión: {nextSession}
+</p>
 
-                    <p style={{color:"#888"}}>
-                      {session.date}
-                    </p>
+</div>
 
-                    {session.locked ?(
+<h2 style={{marginTop:"40px"}}>
 
-                      <p style={{color:"#777"}}>
-                        Sesión bloqueada
-                      </p>
+Módulos
 
-                    ):(
-                      <div style={{marginTop:"5px"}}>
+</h2>
 
-                        <a
-                          href={session.link}
-                          target="_blank"
-                          style={{
-                            padding:"6px 12px",
-                            background:"#2E7D32",
-                            color:"white",
-                            textDecoration:"none",
-                            borderRadius:"4px"
-                          }}
-                        >
-                          Join Session
-                        </a>
+{modules.map(module=>{
 
-                        {session.material &&(
+const moduleSessions =
+sessions.filter(
+s=>s.module===module.id
+);
 
-                          <a
-                            href={session.material}
-                            target="_blank"
-                            style={{
-                              marginLeft:"10px",
-                              padding:"6px 12px",
-                              background:"#444",
-                              color:"white",
-                              textDecoration:"none",
-                              borderRadius:"4px"
-                            }}
-                          >
-                            Material
-                          </a>
+const isOpen =
+openModule===module.id;
 
-                        )}
+return(
 
-                        <button
-                          onClick={()=>completeSession(session.id)}
-                          style={{
-                            marginLeft:"10px",
-                            padding:"6px 12px",
-                            background:"#555",
-                            border:"none",
-                            color:"white",
-                            cursor:"pointer"
-                          }}
-                        >
-                          Completar
-                        </button>
+<div
+key={module.id}
+style={{
+border:"1px solid #333",
+borderRadius:"8px",
+marginTop:"20px",
+padding:"15px"
+}}
+>
 
-                      </div>
+<div
+onClick={()=>setOpenModule(
+isOpen ? null : module.id
+)}
+style={{cursor:"pointer"}}
+>
 
-                    )}
+<h3>{module.title}</h3>
 
-                  </div>
+<p style={{color:"#888"}}>
+{moduleSessions.length} sesiones
+</p>
 
-                ))}
+</div>
 
-              </div>
+{isOpen &&(
 
-            )}
+<div style={{marginTop:"10px"}}>
 
-          </div>
+{moduleSessions.map(session=>(
 
-        );
+<div
+key={session.id}
+style={{
+border:"1px solid #444",
+borderRadius:"6px",
+padding:"10px",
+marginTop:"10px"
+}}
+>
 
-      })}
+<p><b>{session.title}</b></p>
 
-    </main>
+{session.locked ?(
 
-  );
+<p style={{color:"#777"}}>
+Sesión bloqueada
+</p>
+
+):(
+
+<div>
+
+<a
+href={session.link}
+target="_blank"
+style={{
+padding:"6px 12px",
+background:"#2E7D32",
+color:"white",
+textDecoration:"none",
+borderRadius:"4px"
+}}
+>
+
+Join Session
+
+</a>
+
+<button
+onClick={()=>
+completeSession(session.id)
+}
+style={{
+marginLeft:"10px",
+padding:"6px 12px",
+background:"#555",
+border:"none",
+color:"white",
+cursor:"pointer"
+}}
+>
+
+Completar
+
+</button>
+
+</div>
+
+)}
+
+</div>
+
+))}
+
+</div>
+
+)}
+
+</div>
+
+);
+
+})}
+
+{progress===100 &&(
+
+<button
+onClick={generateCertificate}
+style={{
+marginTop:"30px",
+padding:"12px 24px",
+background:"#2E7D32",
+border:"none",
+color:"white",
+cursor:"pointer"
+}}
+>
+
+Descargar certificado
+
+</button>
+
+)}
+
+</main>
+
+);
 
 }
