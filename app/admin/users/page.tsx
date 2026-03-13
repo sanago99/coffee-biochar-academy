@@ -62,9 +62,8 @@ export default function UsersAdmin(){
 
             <th style={{textAlign:"left",padding:"10px"}}>Nombre</th>
             <th style={{textAlign:"left",padding:"10px"}}>Municipio</th>
-            <th style={{textAlign:"left",padding:"10px"}}>Finca</th>
             <th style={{textAlign:"left",padding:"10px"}}>Cluster</th>
-            <th style={{textAlign:"left",padding:"10px"}}>Teléfono</th>
+            <th style={{textAlign:"left",padding:"10px"}}>Progreso</th>
 
           </tr>
 
@@ -77,10 +76,34 @@ export default function UsersAdmin(){
             <tr key={user.id} style={{borderBottom:"1px solid #333"}}>
 
               <td style={{padding:"10px"}}>{user.name}</td>
+
               <td style={{padding:"10px"}}>{user.municipio}</td>
-              <td style={{padding:"10px"}}>{user.finca}</td>
+
               <td style={{padding:"10px"}}>{user.cluster}</td>
-              <td style={{padding:"10px"}}>{user.telefono}</td>
+
+              <td style={{padding:"10px"}}>
+
+                <div style={{
+                  width:"150px",
+                  height:"10px",
+                  background:"#333",
+                  borderRadius:"5px"
+                }}>
+
+                  <div style={{
+                    width:(user.progress || 0)+"%",
+                    height:"10px",
+                    background:"#2E7D32",
+                    borderRadius:"5px"
+                  }}></div>
+
+                </div>
+
+                <span style={{marginLeft:"10px"}}>
+                  {user.progress || 0}%
+                </span>
+
+              </td>
 
             </tr>
 
