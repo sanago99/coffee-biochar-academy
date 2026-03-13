@@ -7,8 +7,6 @@ import {
 collection,
 getDocs,
 addDoc,
-doc,
-getDoc,
 query,
 where
 } from "firebase/firestore";
@@ -38,13 +36,12 @@ useState<string | null>(null);
 
 useEffect(()=>{
 
-/* cargar usuario */
-
 const loadUser = async (email:string)=>{
 
-const usersRef = collection(db,"users");
-
-const q = query(usersRef, where("email","==",email));
+const q = query(
+collection(db,"users"),
+where("email","==",email)
+);
 
 const snap = await getDocs(q);
 
@@ -60,9 +57,9 @@ setModuleScores(data.moduleScores || {});
 
 };
 
-/* cargar módulos y sesiones */
-
 const loadData = async (uid:string)=>{
+
+/* módulos */
 
 const modulesSnap =
 await getDocs(collection(db,"modules"));
@@ -118,8 +115,6 @@ completedSessions.map(p=>p.sessionId)
 
 };
 
-/* escuchar login */
-
 const unsubscribe =
 onAuthStateChanged(auth, async (user)=>{
 
@@ -140,8 +135,6 @@ return () => unsubscribe();
 
 },[]);
 
-/* logout */
-
 const logout = async ()=>{
 
 await signOut(auth);
@@ -149,8 +142,6 @@ await signOut(auth);
 router.push("/login");
 
 };
-
-/* completar sesión */
 
 const completeSession = async (sessionId:string)=>{
 
@@ -170,8 +161,6 @@ setCompleted([...completed,sessionId]);
 setCompletedCount(completedCount+1);
 
 };
-
-/* progreso curso */
 
 const totalSessions = sessions.length;
 
@@ -227,7 +216,7 @@ sessions.filter(
 s=>s.module===module.id
 );
 
-/* lógica desbloqueo */
+/* desbloqueo */
 
 let unlocked = false;
 
@@ -244,17 +233,22 @@ unlocked = previousScore >= 60;
 
 }
 
-/* estado visual */
+/* score actual */
+
+const score =
+Number(moduleScores[String(module.order)] || 0);
+
+/* estado módulo */
 
 let status = "locked";
 
-if(module.order === 1){
-
-status = "available";
-
-}else if(moduleScores[String(module.order)]){
+if(score >= module.passingScore){
 
 status = "approved";
+
+}else if(module.order === 1){
+
+status = "available";
 
 }else if(unlocked){
 
@@ -286,17 +280,15 @@ style={{cursor:"pointer"}}
 
 <h3>{module.title}</h3>
 
-{/* estado módulo */}
-
-{status === "approved" && (
+{status==="approved" &&(
 
 <p style={{color:"#4CAF50"}}>
-🟢 Aprobado — Score: {moduleScores[String(module.order)]}
+🟢 Aprobado — Score: {score}
 </p>
 
 )}
 
-{status === "available" && (
+{status==="available" &&(
 
 <p style={{color:"#FFC107"}}>
 🟡 Disponible
@@ -304,7 +296,7 @@ style={{cursor:"pointer"}}
 
 )}
 
-{status === "locked" && (
+{status==="locked" &&(
 
 <p style={{color:"#777"}}>
 🔒 Completa el módulo anterior para desbloquear
@@ -352,7 +344,7 @@ borderRadius:"4px"
 Join Session
 </a>
 
-{session.material && (
+{session.material &&(
 
 <a
 href={session.material}
@@ -366,12 +358,12 @@ textDecoration:"none",
 borderRadius:"4px"
 }}
 >
-Material
+Material adicional
 </a>
 
 )}
 
-{completed.includes(session.id) ? (
+{completed.includes(session.id)?(
 
 <span
 style={{
@@ -383,7 +375,7 @@ fontWeight:"bold"
 ✓ Completada
 </span>
 
-) : (
+):(
 
 <button
 onClick={()=>completeSession(session.id)}
@@ -407,7 +399,7 @@ Completar
 
 ))}
 
-{module.formLink && (
+{module.formLink && status!=="approved" &&(
 
 <a
 href={module.formLink}
