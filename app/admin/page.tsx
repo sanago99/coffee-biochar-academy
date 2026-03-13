@@ -5,6 +5,7 @@ import { db, auth } from "../../firebase/config";
 import { collection, getDocs } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { signOut } from "firebase/auth";
 
 export default function AdminDashboard(){
 
@@ -42,6 +43,13 @@ export default function AdminDashboard(){
 
   };
 
+  const logout = async ()=>{
+
+    await signOut(auth);
+    router.push("/login");
+
+  };
+
   return(
 
     <main style={{
@@ -52,18 +60,35 @@ export default function AdminDashboard(){
       fontFamily:"Arial"
     }}>
 
+      <button
+        onClick={logout}
+        style={{
+          position:"absolute",
+          top:"20px",
+          right:"20px",
+          padding:"8px 15px",
+          background:"#444",
+          border:"none",
+          color:"white",
+          cursor:"pointer",
+          borderRadius:"6px"
+        }}
+      >
+        Cerrar sesión
+      </button>
+
       <h1>Panel de Administración</h1>
 
       <p style={{color:"#aaa"}}>
         Coffee Biochar Academy
       </p>
 
-      {/* ESTADISTICAS */}
+      {/* Estadísticas */}
 
       <div style={{
         marginTop:"40px",
         display:"grid",
-        gridTemplateColumns:"repeat(2,200px)",
+        gridTemplateColumns:"repeat(2,220px)",
         gap:"20px"
       }}>
 
@@ -89,12 +114,13 @@ export default function AdminDashboard(){
 
       </div>
 
-      {/* BOTONES ADMIN */}
+      {/* Botones principales */}
 
       <div style={{
         marginTop:"50px",
         display:"flex",
-        gap:"20px"
+        gap:"20px",
+        flexWrap:"wrap"
       }}>
 
         <Link href="/admin/content">
@@ -120,6 +146,19 @@ export default function AdminDashboard(){
             borderRadius:"6px"
           }}>
             Ver extensionistas
+          </button>
+        </Link>
+
+        <Link href="/admin/create-user">
+          <button style={{
+            padding:"15px 25px",
+            background:"#1976D2",
+            border:"none",
+            color:"white",
+            cursor:"pointer",
+            borderRadius:"6px"
+          }}>
+            Crear extensionista
           </button>
         </Link>
 
