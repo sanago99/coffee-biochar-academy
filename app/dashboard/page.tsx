@@ -91,28 +91,41 @@ export default function Dashboard(){
 
       const qrImage = await QRCode.toDataURL(verificationUrl);
 
-      const doc = new jsPDF();
+      const doc = new jsPDF("landscape");
 
-      doc.setFontSize(26);
-      doc.text("Coffee Biochar Academy",105,40,{align:"center"});
+      // marco
+      doc.setDrawColor(40,120,70);
+      doc.setLineWidth(3);
+      doc.rect(10,10,277,190);
+
+      // logo
+      doc.addImage("/logo.png","PNG",130,20,40,20);
+
+      doc.setFontSize(28);
+      doc.text("Coffee Biochar Academy",148,60,{align:"center"});
 
       doc.setFontSize(18);
-      doc.text("Certificate of Completion",105,60,{align:"center"});
+      doc.text("CERTIFICATE OF COMPLETION",148,80,{align:"center"});
 
-      doc.setFontSize(22);
-      doc.text(studentName,105,90,{align:"center"});
+      doc.setFontSize(26);
+      doc.text(studentName,148,110,{align:"center"});
 
-      doc.setFontSize(14);
-      doc.text("Certified Coffee Biochar Extensionist",105,110,{align:"center"});
+      doc.setFontSize(16);
+      doc.text("Certified Coffee Biochar Extensionist",148,130,{align:"center"});
 
       doc.setFontSize(12);
-      doc.text("Certificate ID:",105,130,{align:"center"});
-      doc.text(certificateId,105,138,{align:"center"});
+      doc.text("Cohorte Coffee Biochar 2026",148,145,{align:"center"});
 
-      doc.text("Verify:",105,150,{align:"center"});
-      doc.text(verificationUrl,105,158,{align:"center"});
+      doc.text("Certificate ID: "+certificateId,148,160,{align:"center"});
 
-      doc.addImage(qrImage,"PNG",90,170,30,30);
+      doc.text("Verify:",240,150);
+
+      doc.addImage(qrImage,"PNG",230,155,40,40);
+
+      doc.addImage("/signature.png","PNG",40,150,60,20);
+
+      doc.setFontSize(10);
+      doc.text("Program Director",60,175);
 
       doc.save("coffee-biochar-certificate.pdf");
 
