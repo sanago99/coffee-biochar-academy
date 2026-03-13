@@ -127,10 +127,7 @@ router.push("/login");
 const completeSession = async (sessionId:string)=>{
 
 if(completed.includes(sessionId)){
-
-alert("Esta sesión ya fue completada");
 return;
-
 }
 
 await addDoc(collection(db,"progress"),{
@@ -410,6 +407,28 @@ Completar
 
 ))}
 
+{module.formLink && (
+
+<a
+href={module.formLink}
+target="_blank"
+style={{
+display:"inline-block",
+marginTop:"15px",
+padding:"10px 18px",
+background:"#FF9800",
+color:"white",
+textDecoration:"none",
+borderRadius:"6px"
+}}
+>
+
+Tomar evaluación del módulo
+
+</a>
+
+)}
+
 </div>
 
 )}
@@ -420,7 +439,7 @@ Completar
 
 })}
 
-{completedCount >= sessions.length ? (
+{completedCount >= sessions.length && (
 
 <button
 onClick={generateCertificate}
@@ -437,12 +456,6 @@ cursor:"pointer"
 Descargar certificado
 
 </button>
-
-) : (
-
-<p style={{color:"#aaa",marginTop:"20px"}}>
-Completa todas las sesiones para obtener el certificado
-</p>
 
 )}
 
