@@ -131,14 +131,18 @@ router.push("/login");
 const completeSession = async (sessionId:string)=>{
 
 if(completed.includes(sessionId)){
+
+alert("Esta sesión ya fue completada");
 return;
+
 }
 
 await addDoc(collection(db,"progress"),{
 
 userId:auth.currentUser?.uid,
 sessionId:sessionId,
-completed:true
+completed:true,
+completedAt:new Date()
 
 });
 
@@ -383,10 +387,22 @@ Join Session
 
 </a>
 
+{completed.includes(session.id) ? (
+
+<span style={{
+marginLeft:"10px",
+color:"#2E7D32",
+fontWeight:"bold"
+}}>
+
+✓ Completada
+
+</span>
+
+) : (
+
 <button
-onClick={()=>
-completeSession(session.id)
-}
+onClick={()=>completeSession(session.id)}
 style={{
 marginLeft:"10px",
 padding:"6px 12px",
@@ -400,6 +416,8 @@ cursor:"pointer"
 Completar
 
 </button>
+
+)}
 
 </div>
 
