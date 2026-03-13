@@ -1,21 +1,60 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { db } from "../../../firebase/config";
-import { addDoc, collection } from "firebase/firestore";
+
+import {
+collection,
+addDoc,
+getDocs
+} from "firebase/firestore";
 
 export default function Content(){
+
+const [modules,setModules] = useState<any[]>([]);
+
+/* MODULE */
 
 const [moduleTitle,setModuleTitle] = useState("");
 const [moduleOrder,setModuleOrder] = useState("");
 const [formLink,setFormLink] = useState("");
+
+/* SESSION */
 
 const [sessionTitle,setSessionTitle] = useState("");
 const [sessionLink,setSessionLink] = useState("");
 const [sessionMaterial,setSessionMaterial] = useState("");
 const [sessionModule,setSessionModule] = useState("");
 
-/* CREAR MODULO */
+/* LOAD MODULES */
+
+useEffect(()=>{
+
+const loadModules = async ()=>{
+
+const snap = await getDocs(collection(db,"modules"));
+
+const list:any[]=[];
+
+snap.forEach(doc=>{
+
+list.push({
+id:doc.id,
+...doc.data()
+});
+
+});
+
+setModules(list);
+
+};
+
+loadModules();
+
+},[]);
+
+
+/* CREATE MODULE */
 
 const createModule = async ()=>{
 
@@ -37,13 +76,12 @@ passingScore:60
 
 alert("Módulo creado");
 
-setModuleTitle("");
-setModuleOrder("");
-setFormLink("");
+location.reload();
 
 };
 
-/* CREAR SESION */
+
+/* CREATE SESSION */
 
 const createSession = async ()=>{
 
@@ -69,9 +107,11 @@ alert("Sesión creada");
 setSessionTitle("");
 setSessionLink("");
 setSessionMaterial("");
-setSessionModule("");
 
 };
+
+
+/* UI */
 
 return(
 
@@ -85,7 +125,7 @@ fontFamily:"Arial"
 
 <h1>Gestión de contenido</h1>
 
-{/* CREAR MODULO */}
+{/* CREATE MODULE */}
 
 <h2 style={{marginTop:"40px"}}>Crear módulo</h2>
 
@@ -97,14 +137,14 @@ style={input}
 />
 
 <input
-placeholder="Orden del módulo (1,2,3...)"
+placeholder="Orden del módulo"
 value={moduleOrder}
 onChange={(e)=>setModuleOrder(e.target.value)}
 style={input}
 />
 
 <input
-placeholder="Link del Google Form (evaluación)"
+placeholder="Link del Google Form"
 value={formLink}
 onChange={(e)=>setFormLink(e.target.value)}
 style={input}
@@ -119,7 +159,8 @@ Crear módulo
 
 </button>
 
-{/* CREAR SESION */}
+
+{/* CREATE SESSION */}
 
 <h2 style={{marginTop:"60px"}}>Crear sesión</h2>
 
@@ -131,25 +172,42 @@ style={input}
 />
 
 <input
-placeholder="Link de reunión (Teams/Zoom)"
+placeholder="Link de reunión"
 value={sessionLink}
 onChange={(e)=>setSessionLink(e.target.value)}
 style={input}
 />
 
 <input
-placeholder="Material adicional (Drive)"
+placeholder="Material adicional"
 value={sessionMaterial}
 onChange={(e)=>setSessionMaterial(e.target.value)}
 style={input}
 />
 
-<input
-placeholder="ID del módulo (ej: M1)"
+
+{/* MODULE DROPDOWN */}
+
+<select
 value={sessionModule}
 onChange={(e)=>setSessionModule(e.target.value)}
 style={input}
-/>
+>
+
+<option value="">Seleccionar módulo</option>
+
+{modules.map((m)=>(
+
+<option key={m.id} value={m.id}>
+
+{m.title}
+
+</option>
+
+))}
+
+</select>
+
 
 <button
 onClick={createSession}
