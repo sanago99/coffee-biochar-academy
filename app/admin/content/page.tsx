@@ -9,28 +9,36 @@ addDoc,
 getDocs
 } from "firebase/firestore";
 
-export default function Content(){
+import AdminGuard from "../../components/AdminGuard";
+
+export default function AdminContent(){
 
 const [modules,setModules] = useState<any[]>([]);
+const [sessions,setSessions] = useState<any[]>([]);
 
-/* MODULE */
+/* MODULE FORM */
 
 const [moduleTitle,setModuleTitle] = useState("");
-const [moduleOrder,setModuleOrder] = useState("");
-const [formLink,setFormLink] = useState("");
+const [moduleOrder,setModuleOrder] = useState<number>(1);
+const [moduleFormLink,setModuleFormLink] = useState("");
 
-/* SESSION */
+/* SESSION FORM */
 
 const [sessionTitle,setSessionTitle] = useState("");
 const [sessionLink,setSessionLink] = useState("");
 const [sessionMaterial,setSessionMaterial] = useState("");
-const [sessionModule,setSessionModule] = useState("");
+const [selectedModule,setSelectedModule] = useState("");
 
-/* LOAD MODULES */
+/* LOAD DATA */
 
 useEffect(()=>{
 
-const loadModules = async ()=>{
+loadModules();
+loadSessions();
+
+},[]);
+
+const loadModules = async()=>{
 
 const snap = await getDocs(collection(db,"modules"));
 
@@ -45,49 +53,67 @@ id:doc.id,
 
 });
 
+list.sort((a,b)=>a.order-b.order);
+
 setModules(list);
 
 };
 
-loadModules();
+const loadSessions = async()=>{
 
-},[]);
+const snap = await getDocs(collection(db,"sessions"));
+
+const list:any[]=[];
+
+snap.forEach(doc=>{
+
+list.push({
+id:doc.id,
+...doc.data()
+});
+
+});
+
+setSessions(list);
+
+};
+
 
 
 /* CREATE MODULE */
 
-const createModule = async ()=>{
+const createModule = async()=>{
 
-if(!moduleTitle || !moduleOrder){
-
-alert("Completa los campos del módulo");
+if(!moduleTitle){
+alert("Escribe el nombre del módulo");
 return;
-
 }
 
 await addDoc(collection(db,"modules"),{
 
 title:moduleTitle,
-order:Number(moduleOrder),
-formLink:formLink,
+order:moduleOrder,
+formLink:moduleFormLink,
 passingScore:60
 
 });
 
-alert("Módulo creado");
+setModuleTitle("");
+setModuleFormLink("");
 
-location.reload();
+loadModules();
 
 };
 
 
+
 /* CREATE SESSION */
 
-const createSession = async ()=>{
+const createSession = async()=>{
 
-if(!sessionTitle || !sessionModule){
+if(!sessionTitle || !selectedModule){
 
-alert("Completa los campos de la sesión");
+alert("Completa los campos");
 return;
 
 }
@@ -97,31 +123,33 @@ await addDoc(collection(db,"sessions"),{
 title:sessionTitle,
 link:sessionLink,
 material:sessionMaterial,
-module:sessionModule,
+moduleId:selectedModule,
 locked:false
 
 });
-
-alert("Sesión creada");
 
 setSessionTitle("");
 setSessionLink("");
 setSessionMaterial("");
 
+loadSessions();
+
 };
 
 
-/* UI */
 
 return(
 
-<main style={{
-minHeight:"100vh",
+<AdminGuard>
+
+<div
+style={{
 background:"#111",
 color:"white",
-padding:"40px",
-fontFamily:"Arial"
-}}>
+minHeight:"100vh",
+padding:"40px"
+}}
+>
 
 <h1>Gestión de contenido</h1>
 
@@ -130,119 +158,138 @@ fontFamily:"Arial"
 <h2 style={{marginTop:"40px"}}>Crear módulo</h2>
 
 <input
-placeholder="Título del módulo"
+placeholder="Nombre del módulo"
 value={moduleTitle}
 onChange={(e)=>setModuleTitle(e.target.value)}
-style={input}
+style={{display:"block",marginTop:"10px"}}
 />
 
 <input
+type="number"
 placeholder="Orden del módulo"
 value={moduleOrder}
-onChange={(e)=>setModuleOrder(e.target.value)}
-style={input}
+onChange={(e)=>setModuleOrder(Number(e.target.value))}
+style={{display:"block",marginTop:"10px"}}
 />
 
 <input
-placeholder="Link del Google Form"
-value={formLink}
-onChange={(e)=>setFormLink(e.target.value)}
-style={input}
+placeholder="Link evaluación (Google Forms)"
+value={moduleFormLink}
+onChange={(e)=>setModuleFormLink(e.target.value)}
+style={{display:"block",marginTop:"10px"}}
 />
 
 <button
 onClick={createModule}
-style={btn}
+style={{
+marginTop:"10px",
+padding:"8px 14px",
+background:"#4CAF50",
+border:"none",
+color:"white",
+borderRadius:"5px"
+}}
 >
-
 Crear módulo
-
 </button>
+
 
 
 {/* CREATE SESSION */}
 
-<h2 style={{marginTop:"60px"}}>Crear sesión</h2>
+<h2 style={{marginTop:"50px"}}>Crear sesión</h2>
 
 <input
-placeholder="Título de la sesión"
+placeholder="Título sesión"
 value={sessionTitle}
 onChange={(e)=>setSessionTitle(e.target.value)}
-style={input}
+style={{display:"block",marginTop:"10px"}}
 />
 
 <input
-placeholder="Link de reunión"
+placeholder="Link sesión (video)"
 value={sessionLink}
 onChange={(e)=>setSessionLink(e.target.value)}
-style={input}
+style={{display:"block",marginTop:"10px"}}
 />
 
 <input
 placeholder="Material adicional"
 value={sessionMaterial}
 onChange={(e)=>setSessionMaterial(e.target.value)}
-style={input}
+style={{display:"block",marginTop:"10px"}}
 />
 
-
-{/* MODULE DROPDOWN */}
-
 <select
-value={sessionModule}
-onChange={(e)=>setSessionModule(e.target.value)}
-style={input}
+value={selectedModule}
+onChange={(e)=>setSelectedModule(e.target.value)}
+style={{display:"block",marginTop:"10px"}}
 >
 
 <option value="">Seleccionar módulo</option>
 
 {modules.map((m)=>(
-
 <option key={m.id} value={m.id}>
-
 {m.title}
-
 </option>
-
 ))}
 
 </select>
 
-
 <button
 onClick={createSession}
-style={btn}
+style={{
+marginTop:"10px",
+padding:"8px 14px",
+background:"#FFC107",
+border:"none",
+borderRadius:"5px"
+}}
 >
-
 Crear sesión
-
 </button>
 
-</main>
+
+
+{/* MODULE LIST */}
+
+<h2 style={{marginTop:"50px"}}>Módulos existentes</h2>
+
+{modules.map((module)=>{
+
+const moduleSessions =
+sessions.filter(
+s=>s.moduleId===module.id
+);
+
+return(
+
+<div
+key={module.id}
+style={{
+border:"1px solid #333",
+padding:"15px",
+borderRadius:"8px",
+marginTop:"10px"
+}}
+>
+
+<h3>{module.title}</h3>
+
+<p>Orden: {module.order}</p>
+
+<p>{moduleSessions.length} sesiones</p>
+
+</div>
+
+);
+
+})}
+
+</div>
+
+</AdminGuard>
 
 );
 
 }
-
-const input = {
-
-display:"block",
-marginTop:"10px",
-padding:"10px",
-width:"400px",
-background:"#222",
-border:"1px solid #444",
-color:"white"
-
-};
-
-const btn = {
-
-marginTop:"15px",
-padding:"10px 20px",
-background:"#2E7D32",
-border:"none",
-color:"white",
-cursor:"pointer"
-
-};
