@@ -45,7 +45,6 @@ await getDoc(doc(db,"users",uid));
 if(userDoc.exists()){
 
 const data:any = userDoc.data();
-
 setStudentName(data.name);
 
 }
@@ -121,7 +120,6 @@ return () => unsubscribe();
 const logout = async ()=>{
 
 await signOut(auth);
-
 router.push("/login");
 
 };
@@ -145,19 +143,9 @@ completedAt:new Date()
 });
 
 setCompleted([...completed,sessionId]);
-
 setCompletedCount(completedCount+1);
 
-alert("Sesión completada");
-
 };
-
-const totalSessions = sessions.length;
-
-const progress =
-totalSessions
-? Math.round((completedCount/totalSessions)*100)
-:0;
 
 const generateCertificate = async ()=>{
 
@@ -171,7 +159,7 @@ return;
 const certSnap =
 await getDocs(collection(db,"certificates"));
 
-let certificateId = "";
+let certificateId="";
 
 const existing =
 certSnap.docs.find(
@@ -209,55 +197,32 @@ await QRCode.toDataURL(verificationUrl);
 const pdf = new jsPDF("landscape");
 
 pdf.setFontSize(28);
-
-pdf.text(
-"Coffee Biochar Academy",
-148,
-60,
-{align:"center"}
-);
+pdf.text("Coffee Biochar Academy",148,60,{align:"center"});
 
 pdf.setFontSize(18);
-
-pdf.text(
-"CERTIFICATE OF COMPLETION",
-148,
-80,
-{align:"center"}
-);
+pdf.text("CERTIFICATE OF COMPLETION",148,80,{align:"center"});
 
 pdf.setFontSize(26);
-
-pdf.text(
-studentName,
-148,
-110,
-{align:"center"}
-);
+pdf.text(studentName,148,110,{align:"center"});
 
 pdf.setFontSize(16);
-
-pdf.text(
-"Certified Coffee Biochar Extensionist",
-148,
-130,
-{align:"center"}
-);
+pdf.text("Certified Coffee Biochar Extensionist",148,130,{align:"center"});
 
 pdf.setFontSize(12);
-
-pdf.text(
-"Certificate ID: "+certificateId,
-148,
-150,
-{align:"center"}
-);
+pdf.text("Certificate ID: "+certificateId,148,150,{align:"center"});
 
 pdf.addImage(qr,"PNG",230,140,40,40);
 
 pdf.save("coffee-biochar-certificate.pdf");
 
 };
+
+const totalSessions = sessions.length;
+
+const progress =
+totalSessions
+? Math.round((completedCount/totalSessions)*100)
+:0;
 
 return(
 
@@ -290,30 +255,16 @@ Cerrar sesión
 
 <h1>Coffee Biochar Academy</h1>
 
-<h2>
+<h2>Bienvenido {studentName}</h2>
 
-Bienvenido {studentName}
-
-</h2>
+<p>Progreso del curso: {progress}%</p>
 
 <p>
-
-Progreso del curso: {progress}%
-
-</p>
-
-<p>
-
 Sesiones completadas:
 {completedCount} / {sessions.length}
-
 </p>
 
-<h2 style={{marginTop:"40px"}}>
-
-Módulos
-
-</h2>
+<h2 style={{marginTop:"40px"}}>Módulos</h2>
 
 {modules.map((module)=>{
 
@@ -370,19 +321,11 @@ marginTop:"10px"
 }}
 >
 
-<p>
-
-<b>{session.title}</b>
-
-</p>
+<p><b>{session.title}</b></p>
 
 {session.locked ?(
 
-<p style={{color:"#777"}}>
-
-Sesión bloqueada
-
-</p>
+<p style={{color:"#777"}}>Sesión bloqueada</p>
 
 ):(
 
@@ -406,11 +349,13 @@ Join Session
 
 {completed.includes(session.id) ? (
 
-<span style={{
+<span
+style={{
 marginLeft:"10px",
 color:"#2E7D32",
 fontWeight:"bold"
-}}>
+}}
+>
 
 ✓ Completada
 
@@ -454,7 +399,7 @@ Completar
 
 })}
 
-{progress===100 &&(
+{completedCount >= sessions.length ? (
 
 <button
 onClick={generateCertificate}
@@ -471,6 +416,12 @@ cursor:"pointer"
 Descargar certificado
 
 </button>
+
+) : (
+
+<p style={{color:"#aaa",marginTop:"20px"}}>
+Completa todas las sesiones para obtener el certificado
+</p>
 
 )}
 
