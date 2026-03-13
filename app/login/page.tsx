@@ -1,98 +1,123 @@
 "use client";
 
 import { useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../firebase/config";
+import { auth, db } from "../../firebase/config";
+
+import {
+signInWithEmailAndPassword
+} from "firebase/auth";
+
+import {
+collection,
+query,
+where,
+getDocs
+} from "firebase/firestore";
+
 import { useRouter } from "next/navigation";
 
 export default function Login(){
 
-  const router = useRouter();
+const router = useRouter();
 
-  const [email,setEmail] = useState("");
-  const [password,setPassword] = useState("");
+const [email,setEmail] = useState("");
+const [password,setPassword] = useState("");
 
-  const login = async ()=>{
+const login = async ()=>{
 
-    try{
+try{
 
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
+const userCredential =
+await signInWithEmailAndPassword(
+auth,
+email,
+password
+);
 
-      const user = userCredential.user;
+const q = query(
+collection(db,"users"),
+where("email","==",email)
+);
 
-      // ADMIN EMAIL
-      if(user.email === "santiago@biodiversal.co"){
-        router.push("/admin");
-      }else{
-        router.push("/dashboard");
-      }
+const snap = await getDocs(q);
 
-    }catch(error){
+if(snap.empty){
 
-      alert("Error al iniciar sesión");
+alert("Usuario no encontrado");
+return;
 
-    }
+}
 
-  };
+const userData = snap.docs[0].data();
 
-  return(
+const role = userData.role;
 
-    <main style={{
-      minHeight:"100vh",
-      background:"#111",
-      color:"white",
-      display:"flex",
-      flexDirection:"column",
-      alignItems:"center",
-      justifyContent:"center",
-      fontFamily:"Arial"
-    }}>
+/* REDIRECCION */
 
-      <h1>Iniciar sesión</h1>
+if(role === "admin"){
 
-      <input
-        placeholder="Correo"
-        value={email}
-        onChange={(e)=>setEmail(e.target.value)}
-        style={{
-          margin:"10px",
-          padding:"10px",
-          width:"250px"
-        }}
-      />
+router.push("/admin");
 
-      <input
-        type="password"
-        placeholder="Contraseña"
-        value={password}
-        onChange={(e)=>setPassword(e.target.value)}
-        style={{
-          margin:"10px",
-          padding:"10px",
-          width:"250px"
-        }}
-      />
+}else{
 
-      <button
-        onClick={login}
-        style={{
-          marginTop:"20px",
-          padding:"10px 20px",
-          background:"#2E7D32",
-          border:"none",
-          color:"white",
-          cursor:"pointer"
-        }}
-      >
-        Entrar
-      </button>
+router.push("/dashboard");
 
-    </main>
+}
 
-  );
+}catch(error){
+
+alert("Error al iniciar sesión");
+
+}
+
+};
+
+return(
+
+<div
+style={{
+minHeight:"100vh",
+display:"flex",
+alignItems:"center",
+justifyContent:"center",
+background:"#111",
+color:"white"
+}}
+>
+
+<div style={{width:"300px"}}>
+
+<h2>Login</h2>
+
+<input
+placeholder="Email"
+value={email}
+onChange={e=>setEmail(e.target.value)}
+style={{width:"100%",marginTop:"10px"}}
+/>
+
+<input
+type="password"
+placeholder="Password"
+value={password}
+onChange={e=>setPassword(e.target.value)}
+style={{width:"100%",marginTop:"10px"}}
+/>
+
+<button
+onClick={login}
+style={{
+marginTop:"20px",
+width:"100%"
+}}
+>
+Entrar
+</button>
+
+</div>
+
+</div>
+
+);
 
 }
