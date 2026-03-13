@@ -1,48 +1,65 @@
 import { NextResponse } from "next/server";
 import { db } from "../../../firebase/config";
-import { collection, query, where, getDocs, setDoc, doc } from "firebase/firestore";
 
-export async function POST(req: Request) {
+import {
+collection,
+query,
+where,
+getDocs,
+doc,
+updateDoc
+} from "firebase/firestore";
 
-  const data = await req.json();
+export async function POST(req: Request){
 
-  const email = data.email;
-  const moduleOrder = data.moduleOrder;
-  const score = data.score;
-  const passed = data.passed;
+try{
 
-  const usersRef = collection(db,"users");
+const data = await req.json();
 
-  const q = query(usersRef, where("email","==",email));
+const email = data.email;
+const moduleOrder = data.moduleOrder;
+const score = data.score;
 
-  const snap = await getDocs(q);
+/* buscar usuario */
 
-  if(snap.empty){
+const usersRef = collection(db,"users");
 
-    return NextResponse.json({
-      error:"user not found"
-    });
+const q = query(usersRef, where("email","==",email));
 
-  }
+const snap = await getDocs(q);
 
-  const userDoc = snap.docs[0];
+if(snap.empty){
 
-  const uid = userDoc.id;
+return NextResponse.json({
+error:"user not found"
+});
 
-  const evaluationId = uid + "_" + moduleOrder;
+}
 
-  await setDoc(doc(db,"evaluations",evaluationId),{
+const userDoc = snap.docs[0];
 
-    userId: uid,
-    moduleOrder: moduleOrder,
-    score: score,
-    passed: passed,
-    createdAt: new Date()
+const uid = userDoc.id;
 
-  });
+/* guardar score en usuario */
 
-  return NextResponse.json({
-    success:true
-  });
+const field = `moduleScores.${moduleOrder}`;
+
+await updateDoc(doc(db,"users",uid),{
+
+[field]: score
+
+});
+
+return NextResponse.json({
+success:true
+});
+
+}catch(error){
+
+return NextResponse.json({
+error:"evaluation error"
+});
+
+}
 
 }
