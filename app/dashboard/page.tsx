@@ -1,11 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { db } from "../../firebase/config";
+import { db, auth } from "../../firebase/config";
 import { collection, getDocs } from "firebase/firestore";
+import { signOut } from "firebase/auth";
+import { useRouter } from "next/navigation";
 import jsPDF from "jspdf";
 
 export default function Dashboard() {
+
+  const router = useRouter();
 
   const [modules, setModules] = useState<any[]>([]);
   const [sessions, setSessions] = useState<any[]>([]);
@@ -39,6 +43,14 @@ export default function Dashboard() {
     loadData();
 
   },[]);
+
+  const logout = async () => {
+
+    await signOut(auth);
+
+    router.push("/login");
+
+  };
 
   const totalSessions = sessions.length;
 
@@ -110,6 +122,25 @@ export default function Dashboard() {
       padding:"40px",
       fontFamily:"Arial"
     }}>
+
+      {/* BOTON CERRAR SESION */}
+
+      <button
+        onClick={logout}
+        style={{
+          position:"absolute",
+          top:"20px",
+          right:"20px",
+          padding:"8px 15px",
+          background:"#444",
+          border:"none",
+          color:"white",
+          cursor:"pointer",
+          borderRadius:"6px"
+        }}
+      >
+        Cerrar sesión
+      </button>
 
       <h1>Coffee Biochar Academy</h1>
 
