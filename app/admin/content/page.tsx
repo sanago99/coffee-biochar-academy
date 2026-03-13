@@ -1,254 +1,190 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { db, auth } from "../../../firebase/config";
-import { collection, addDoc, getDocs, updateDoc, doc } from "firebase/firestore";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { db } from "../../../firebase/config";
+import { addDoc, collection } from "firebase/firestore";
 
-export default function AdminContent(){
+export default function Content(){
 
-  const router = useRouter();
+const [moduleTitle,setModuleTitle] = useState("");
+const [moduleOrder,setModuleOrder] = useState("");
+const [formLink,setFormLink] = useState("");
 
-  const [modules,setModules] = useState<any[]>([]);
-  const [sessions,setSessions] = useState<any[]>([]);
+const [sessionTitle,setSessionTitle] = useState("");
+const [sessionLink,setSessionLink] = useState("");
+const [sessionMaterial,setSessionMaterial] = useState("");
+const [sessionModule,setSessionModule] = useState("");
 
-  const [moduleTitle,setModuleTitle] = useState("");
+/* CREAR MODULO */
 
-  const [module,setModule] = useState("");
-  const [title,setTitle] = useState("");
-  const [date,setDate] = useState("");
-  const [link,setLink] = useState("");
-  const [material,setMaterial] = useState("");
+const createModule = async ()=>{
 
-  useEffect(()=>{
+if(!moduleTitle || !moduleOrder){
 
-    const user = auth.currentUser;
-
-    if(!user || user.email !== "santiago@biodiversal.co"){
-      router.push("/login");
-    }
-
-    loadData();
-
-  },[]);
-
-  const loadData = async ()=>{
-
-    const modulesSnapshot = await getDocs(collection(db,"modules"));
-    const sessionsSnapshot = await getDocs(collection(db,"sessions"));
-
-    const modulesList:any[]=[];
-    const sessionsList:any[]=[];
-
-    modulesSnapshot.forEach(doc=>{
-      modulesList.push({id:doc.id,...doc.data()});
-    });
-
-    sessionsSnapshot.forEach(doc=>{
-      sessionsList.push({id:doc.id,...doc.data()});
-    });
-
-    setModules(modulesList);
-    setSessions(sessionsList);
-
-  };
-
-  const createModule = async ()=>{
-
-    if(!moduleTitle) return alert("Escribe el nombre del módulo");
-
-    await addDoc(collection(db,"modules"),{
-      title:moduleTitle
-    });
-
-    setModuleTitle("");
-
-    alert("Módulo creado");
-
-    loadData();
-
-  };
-
-  const createSession = async ()=>{
-
-    if(!module) return alert("Selecciona un módulo");
-
-    await addDoc(collection(db,"sessions"),{
-      module:module,
-      title:title,
-      date:date,
-      link:link,
-      material:material,
-      locked:true
-    });
-
-    setTitle("");
-    setDate("");
-    setLink("");
-    setMaterial("");
-
-    alert("Sesión creada");
-
-    loadData();
-
-  };
-
-  const unlockSession = async (id:string)=>{
-
-    const sessionRef = doc(db,"sessions",id);
-
-    await updateDoc(sessionRef,{
-      locked:false
-    });
-
-    alert("Sesión desbloqueada");
-
-    loadData();
-
-  };
-
-  return(
-
-    <main style={{
-      minHeight:"100vh",
-      background:"#111",
-      color:"white",
-      padding:"40px",
-      fontFamily:"Arial"
-    }}>
-
-      <h1>Gestión de contenido</h1>
-
-      {/* CREAR MODULO */}
-
-      <h2 style={{marginTop:"30px"}}>Crear módulo</h2>
-
-      <input
-        placeholder="Nombre del módulo"
-        value={moduleTitle}
-        onChange={(e)=>setModuleTitle(e.target.value)}
-        style={{display:"block",margin:"10px 0",padding:"10px",width:"300px"}}
-      />
-
-      <button
-        onClick={createModule}
-        style={{
-          padding:"10px 20px",
-          background:"#2E7D32",
-          border:"none",
-          color:"white",
-          cursor:"pointer"
-        }}
-      >
-        Crear módulo
-      </button>
-
-      {/* CREAR SESION */}
-
-      <h2 style={{marginTop:"50px"}}>Crear sesión</h2>
-
-      <select
-        value={module}
-        onChange={(e)=>setModule(e.target.value)}
-        style={{display:"block",margin:"10px 0",padding:"10px",width:"320px"}}
-      >
-
-        <option value="">Seleccionar módulo</option>
-
-        {modules.map((m)=>(
-          <option key={m.id} value={m.id}>
-            {m.title}
-          </option>
-        ))}
-
-      </select>
-
-      <input
-        placeholder="Título sesión"
-        value={title}
-        onChange={(e)=>setTitle(e.target.value)}
-        style={{display:"block",margin:"10px 0",padding:"10px",width:"300px"}}
-      />
-
-      <input
-        placeholder="Fecha (ej: Semana 3)"
-        value={date}
-        onChange={(e)=>setDate(e.target.value)}
-        style={{display:"block",margin:"10px 0",padding:"10px",width:"300px"}}
-      />
-
-      <input
-        placeholder="Link Google Meet"
-        value={link}
-        onChange={(e)=>setLink(e.target.value)}
-        style={{display:"block",margin:"10px 0",padding:"10px",width:"300px"}}
-      />
-
-      <input
-        placeholder="Link material (Google Drive)"
-        value={material}
-        onChange={(e)=>setMaterial(e.target.value)}
-        style={{display:"block",margin:"10px 0",padding:"10px",width:"300px"}}
-      />
-
-      <button
-        onClick={createSession}
-        style={{
-          padding:"10px 20px",
-          background:"#2E7D32",
-          border:"none",
-          color:"white",
-          cursor:"pointer"
-        }}
-      >
-        Crear sesión
-      </button>
-
-      {/* LISTA DE SESIONES */}
-
-      <h2 style={{marginTop:"60px"}}>Sesiones del curso</h2>
-
-      {sessions.map(session=>(
-
-        <div key={session.id} style={{
-          border:"1px solid #444",
-          padding:"15px",
-          marginTop:"10px",
-          borderRadius:"6px",
-          maxWidth:"500px"
-        }}>
-
-          <p><b>{session.title}</b></p>
-
-          <p>{session.date}</p>
-
-          {session.locked ? (
-
-            <button
-              onClick={()=>unlockSession(session.id)}
-              style={{
-                padding:"6px 12px",
-                background:"#2E7D32",
-                border:"none",
-                color:"white",
-                cursor:"pointer"
-              }}
-            >
-              Desbloquear
-            </button>
-
-          ) : (
-
-            <p style={{color:"#2E7D32"}}>Sesión abierta</p>
-
-          )}
-
-        </div>
-
-      ))}
-
-    </main>
-
-  );
+alert("Completa los campos del módulo");
+return;
 
 }
+
+await addDoc(collection(db,"modules"),{
+
+title:moduleTitle,
+order:Number(moduleOrder),
+formLink:formLink,
+passingScore:60
+
+});
+
+alert("Módulo creado");
+
+setModuleTitle("");
+setModuleOrder("");
+setFormLink("");
+
+};
+
+/* CREAR SESION */
+
+const createSession = async ()=>{
+
+if(!sessionTitle || !sessionModule){
+
+alert("Completa los campos de la sesión");
+return;
+
+}
+
+await addDoc(collection(db,"sessions"),{
+
+title:sessionTitle,
+link:sessionLink,
+material:sessionMaterial,
+module:sessionModule,
+locked:false
+
+});
+
+alert("Sesión creada");
+
+setSessionTitle("");
+setSessionLink("");
+setSessionMaterial("");
+setSessionModule("");
+
+};
+
+return(
+
+<main style={{
+minHeight:"100vh",
+background:"#111",
+color:"white",
+padding:"40px",
+fontFamily:"Arial"
+}}>
+
+<h1>Gestión de contenido</h1>
+
+{/* CREAR MODULO */}
+
+<h2 style={{marginTop:"40px"}}>Crear módulo</h2>
+
+<input
+placeholder="Título del módulo"
+value={moduleTitle}
+onChange={(e)=>setModuleTitle(e.target.value)}
+style={input}
+/>
+
+<input
+placeholder="Orden del módulo (1,2,3...)"
+value={moduleOrder}
+onChange={(e)=>setModuleOrder(e.target.value)}
+style={input}
+/>
+
+<input
+placeholder="Link del Google Form (evaluación)"
+value={formLink}
+onChange={(e)=>setFormLink(e.target.value)}
+style={input}
+/>
+
+<button
+onClick={createModule}
+style={btn}
+>
+
+Crear módulo
+
+</button>
+
+{/* CREAR SESION */}
+
+<h2 style={{marginTop:"60px"}}>Crear sesión</h2>
+
+<input
+placeholder="Título de la sesión"
+value={sessionTitle}
+onChange={(e)=>setSessionTitle(e.target.value)}
+style={input}
+/>
+
+<input
+placeholder="Link de reunión (Teams/Zoom)"
+value={sessionLink}
+onChange={(e)=>setSessionLink(e.target.value)}
+style={input}
+/>
+
+<input
+placeholder="Material adicional (Drive)"
+value={sessionMaterial}
+onChange={(e)=>setSessionMaterial(e.target.value)}
+style={input}
+/>
+
+<input
+placeholder="ID del módulo (ej: M1)"
+value={sessionModule}
+onChange={(e)=>setSessionModule(e.target.value)}
+style={input}
+/>
+
+<button
+onClick={createSession}
+style={btn}
+>
+
+Crear sesión
+
+</button>
+
+</main>
+
+);
+
+}
+
+const input = {
+
+display:"block",
+marginTop:"10px",
+padding:"10px",
+width:"400px",
+background:"#222",
+border:"1px solid #444",
+color:"white"
+
+};
+
+const btn = {
+
+marginTop:"15px",
+padding:"10px 20px",
+background:"#2E7D32",
+border:"none",
+color:"white",
+cursor:"pointer"
+
+};
