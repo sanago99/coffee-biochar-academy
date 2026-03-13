@@ -7,7 +7,7 @@ import { signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import jsPDF from "jspdf";
 
-export default function Dashboard(){
+export default function Dashboard() {
 
   const router = useRouter();
 
@@ -75,31 +75,43 @@ export default function Dashboard(){
 
   const generateCertificate = async ()=>{
 
-    const certificateId = "CBA-" + Math.floor(Math.random()*100000);
+    try{
 
-    await addDoc(collection(db,"certificates"),{
-      certificateId:certificateId,
-      name:studentName,
-      date:new Date().toISOString()
-    });
+      const certificateId = "CBA-" + Date.now();
 
-    const doc = new jsPDF();
+      await addDoc(collection(db,"certificates"),{
+        certificateId: certificateId,
+        name: studentName,
+        userId: auth.currentUser?.uid,
+        date: new Date().toISOString()
+      });
 
-    doc.setFontSize(24);
-    doc.text("Coffee Biochar Academy",105,40,{align:"center"});
+      const doc = new jsPDF();
 
-    doc.setFontSize(18);
-    doc.text("Certificate of Completion",105,60,{align:"center"});
+      doc.setFontSize(26);
+      doc.text("Coffee Biochar Academy",105,40,{align:"center"});
 
-    doc.setFontSize(20);
-    doc.text(studentName,105,90,{align:"center"});
+      doc.setFontSize(18);
+      doc.text("Certificate of Completion",105,60,{align:"center"});
 
-    doc.setFontSize(14);
-    doc.text("Certified Coffee Biochar Extensionist",105,110,{align:"center"});
+      doc.setFontSize(22);
+      doc.text(studentName,105,90,{align:"center"});
 
-    doc.text("Certificate ID: "+certificateId,105,130,{align:"center"});
+      doc.setFontSize(14);
+      doc.text("Certified Coffee Biochar Extensionist",105,110,{align:"center"});
 
-    doc.save("coffee-biochar-certificate.pdf");
+      doc.setFontSize(12);
+      doc.text("Certificate ID:",105,130,{align:"center"});
+      doc.text(certificateId,105,138,{align:"center"});
+
+      doc.save("coffee-biochar-certificate.pdf");
+
+    }catch(error){
+
+      console.error(error);
+      alert("Error generando certificado");
+
+    }
 
   };
 
