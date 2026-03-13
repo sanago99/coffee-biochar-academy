@@ -54,7 +54,7 @@ setStudentName(data.name);
 
 const loadData = async (uid:string)=>{
 
-/* MODULES */
+/* modules */
 
 const modulesSnap =
 await getDocs(collection(db,"modules"));
@@ -72,7 +72,7 @@ modulesList.sort((a,b)=>a.order - b.order);
 
 setModules(modulesList);
 
-/* SESSIONS */
+/* sessions */
 
 const sessionsSnap =
 await getDocs(collection(db,"sessions"));
@@ -88,7 +88,7 @@ id:doc.id,
 
 setSessions(sessionsList);
 
-/* PROGRESS */
+/* progress */
 
 const progressSnap =
 await getDocs(collection(db,"progress"));
@@ -108,7 +108,7 @@ setCompleted(
 completedSessions.map(p=>p.sessionId)
 );
 
-/* EVALUATIONS */
+/* evaluations */
 
 const evalSnap =
 await getDocs(collection(db,"evaluations"));
@@ -142,7 +142,7 @@ return () => unsubscribe();
 
 },[]);
 
-/* LOGOUT */
+/* logout */
 
 const logout = async ()=>{
 
@@ -151,7 +151,7 @@ router.push("/login");
 
 };
 
-/* COMPLETE SESSION */
+/* completar sesión */
 
 const completeSession = async (sessionId:string)=>{
 
@@ -171,23 +171,23 @@ setCompletedCount(completedCount+1);
 
 };
 
-/* CHECK IF MODULE APPROVED */
+/* verificar módulo aprobado */
 
 const modulePassed = (moduleId:string)=>{
 
 const uid = auth.currentUser?.uid;
 
-const result = evaluations.find(e =>
+const evaluation = evaluations.find(e =>
 e.userId === uid &&
 e.moduleId === moduleId &&
 e.passed === true
 );
 
-return !!result;
+return !!evaluation;
 
 };
 
-/* CERTIFICATE */
+/* certificado */
 
 const generateCertificate = async ()=>{
 
@@ -308,15 +308,20 @@ sessions.filter(
 s=>s.module===module.id
 );
 
-const previousModule =
-modules[index-1];
+/* desbloqueo */
 
 let unlocked=false;
 
 if(index===0){
+
 unlocked=true;
+
 }else{
+
+const previousModule = modules[index-1];
+
 unlocked = modulePassed(previousModule.id);
+
 }
 
 const isOpen =
