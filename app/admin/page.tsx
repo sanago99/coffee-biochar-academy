@@ -1,186 +1,127 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { db, auth } from "../../firebase/config";
-import { collection, getDocs } from "firebase/firestore";
-import { signOut } from "firebase/auth";
+import AdminGuard from "../components/AdminGuard";
+
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 
-export default function AdminPage(){
+export default function AdminDashboard(){
 
-  const router = useRouter();
+const router = useRouter();
 
-  const [usersCount,setUsersCount] = useState(0);
-  const [modulesCount,setModulesCount] = useState(0);
-  const [sessionsCount,setSessionsCount] = useState(0);
-  const [certificatesCount,setCertificatesCount] = useState(0);
+return(
 
-  useEffect(()=>{
+<AdminGuard>
 
-    const checkAdmin = async ()=>{
+<div
+style={{
+minHeight:"100vh",
+background:"#111",
+color:"white",
+padding:"40px"
+}}
+>
 
-      const user = auth.currentUser;
+<h1>Panel Administrador</h1>
 
-      if(!user){
-        router.push("/login");
-        return;
-      }
+<p style={{color:"#aaa"}}>
+Coffee Biochar Academy
+</p>
 
-      loadStats();
+<div
+style={{
+display:"grid",
+gridTemplateColumns:"repeat(auto-fit,minmax(220px,1fr))",
+gap:"20px",
+marginTop:"40px"
+}}
+>
 
-    };
+{/* CONTENT */}
 
-    checkAdmin();
+<div
+onClick={()=>router.push("/admin/content")}
+style={{
+background:"#1a1a1a",
+padding:"30px",
+borderRadius:"10px",
+cursor:"pointer"
+}}
+>
 
-  },[]);
+<h2>📚 Contenido</h2>
 
-  const loadStats = async ()=>{
+<p style={{color:"#aaa"}}>
+Crear módulos y sesiones
+</p>
 
-    const usersSnap = await getDocs(collection(db,"users"));
-    const modulesSnap = await getDocs(collection(db,"modules"));
-    const sessionsSnap = await getDocs(collection(db,"sessions"));
-    const certSnap = await getDocs(collection(db,"certificates"));
+</div>
 
-    setUsersCount(usersSnap.size);
-    setModulesCount(modulesSnap.size);
-    setSessionsCount(sessionsSnap.size);
-    setCertificatesCount(certSnap.size);
+{/* USERS */}
 
-  };
+<div
+onClick={()=>router.push("/admin/users")}
+style={{
+background:"#1a1a1a",
+padding:"30px",
+borderRadius:"10px",
+cursor:"pointer"
+}}
+>
 
-  const logout = async ()=>{
+<h2>👩‍🌾 Extensionistas</h2>
 
-    await signOut(auth);
-    router.push("/login");
+<p style={{color:"#aaa"}}>
+Gestionar usuarios
+</p>
 
-  };
+</div>
 
-  return(
+{/* PROGRESS */}
 
-    <main style={{
-      minHeight:"100vh",
-      background:"#111",
-      color:"white",
-      padding:"40px",
-      fontFamily:"Arial"
-    }}>
+<div
+onClick={()=>router.push("/admin/progress")}
+style={{
+background:"#1a1a1a",
+padding:"30px",
+borderRadius:"10px",
+cursor:"pointer"
+}}
+>
 
-      <button
-        onClick={logout}
-        style={{
-          position:"absolute",
-          right:"20px",
-          top:"20px",
-          padding:"8px 16px",
-          background:"#444",
-          border:"none",
-          color:"white",
-          cursor:"pointer",
-          borderRadius:"6px"
-        }}
-      >
-        Cerrar sesión
-      </button>
+<h2>📊 Progreso</h2>
 
-      <h1>Admin Panel</h1>
+<p style={{color:"#aaa"}}>
+Ver avance del programa
+</p>
 
-      <p style={{color:"#aaa"}}>
-        Coffee Biochar Academy
-      </p>
+</div>
 
-      {/* Estadísticas */}
+{/* CREATE USER */}
 
-      <div style={{
-        marginTop:"40px",
-        display:"grid",
-        gridTemplateColumns:"repeat(2,220px)",
-        gap:"20px"
-      }}>
+<div
+onClick={()=>router.push("/admin/create-user")}
+style={{
+background:"#1a1a1a",
+padding:"30px",
+borderRadius:"10px",
+cursor:"pointer"
+}}
+>
 
-        <div style={card}>
-          <h2>{usersCount}</h2>
-          <p>Extensionistas</p>
-        </div>
+<h2>➕ Crear usuario</h2>
 
-        <div style={card}>
-          <h2>{modulesCount}</h2>
-          <p>Módulos</p>
-        </div>
+<p style={{color:"#aaa"}}>
+Nuevo extensionista
+</p>
 
-        <div style={card}>
-          <h2>{sessionsCount}</h2>
-          <p>Sesiones</p>
-        </div>
+</div>
 
-        <div style={card}>
-          <h2>{certificatesCount}</h2>
-          <p>Certificados emitidos</p>
-        </div>
+</div>
 
-      </div>
+</div>
 
-      {/* Navegación */}
+</AdminGuard>
 
-      <div style={{
-        marginTop:"50px",
-        display:"flex",
-        gap:"20px",
-        flexWrap:"wrap"
-      }}>
-
-        <Link href="/admin/create-user">
-          <button style={btn}>
-            Crear extensionista
-          </button>
-        </Link>
-
-        <Link href="/admin/users">
-          <button style={btn}>
-            Ver extensionistas
-          </button>
-        </Link>
-
-        <Link href="/admin/content">
-          <button style={btn}>
-            Gestionar módulos y sesiones
-          </button>
-        </Link>
-
-        <Link href="/admin/progress">
-          <button style={btnGreen}>
-            Progreso extensionistas
-          </button>
-        </Link>
-
-      </div>
-
-    </main>
-
-  );
+)
 
 }
-
-const card = {
-  background:"#222",
-  padding:"20px",
-  borderRadius:"8px"
-};
-
-const btn = {
-  padding:"14px 24px",
-  background:"#444",
-  border:"none",
-  color:"white",
-  cursor:"pointer",
-  borderRadius:"6px"
-};
-
-const btnGreen = {
-  padding:"14px 24px",
-  background:"#2E7D32",
-  border:"none",
-  color:"white",
-  cursor:"pointer",
-  borderRadius:"6px"
-};
