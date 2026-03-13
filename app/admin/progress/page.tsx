@@ -84,6 +84,7 @@ totalSessions
 
 return{
 
+id:user.id,
 name:user.name,
 cluster:user.cluster,
 municipio:user.municipio,
@@ -96,7 +97,7 @@ moduleScores:user.moduleScores || {}
 
 setProgressData(results);
 
-/* MÉTRICAS */
+/* METRICAS */
 
 const avg =
 results.reduce((acc,u)=>acc+u.progress,0) /
@@ -111,7 +112,7 @@ avgProgress:Math.round(avg),
 certificates
 });
 
-/* AGRUPAR POR CLUSTER */
+/* CLUSTER STATS */
 
 const clusterMap:any = {};
 
@@ -142,7 +143,7 @@ progress:Math.round(c.total/c.count)
 
 setClusterStats(clusterData);
 
-/* AGRUPAR POR MODULO */
+/* MODULE STATS */
 
 const moduleMap:any = {};
 
@@ -196,7 +197,7 @@ color:"white"
 
 <h1>Panel de progreso de extensionistas</h1>
 
-{/* MÉTRICAS */}
+{/* METRICAS */}
 
 <div style={{
 display:"flex",
@@ -311,24 +312,28 @@ borderCollapse:"collapse"
 borderBottom:"1px solid #444"
 }}>
 
-<th style={{textAlign:"left",padding:"10px"}}>
+<th style={{padding:"10px",textAlign:"left"}}>
 Extensionista
 </th>
 
-<th style={{textAlign:"left",padding:"10px"}}>
+<th style={{padding:"10px",textAlign:"left"}}>
 Cluster
 </th>
 
-<th style={{textAlign:"left",padding:"10px"}}>
+<th style={{padding:"10px",textAlign:"left"}}>
 Municipio
 </th>
 
-<th style={{textAlign:"left",padding:"10px"}}>
+<th style={{padding:"10px",textAlign:"left"}}>
 Progreso
 </th>
 
-<th style={{textAlign:"left",padding:"10px"}}>
+<th style={{padding:"10px",textAlign:"left"}}>
 Certificado
+</th>
+
+<th style={{padding:"10px",textAlign:"left"}}>
+Detalle
 </th>
 
 </tr>
@@ -361,6 +366,19 @@ borderBottom:"1px solid #333"
 
 <td style={{padding:"10px"}}>
 {user.progress===100 ? "✔" : "❌"}
+</td>
+
+<td style={{padding:"10px"}}>
+
+<a
+href={`/admin/users/${user.id}`}
+style={{
+color:"#4CAF50"
+}}
+>
+Ver progreso
+</a>
+
 </td>
 
 </tr>
