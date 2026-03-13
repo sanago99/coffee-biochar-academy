@@ -27,6 +27,7 @@ const router = useRouter();
 
 const [modules,setModules] = useState<any[]>([]);
 const [sessions,setSessions] = useState<any[]>([]);
+const [evaluations,setEvaluations] = useState<any[]>([]);
 const [completed,setCompleted] = useState<string[]>([]);
 
 const [studentName,setStudentName] = useState("");
@@ -53,18 +54,12 @@ setStudentName(data.name);
 
 const loadData = async (uid:string)=>{
 
+/* modules */
+
 const modulesSnap =
 await getDocs(collection(db,"modules"));
 
-const sessionsSnap =
-await getDocs(collection(db,"sessions"));
-
-const progressSnap =
-await getDocs(collection(db,"progress"));
-
 const modulesList:any[]=[];
-const sessionsList:any[]=[];
-const progressList:any[]=[];
 
 modulesSnap.forEach(doc=>{
 modulesList.push({
@@ -73,6 +68,17 @@ id:doc.id,
 });
 });
 
+modulesList.sort((a,b)=>a.order - b.order);
+
+setModules(modulesList);
+
+/* sessions */
+
+const sessionsSnap =
+await getDocs(collection(db,"sessions"));
+
+const sessionsList:any[]=[];
+
 sessionsSnap.forEach(doc=>{
 sessionsList.push({
 id:doc.id,
@@ -80,12 +86,18 @@ id:doc.id,
 });
 });
 
+setSessions(sessionsList);
+
+/* progress */
+
+const progressSnap =
+await getDocs(collection(db,"progress"));
+
+const progressList:any[]=[];
+
 progressSnap.forEach(doc=>{
 progressList.push(doc.data());
 });
-
-setModules(modulesList);
-setSessions(sessionsList);
 
 const completedSessions =
 progressList.filter(p=>p.userId===uid);
@@ -95,6 +107,19 @@ setCompletedCount(completedSessions.length);
 setCompleted(
 completedSessions.map(p=>p.sessionId)
 );
+
+/* evaluations */
+
+const evalSnap =
+await getDocs(collection(db,"evaluations"));
+
+const evalList:any[]=[];
+
+evalSnap.forEach(doc=>{
+evalList.push(doc.data());
+});
+
+setEvaluations(evalList);
 
 };
 
@@ -126,9 +151,7 @@ router.push("/login");
 
 const completeSession = async (sessionId:string)=>{
 
-if(completed.includes(sessionId)){
-return;
-}
+if(completed.includes(sessionId)) return;
 
 await addDoc(collection(db,"progress"),{
 
@@ -144,14 +167,21 @@ setCompletedCount(completedCount+1);
 
 };
 
+const modulePassed = (moduleId:string)=>{
+
+const result = evaluations.find(
+e =>
+e.userId === auth.currentUser?.uid &&
+e.moduleId === moduleId
+);
+
+return result?.passed === true;
+
+};
+
 const generateCertificate = async ()=>{
 
 const uid = auth.currentUser?.uid;
-
-if(!studentName){
-alert("Nombre no cargado");
-return;
-}
 
 const certSnap =
 await getDocs(collection(db,"certificates"));
@@ -263,12 +293,19 @@ Sesiones completadas:
 
 <h2 style={{marginTop:"40px"}}>Módulos</h2>
 
-{modules.map((module)=>{
+{modules.map((module,index)=>{
 
 const moduleSessions =
 sessions.filter(
 s=>s.module===module.id
 );
+
+const previousModule =
+modules[index-1];
+
+const unlocked =
+index === 0 ||
+modulePassed(previousModule?.id);
 
 const isOpen =
 openModule===module.id;
@@ -286,11 +323,9 @@ padding:"15px"
 >
 
 <div
-onClick={()=>
-setOpenModule(
+onClick={()=>setOpenModule(
 isOpen ? null : module.id
-)
-}
+)}
 style={{cursor:"pointer"}}
 >
 
@@ -302,7 +337,15 @@ style={{cursor:"pointer"}}
 
 </div>
 
-{isOpen &&(
+{!unlocked && (
+
+<p style={{color:"#777"}}>
+🔒 Completa el módulo anterior para desbloquear
+</p>
+
+)}
+
+{isOpen && unlocked &&(
 
 <div style={{marginTop:"10px"}}>
 
@@ -319,12 +362,6 @@ marginTop:"10px"
 >
 
 <p><b>{session.title}</b></p>
-
-{session.locked ?(
-
-<p style={{color:"#777"}}>Sesión bloqueada</p>
-
-):(
 
 <div>
 
@@ -400,8 +437,6 @@ Completar
 )}
 
 </div>
-
-)}
 
 </div>
 
