@@ -8,13 +8,20 @@ collection,
 getDocs
 } from "firebase/firestore";
 
+import {
+BarChart,
+Bar,
+XAxis,
+YAxis,
+Tooltip,
+ResponsiveContainer
+} from "recharts";
+
 export default function AdminProgress(){
 
 const [progressData,setProgressData] = useState<any[]>([]);
+const [clusterStats,setClusterStats] = useState<any[]>([]);
 const [totalSessions,setTotalSessions] = useState(0);
-
-const [search,setSearch] = useState("");
-const [clusterFilter,setClusterFilter] = useState("");
 
 const [stats,setStats] = useState({
 users:0,
@@ -103,32 +110,42 @@ avgProgress:Math.round(avg),
 certificates
 });
 
+/* AGRUPAR POR CLUSTER */
+
+const clusterMap:any = {};
+
+results.forEach(u=>{
+
+if(!clusterMap[u.cluster]){
+
+clusterMap[u.cluster] = {
+cluster:u.cluster,
+total:0,
+count:0
+};
+
+}
+
+clusterMap[u.cluster].total += u.progress;
+clusterMap[u.cluster].count++;
+
+});
+
+const clusterData =
+Object.values(clusterMap).map((c:any)=>({
+
+cluster:c.cluster,
+progress:Math.round(c.total/c.count)
+
+}));
+
+setClusterStats(clusterData);
+
 };
 
 loadData();
 
 },[]);
-
-const filteredData =
-progressData.filter(user=>{
-
-const matchName =
-user.name?.toLowerCase()
-.includes(search.toLowerCase());
-
-const matchCluster =
-clusterFilter
-? user.cluster === clusterFilter
-: true;
-
-return matchName && matchCluster;
-
-});
-
-/* clusters únicos */
-
-const clusters =
-[...new Set(progressData.map(u=>u.cluster))];
 
 return(
 
@@ -178,48 +195,32 @@ borderRadius:"8px"
 
 </div>
 
-{/* FILTROS */}
+{/* GRÁFICO */}
+
+<h2 style={{marginTop:"40px"}}>
+Progreso promedio por cluster
+</h2>
 
 <div style={{
-marginTop:"30px",
-display:"flex",
-gap:"20px"
+width:"100%",
+height:"300px"
 }}>
 
-<input
-placeholder="Buscar extensionista"
-value={search}
-onChange={(e)=>setSearch(e.target.value)}
-style={{
-padding:"8px",
-background:"#222",
-border:"1px solid #444",
-color:"white"
-}}
-/>
+<ResponsiveContainer>
 
-<select
-value={clusterFilter}
-onChange={(e)=>setClusterFilter(e.target.value)}
-style={{
-padding:"8px",
-background:"#222",
-border:"1px solid #444",
-color:"white"
-}}
->
+<BarChart data={clusterStats}>
 
-<option value="">Todos los clusters</option>
+<XAxis dataKey="cluster" />
 
-{clusters.map((cluster,i)=>(
+<YAxis />
 
-<option key={i} value={cluster}>
-{cluster}
-</option>
+<Tooltip />
 
-))}
+<Bar dataKey="progress" />
 
-</select>
+</BarChart>
+
+</ResponsiveContainer>
 
 </div>
 
@@ -227,7 +228,7 @@ color:"white"
 
 <table style={{
 width:"100%",
-marginTop:"30px",
+marginTop:"40px",
 borderCollapse:"collapse"
 }}>
 
@@ -249,7 +250,7 @@ borderBottom:"1px solid #444"
 
 <tbody>
 
-{filteredData.map((user,i)=>(
+{progressData.map((user,i)=>(
 
 <tr key={i} style={{
 borderBottom:"1px solid #333"
