@@ -16,8 +16,7 @@ export default function Dashboard(){
   const [sessions,setSessions] = useState<any[]>([]);
   const [openModule,setOpenModule] = useState<string | null>(null);
   const [completed,setCompleted] = useState<string[]>([]);
-
-  const studentName = "Extensionista Coffee Biochar";
+  const [studentName,setStudentName] = useState("");
 
   useEffect(()=>{
 
@@ -42,7 +41,24 @@ export default function Dashboard(){
 
     };
 
+    const loadUser = async ()=>{
+
+      const snapshot = await getDocs(collection(db,"users"));
+
+      snapshot.forEach(doc=>{
+
+        const data:any = doc.data();
+
+        if(data.uid === auth.currentUser?.uid){
+          setStudentName(data.name);
+        }
+
+      });
+
+    };
+
     loadData();
+    loadUser();
 
   },[]);
 
@@ -93,12 +109,10 @@ export default function Dashboard(){
 
       const doc = new jsPDF("landscape");
 
-      // marco
       doc.setDrawColor(40,120,70);
       doc.setLineWidth(3);
       doc.rect(10,10,277,190);
 
-      // logo
       doc.addImage("/logo.png","PNG",130,20,40,20);
 
       doc.setFontSize(28);
@@ -167,7 +181,7 @@ export default function Dashboard(){
 
       <h1>Coffee Biochar Academy</h1>
 
-      <h2>Certified Coffee Biochar Extensionist</h2>
+      <h2>Bienvenido {studentName}</h2>
 
       <div style={{marginTop:"30px"}}>
 
