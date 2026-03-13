@@ -1,6 +1,23 @@
+"use client";
+
+import { useEffect } from "react";
+import { auth } from "../../firebase/config";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 export default function AdminDashboard(){
+
+  const router = useRouter();
+
+  useEffect(()=>{
+
+    const user = auth.currentUser;
+
+    if(!user || user.email !== "santiago@biodiversal.co"){
+      router.push("/login");
+    }
+
+  },[]);
 
   return(
 

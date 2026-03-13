@@ -1,10 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { db } from "../../../firebase/config";
+import { db, auth } from "../../../firebase/config";
 import { collection, addDoc, getDocs, updateDoc, doc } from "firebase/firestore";
+import { useRouter } from "next/navigation";
 
 export default function AdminContent(){
+
+  const router = useRouter();
 
   const [modules,setModules] = useState<any[]>([]);
   const [sessions,setSessions] = useState<any[]>([]);
@@ -16,6 +19,18 @@ export default function AdminContent(){
   const [date,setDate] = useState("");
   const [link,setLink] = useState("");
   const [material,setMaterial] = useState("");
+
+  useEffect(()=>{
+
+    const user = auth.currentUser;
+
+    if(!user || user.email !== "santiago@biodiversal.co"){
+      router.push("/login");
+    }
+
+    loadData();
+
+  },[]);
 
   const loadData = async ()=>{
 
@@ -37,10 +52,6 @@ export default function AdminContent(){
     setSessions(sessionsList);
 
   };
-
-  useEffect(()=>{
-    loadData();
-  },[]);
 
   const createModule = async ()=>{
 

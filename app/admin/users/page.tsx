@@ -1,32 +1,42 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { db } from "../../../firebase/config";
+import { db, auth } from "../../../firebase/config";
 import { collection, getDocs } from "firebase/firestore";
+import { useRouter } from "next/navigation";
 
 export default function UsersAdmin(){
+
+  const router = useRouter();
 
   const [users,setUsers] = useState<any[]>([]);
 
   useEffect(()=>{
 
-    const loadUsers = async ()=>{
+    const user = auth.currentUser;
 
-      const snapshot = await getDocs(collection(db,"users"));
-
-      const list:any[] = [];
-
-      snapshot.forEach(doc=>{
-        list.push({id:doc.id,...doc.data()});
-      });
-
-      setUsers(list);
-
-    };
+    if(!user || user.email !== "santiago@biodiversal.co"){
+      router.push("/login");
+      return;
+    }
 
     loadUsers();
 
   },[]);
+
+  const loadUsers = async ()=>{
+
+    const snapshot = await getDocs(collection(db,"users"));
+
+    const list:any[] = [];
+
+    snapshot.forEach(doc=>{
+      list.push({id:doc.id,...doc.data()});
+    });
+
+    setUsers(list);
+
+  };
 
   return(
 
