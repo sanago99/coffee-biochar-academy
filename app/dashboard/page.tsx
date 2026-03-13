@@ -2,7 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { db, auth } from "../../firebase/config";
-import { collection, getDocs, addDoc, doc, getDoc } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  addDoc,
+  doc,
+  getDoc
+} from "firebase/firestore";
+
 import { signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import jsPDF from "jspdf";
@@ -29,11 +36,17 @@ export default function Dashboard(){
       const sessionsList:any[]=[];
 
       modulesSnapshot.forEach(doc=>{
-        modulesList.push({id:doc.id,...doc.data()});
+        modulesList.push({
+          id:doc.id,
+          ...doc.data()
+        });
       });
 
       sessionsSnapshot.forEach(doc=>{
-        sessionsList.push({id:doc.id,...doc.data()});
+        sessionsList.push({
+          id:doc.id,
+          ...doc.data()
+        });
       });
 
       setModules(modulesList);
@@ -43,19 +56,19 @@ export default function Dashboard(){
 
     const loadUser = async ()=>{
 
-      const uid = auth.currentUser?.uid;
+      const user = auth.currentUser;
 
-      if(!uid) return;
+      if(!user) return;
 
-      const userRef = doc(db,"users",uid);
+      const userDoc = await getDoc(doc(db,"users",user.uid));
 
-      const userSnap = await getDoc(userRef);
+      if(userDoc.exists()){
 
-      if(userSnap.exists()){
-
-        const data:any = userSnap.data();
+        const data:any = userDoc.data();
 
         setStudentName(data.name);
+
+        console.log("Nombre cargado:",data.name);
 
       }
 
@@ -76,9 +89,11 @@ export default function Dashboard(){
   const completeSession = async (sessionId:string)=>{
 
     await addDoc(collection(db,"progress"),{
+
       userId:auth.currentUser?.uid,
       sessionId:sessionId,
       completed:true
+
     });
 
     setCompleted([...completed,sessionId]);
@@ -95,6 +110,14 @@ export default function Dashboard(){
 
   const generateCertificate = async ()=>{
 
+    if(!studentName){
+
+      alert("El nombre aún no se ha cargado");
+
+      return;
+
+    }
+
     try{
 
       const certificateId = "CBA-" + Date.now();
@@ -103,53 +126,62 @@ export default function Dashboard(){
         "https://coffeebiochar.academy/certificate/" + certificateId;
 
       await addDoc(collection(db,"certificates"),{
-        certificateId: certificateId,
-        name: studentName,
-        userId: auth.currentUser?.uid,
-        date: new Date().toISOString()
+
+        certificateId:certificateId,
+        name:studentName,
+        userId:auth.currentUser?.uid,
+        date:new Date().toISOString()
+
       });
 
       const qrImage = await QRCode.toDataURL(verificationUrl);
 
-      const docPDF = new jsPDF("landscape");
+      const pdf = new jsPDF("landscape");
 
-      docPDF.setDrawColor(40,120,70);
-      docPDF.setLineWidth(3);
-      docPDF.rect(10,10,277,190);
+      pdf.setDrawColor(40,120,70);
+      pdf.setLineWidth(3);
+      pdf.rect(10,10,277,190);
 
-      docPDF.addImage("/logo.png","PNG",130,20,40,20);
+      pdf.setFontSize(28);
+      pdf.text("Coffee Biochar Academy",148,60,{align:"center"});
 
-      docPDF.setFontSize(28);
-      docPDF.text("Coffee Biochar Academy",148,60,{align:"center"});
+      pdf.setFontSize(18);
+      pdf.text("CERTIFICATE OF COMPLETION",148,80,{align:"center"});
 
-      docPDF.setFontSize(18);
-      docPDF.text("CERTIFICATE OF COMPLETION",148,80,{align:"center"});
+      pdf.setFontSize(26);
+      pdf.text(studentName,148,110,{align:"center"});
 
-      docPDF.setFontSize(26);
-      docPDF.text(studentName,148,110,{align:"center"});
+      pdf.setFontSize(16);
+      pdf.text(
+        "Certified Coffee Biochar Extensionist",
+        148,
+        130,
+        {align:"center"}
+      );
 
-      docPDF.setFontSize(16);
-      docPDF.text("Certified Coffee Biochar Extensionist",148,130,{align:"center"});
+      pdf.setFontSize(12);
+      pdf.text(
+        "Coffee Biochar Program",
+        148,
+        145,
+        {align:"center"}
+      );
 
-      docPDF.setFontSize(12);
-      docPDF.text("Cohorte Coffee Biochar 2026",148,145,{align:"center"});
+      pdf.text(
+        "Certificate ID: "+certificateId,
+        148,
+        160,
+        {align:"center"}
+      );
 
-      docPDF.text("Certificate ID: "+certificateId,148,160,{align:"center"});
+      pdf.addImage(qrImage,"PNG",230,150,40,40);
 
-      docPDF.text("Verify:",240,150);
-
-      docPDF.addImage(qrImage,"PNG",230,155,40,40);
-
-      docPDF.addImage("/signature.png","PNG",40,150,60,20);
-
-      docPDF.setFontSize(10);
-      docPDF.text("Program Director",60,175);
-
-      docPDF.save("coffee-biochar-certificate.pdf");
+      pdf.save("coffee-biochar-certificate.pdf");
 
     }catch(error){
 
       console.error(error);
+
       alert("Error generando certificado");
 
     }
@@ -235,23 +267,30 @@ export default function Dashboard(){
 
       {modules.map(module=>{
 
-        const moduleSessions = sessions.filter(
-          s=>s.module===module.id
-        );
+        const moduleSessions =
+          sessions.filter(s=>s.module===module.id);
 
-        const isOpen = openModule===module.id;
+        const isOpen =
+          openModule===module.id;
 
         return(
 
-          <div key={module.id} style={{
-            border:"1px solid #333",
-            borderRadius:"8px",
-            marginTop:"20px",
-            padding:"15px"
-          }}>
+          <div
+            key={module.id}
+            style={{
+              border:"1px solid #333",
+              borderRadius:"8px",
+              marginTop:"20px",
+              padding:"15px"
+            }}
+          >
 
             <div
-              onClick={()=>setOpenModule(isOpen ? null : module.id)}
+              onClick={()=>
+                setOpenModule(
+                  isOpen ? null : module.id
+                )
+              }
               style={{cursor:"pointer"}}
             >
 
@@ -269,12 +308,15 @@ export default function Dashboard(){
 
                 {moduleSessions.map(session=>(
 
-                  <div key={session.id} style={{
-                    border:"1px solid #444",
-                    borderRadius:"6px",
-                    padding:"10px",
-                    marginTop:"10px"
-                  }}>
+                  <div
+                    key={session.id}
+                    style={{
+                      border:"1px solid #444",
+                      borderRadius:"6px",
+                      padding:"10px",
+                      marginTop:"10px"
+                    }}
+                  >
 
                     <p><b>{session.title}</b></p>
 
