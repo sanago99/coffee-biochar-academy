@@ -27,11 +27,9 @@ const router = useRouter();
 
 const [modules,setModules] = useState<any[]>([]);
 const [sessions,setSessions] = useState<any[]>([]);
-
 const [completed,setCompleted] = useState<string[]>([]);
 
 const [studentName,setStudentName] = useState("");
-
 const [completedCount,setCompletedCount] = useState(0);
 
 const [openModule,setOpenModule] =
@@ -163,28 +161,47 @@ totalSessions
 
 const generateCertificate = async ()=>{
 
-if(!studentName){
+const uid = auth.currentUser?.uid;
 
+if(!studentName){
 alert("Nombre no cargado");
 return;
-
 }
 
-const certificateId =
-"CBA-" + Date.now();
+const certSnap =
+await getDocs(collection(db,"certificates"));
 
-const verificationUrl =
-"https://coffeebiochar.academy/certificate/"
-+certificateId;
+let certificateId = "";
+
+const existing =
+certSnap.docs.find(
+doc => doc.data().userId === uid
+);
+
+if(existing){
+
+certificateId =
+existing.data().certificateId;
+
+}else{
+
+certificateId =
+"CBA-" + Date.now();
 
 await addDoc(collection(db,"certificates"),{
 
 certificateId,
 name:studentName,
-userId:auth.currentUser?.uid,
+userId:uid,
 date:new Date().toISOString()
 
 });
+
+}
+
+const verificationUrl =
+"https://coffeebiochar.academy/certificate/"
++certificateId;
 
 const qr =
 await QRCode.toDataURL(verificationUrl);
@@ -298,7 +315,7 @@ Módulos
 
 </h2>
 
-{modules.map(module=>{
+{modules.map((module)=>{
 
 const moduleSessions =
 sessions.filter(
@@ -341,7 +358,7 @@ style={{cursor:"pointer"}}
 
 <div style={{marginTop:"10px"}}>
 
-{moduleSessions.map(session=>(
+{moduleSessions.map((session)=>(
 
 <div
 key={session.id}
