@@ -54,8 +54,15 @@ export default function Login() {
     try {
       await signInWithEmailAndPassword(auth, demoEmail, DEMO_PASSWORD);
       router.push(role === "admin" ? "/admin" : "/dashboard");
-    } catch {
-      setError("Las cuentas demo no están configuradas aún. Consulta la guía de configuración.");
+    } catch (err: unknown) {
+      const code = (err as { code?: string }).code ?? "";
+      if (code === "auth/wrong-password" || code === "auth/invalid-login-credentials" || code === "auth/invalid-credential") {
+        setError("Contraseña demo incorrecta. Agrega NEXT_PUBLIC_DEMO_PASSWORD=tucontraseña en .env.local");
+      } else if (code === "auth/user-not-found") {
+        setError("Cuenta demo no encontrada. Créala en Firebase Auth con el email: " + demoEmail);
+      } else {
+        setError(`Error al entrar al demo: ${code || String(err)}`);
+      }
       setDemoLoading(null);
     }
   };
