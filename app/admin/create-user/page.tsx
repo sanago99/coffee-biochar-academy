@@ -1,16 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../../firebase/config";
-import { setDoc, doc } from "firebase/firestore";
+import { setDoc, doc, collection, getDocs } from "firebase/firestore";
 import AdminGuard from "../../components/AdminGuard";
 import AdminNav from "../../components/AdminNav";
-
-const CLUSTERS = [
-  "Cluster 1 – Ataco",
-  "Cluster 2 – Huila",
-];
 
 const IconBack = () => (
   <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
@@ -24,10 +19,20 @@ export default function CreateUser() {
   const [password,  setPassword]  = useState("");
   const [municipio, setMunicipio] = useState("");
   const [cluster,   setCluster]   = useState("");
+  const [clusters,  setClusters]  = useState<string[]>([]);
   const [finca,     setFinca]     = useState("");
   const [telefono,  setTelefono]  = useState("");
   const [msg,       setMsg]       = useState<{ ok: boolean; text: string } | null>(null);
   const [loading,   setLoading]   = useState(false);
+
+  useEffect(() => {
+    getDocs(collection(db, "users")).then(snap => {
+      const unique = Array.from(new Set(
+        snap.docs.map(d => d.data().cluster as string).filter(Boolean)
+      )).sort();
+      setClusters(unique);
+    });
+  }, []);
 
   const reset = () => {
     setName(""); setEmail(""); setPassword(""); setMunicipio("");
@@ -111,10 +116,22 @@ export default function CreateUser() {
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px", marginTop: "14px" }}>
                 <div>
                   <label className="form-label">Clúster *</label>
-                  <select className="input" value={cluster} onChange={e => setCluster(e.target.value)}>
-                    <option value="">Seleccionar clúster</option>
-                    {CLUSTERS.map(c => <option key={c} value={c}>{c}</option>)}
-                  </select>
+                  <input
+                    className="input"
+                    list="clusters-list"
+                    placeholder="Ej: Cluster 3 – Nariño"
+                    value={cluster}
+                    onChange={e => setCluster(e.target.value)}
+                    autoComplete="off"
+                  />
+                  <datalist id="clusters-list">
+                    {clusters.map(c => <option key={c} value={c} />)}
+                  </datalist>
+                  {clusters.length > 0 && (
+                    <p className="body-sm" style={{ marginTop: "5px", fontSize: "11px" }}>
+                      {clusters.length} clúster{clusters.length !== 1 ? "s" : ""} existente{clusters.length !== 1 ? "s" : ""}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label className="form-label">Finca</label>
