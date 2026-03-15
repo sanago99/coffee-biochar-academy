@@ -105,7 +105,8 @@ a { color: inherit; text-decoration: none; }
 }
 .nav-link:hover { color:var(--text-primary); background:rgba(245,166,35,0.07); }
 .nav-link-active { color:var(--amber) !important; }
-@media(max-width:768px){ .nav-links { display:none; } }
+@media(max-width:768px)  { .nav-links { display:none; } .nav-desktop-only { display:none !important; } }
+@media(min-width:769px)  { .nav-mobile-only { display:none !important; } }
 
 /* ─── Buttons ─────────────────────────────────────── */
 .btn {
@@ -116,6 +117,10 @@ a { color: inherit; text-decoration: none; }
   white-space:nowrap; min-height:48px; text-decoration:none;
 }
 .btn:disabled { opacity:.5; cursor:not-allowed; }
+.btn:focus-visible { outline:2px solid var(--amber); outline-offset:2px; }
+.btn-green:focus-visible  { outline-color:var(--green); }
+.btn-ghost:focus-visible  { outline-color:var(--border-light); }
+.btn-outline:focus-visible { outline-color:var(--amber); }
 
 .btn-primary {
   background:var(--amber);
@@ -283,18 +288,19 @@ select.input { appearance:none; cursor:pointer; }
 .badge-rust   { background:rgba(192,74,42,0.1); color:#e06040; border:1px solid rgba(192,74,42,0.25); }
 
 /* ─── Progress Bar ────────────────────────────────── */
+/* Two sizes: 8px (main) · 5px (compact, tables) · 3px via .module-progress */
 .progress-track {
   width:100%; height:8px;
   background:rgba(255,255,255,0.06);
   border-radius:var(--radius-pill); overflow:hidden;
 }
-.progress-fill {
-  height:100%; border-radius:var(--radius-pill);
-  background:linear-gradient(90deg, var(--amber-dark), var(--amber));
-  transition:width .9s cubic-bezier(.4,0,.2,1);
+.progress-track-sm {
+  width:100%; height:5px;
+  background:rgba(255,255,255,0.06);
+  border-radius:var(--radius-pill); overflow:hidden;
 }
-.progress-fill-sm {
-  height:6px; border-radius:var(--radius-pill);
+.progress-fill, .progress-fill-sm {
+  height:100%; border-radius:var(--radius-pill);
   background:linear-gradient(90deg, var(--amber-dark), var(--amber));
   transition:width .9s cubic-bezier(.4,0,.2,1);
 }
@@ -425,7 +431,7 @@ select.input { appearance:none; cursor:pointer; }
   background:var(--bg-elevated);
   transition:background .15s;
 }
-.session-row:hover { background:rgba(245,166,35,0.05); }
+.session-row:hover { background:rgba(245,166,35,0.09); color:var(--text-primary); }
 .session-row-done  { background:rgba(122,182,72,0.04); }
 
 .session-check {

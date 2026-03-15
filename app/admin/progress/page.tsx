@@ -10,6 +10,13 @@ import type { UserData } from "../../types";
 
 interface UserRow  { id: string; name: string; cluster: string; municipio: string; progress: number; moduleScores: Record<number,number>; }
 interface ClusterStat { cluster: string; progress: number; users: number; }
+
+/* Brand color tokens for Recharts (can't use CSS vars in SVG attributes) */
+const C_AMBER = "#F5A623";
+const C_AMBER_ALT = "#D4891A";
+const C_GREEN = "#7AB648";
+const C_GREEN_ALT = "#5A9E32";
+const C_RUST  = "#C04A2A";
 interface ModuleStat  { module: string; label: string; avg: number; approved: number; }
 
 const tooltipStyle = {
@@ -135,7 +142,7 @@ export default function AdminProgress() {
                       <YAxis tick={{ fill: "var(--text-muted)", fontSize: 11 }} axisLine={false} tickLine={false} domain={[0, 100]} />
                       <Tooltip {...tooltipStyle} formatter={(v) => [`${v}%`, "Progreso"]} />
                       <Bar dataKey="progress" radius={[4, 4, 0, 0]}>
-                        {clusterStats.map((_, i) => <Cell key={i} fill={i % 2 === 0 ? "#7AB648" : "#5A9E32"} />)}
+                        {clusterStats.map((_, i) => <Cell key={i} fill={i % 2 === 0 ? C_GREEN : C_GREEN_ALT} />)}
                       </Bar>
                     </BarChart>
                   </ResponsiveContainer>
@@ -161,7 +168,7 @@ export default function AdminProgress() {
                       <YAxis tick={{ fill: "var(--text-muted)", fontSize: 11 }} axisLine={false} tickLine={false} domain={[0, 100]} />
                       <Tooltip {...tooltipStyle} formatter={(v, name) => [name === "avg" ? `${v} pts` : `${v}`, name === "avg" ? "Score" : "Aprobados"]} />
                       <Bar dataKey="avg" radius={[4, 4, 0, 0]}>
-                        {moduleStats.map((m, i) => <Cell key={i} fill={m.avg >= 70 ? "#F5A623" : "#C04A2A"} />)}
+                        {moduleStats.map((m, i) => <Cell key={i} fill={m.avg >= 70 ? C_AMBER : C_RUST} />)}
                       </Bar>
                     </BarChart>
                   </ResponsiveContainer>
@@ -174,11 +181,11 @@ export default function AdminProgress() {
               {/* Legend */}
               <div style={{ display: "flex", gap: "16px", marginTop: "12px" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                  <div style={{ width: "10px", height: "10px", borderRadius: "2px", background: "#F5A623" }} />
+                  <div style={{ width: "10px", height: "10px", borderRadius: "2px", background: C_AMBER }} />
                   <span style={{ fontSize: "11px", color: "var(--text-muted)" }}>≥ 70 pts</span>
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                  <div style={{ width: "10px", height: "10px", borderRadius: "2px", background: "#C04A2A" }} />
+                  <div style={{ width: "10px", height: "10px", borderRadius: "2px", background: C_RUST }} />
                   <span style={{ fontSize: "11px", color: "var(--text-muted)" }}>&lt; 70 pts</span>
                 </div>
               </div>
@@ -194,11 +201,11 @@ export default function AdminProgress() {
             <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
               {[
                 { label: "0%",     range: [0, 0],    color: "var(--text-muted)" },
-                { label: "1–25%",  range: [1, 25],   color: "#C04A2A"           },
-                { label: "26–50%", range: [26, 50],  color: "#D4891A"           },
+                { label: "1–25%",  range: [1, 25],   color: C_RUST              },
+                { label: "26–50%", range: [26, 50],  color: C_AMBER_ALT         },
                 { label: "51–75%", range: [51, 75],  color: "var(--amber)"      },
                 { label: "76–99%", range: [76, 99],  color: "var(--green)"      },
-                { label: "100%",   range: [100, 100],color: "#7AB648"           },
+                { label: "100%",   range: [100, 100],color: C_GREEN             },
               ].map(({ label, range, color }) => {
                 const count = rows.filter(u => u.progress >= range[0] && u.progress <= range[1]).length;
                 const pct = rows.length ? Math.round((count / rows.length) * 100) : 0;
@@ -270,7 +277,7 @@ export default function AdminProgress() {
                           <td>{u.municipio || "—"}</td>
                           <td>
                             <div style={{ display: "flex", alignItems: "center", gap: "8px", minWidth: "110px" }}>
-                              <div className="progress-track" style={{ flex: 1 }}>
+                              <div className="progress-track-sm" style={{ flex: 1 }}>
                                 <div className="progress-fill-sm" style={{ width: `${u.progress}%`, background: isCert ? "var(--green)" : undefined }} />
                               </div>
                               <span style={{ fontSize: "12px", color: isCert ? "var(--green)" : "var(--text-muted)", minWidth: "30px", fontWeight: 600 }}>

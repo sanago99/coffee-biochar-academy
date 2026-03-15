@@ -331,7 +331,7 @@ export default function Dashboard() {
           </div>
 
           {/* main bar */}
-          <div className="progress-track" style={{ height: "10px" }}>
+          <div className="progress-track">
             <div className="progress-fill" style={{ width: `${progress}%` }} />
           </div>
 

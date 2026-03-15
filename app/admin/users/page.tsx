@@ -5,6 +5,7 @@ import { db } from "../../../firebase/config";
 import { collection, getDocs, doc, updateDoc } from "firebase/firestore";
 import AdminGuard from "../../components/AdminGuard";
 import AdminNav from "../../components/AdminNav";
+import ConfirmModal from "../../components/ConfirmModal";
 import type { UserData } from "../../types";
 
 type UserRow = UserData & { id: string };
@@ -69,7 +70,8 @@ export default function UsersAdmin() {
   const [search,   setSearch]   = useState("");
   const [cluster,  setCluster]  = useState("all");
   const [tab,      setTab]      = useState<Tab>("all");
-  const [approving, setApproving] = useState<string | null>(null);
+  const [approving,       setApproving]       = useState<string | null>(null);
+  const [confirmApprove,  setConfirmApprove]  = useState<string | null>(null);
 
   const load = () => {
     getDocs(collection(db, "users")).then(snap => {
@@ -82,7 +84,11 @@ export default function UsersAdmin() {
 
   const approve = async (userId: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!window.confirm("¿Aprobar esta cuenta? El extensionista podrá acceder al programa.")) return;
+    setConfirmApprove(userId);
+  };
+
+  const doApprove = async (userId: string) => {
+    setConfirmApprove(null);
     setApproving(userId);
     await updateDoc(doc(db, "users", userId), { status: "active" });
     setUsers(prev => prev.map(u => u.id === userId ? { ...u, status: "active" } : u));
@@ -256,7 +262,7 @@ export default function UsersAdmin() {
                               <span style={{ fontSize: "12px", color: "var(--text-muted)" }}>—</span>
                             ) : (
                               <div style={{ display: "flex", alignItems: "center", gap: "10px", minWidth: "120px" }}>
-                                <div className="progress-track" style={{ flex: 1 }}>
+                                <div className="progress-track-sm" style={{ flex: 1 }}>
                                   <div className="progress-fill-sm" style={{ width: `${user.progress || 0}%` }} />
                                 </div>
                                 <span style={{ fontSize: "12px", color: "var(--text-muted)", minWidth: "30px", fontWeight: 600 }}>
@@ -321,6 +327,15 @@ export default function UsersAdmin() {
           )}
         </div>
       </div>
+
+      {confirmApprove && (
+        <ConfirmModal
+          message="¿Aprobar esta cuenta? El extensionista podrá acceder al programa de formación."
+          confirmLabel="Aprobar"
+          onConfirm={() => doApprove(confirmApprove)}
+          onCancel={() => setConfirmApprove(null)}
+        />
+      )}
     </AdminGuard>
   );
 }
