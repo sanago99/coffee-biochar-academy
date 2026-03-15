@@ -67,6 +67,9 @@ export default function AdminContent() {
   const [editSesData, setEditSesData] = useState<{ title: string; description: string; link: string; material: string }>({ title: "", description: "", link: "", material: "" });
   const [savingSes,   setSavingSes]   = useState(false);
 
+  /* ── Lock toggle ── */
+  const [togglingLock, setTogglingLock] = useState<string | null>(null);
+
   /* ── Delete confirm ── */
   const [confirmDelete, setConfirmDelete] = useState<{ type: "module" | "session"; id: string; name: string; hasChildren?: boolean } | null>(null);
   const [deleting, setDeleting] = useState(false);
@@ -139,6 +142,17 @@ export default function AdminContent() {
       refreshSessions();
     } finally {
       setSavingSes(false);
+    }
+  };
+
+  /* ── Lock toggle handler ── */
+  const toggleLock = async (s: Session) => {
+    setTogglingLock(s.id);
+    try {
+      await updateDoc(doc(db, "sessions", s.id), { locked: !s.locked });
+      refreshSessions();
+    } finally {
+      setTogglingLock(null);
     }
   };
 
@@ -446,7 +460,14 @@ export default function AdminContent() {
                                     <IconSession />
                                   </div>
                                   <div style={{ flex: 1 }}>
-                                    <p style={{ fontSize: "14px", fontWeight: 500, color: "var(--text-primary)", marginBottom: "2px" }}>{s.title}</p>
+                                    <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "2px" }}>
+                                      <p style={{ fontSize: "14px", fontWeight: 500, color: "var(--text-primary)" }}>{s.title}</p>
+                                      {s.locked && (
+                                        <span style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: "#e06040", background: "rgba(192,74,42,0.1)", border: "1px solid rgba(192,74,42,0.25)", borderRadius: "4px", padding: "1px 6px" }}>
+                                          Bloqueada
+                                        </span>
+                                      )}
+                                    </div>
                                     {s.description && <p style={{ fontSize: "12px", color: "var(--text-secondary)", marginBottom: "2px" }}>{s.description}</p>}
                                     {s.link && <p style={{ fontSize: "11px", color: "var(--text-muted)" }}>Video · {s.link.slice(0, 50)}{s.link.length > 50 ? "…" : ""}</p>}
                                   </div>
@@ -457,6 +478,19 @@ export default function AdminContent() {
                                     {s.link && (
                                       <a href={s.link} target="_blank" rel="noreferrer" className="btn btn-ghost btn-sm" style={{ fontSize: "11px", padding: "4px 8px", minHeight: "28px" }}>Video</a>
                                     )}
+                                    <button
+                                      className="btn btn-ghost btn-sm"
+                                      style={{ cursor: togglingLock === s.id ? "not-allowed" : "pointer", padding: "4px 8px", minHeight: "28px", fontSize: "11px", display: "flex", alignItems: "center", gap: "4px", color: s.locked ? "var(--amber)" : "var(--text-muted)" }}
+                                      onClick={() => toggleLock(s)}
+                                      disabled={togglingLock === s.id}
+                                      title={s.locked ? "Desbloquear sesión" : "Bloquear sesión"}
+                                    >
+                                      {s.locked ? (
+                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="2.5" y="5.5" width="7" height="5" rx="1" stroke="currentColor" strokeWidth="1.4"/><path d="M4 5.5V4a2 2 0 014 0v1.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/></svg>
+                                      ) : (
+                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="2.5" y="5.5" width="7" height="5" rx="1" stroke="currentColor" strokeWidth="1.4"/><path d="M4 5.5V4a2 2 0 014 0v1.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeDasharray="3 2"/></svg>
+                                      )}
+                                    </button>
                                     <button
                                       className="btn btn-ghost btn-sm"
                                       style={{ cursor: "pointer", padding: "4px 8px", minHeight: "28px", fontSize: "11px", display: "flex", alignItems: "center", gap: "4px" }}

@@ -136,6 +136,24 @@ export default function UsersAdmin() {
     });
   };
 
+  const exportCSV = () => {
+    const headers = ["Nombre", "Email", "Clúster", "Municipio", "Finca", "Teléfono", "Estado", "Progreso"];
+    const rowData = users.map(u => [
+      u.name ?? "", u.email ?? "", u.cluster ?? "", u.municipio ?? "",
+      u.finca ?? "", u.telefono ?? "",
+      u.status === "pending" ? "Pendiente" : "Activo",
+      `${u.progress ?? 0}%`,
+    ]);
+    const csv = [headers, ...rowData]
+      .map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(","))
+      .join("\n");
+    const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = "extensionistas.csv"; a.click();
+    URL.revokeObjectURL(url);
+  };
+
   const clusters = Array.from(new Set(users.map(u => u.cluster).filter(Boolean)));
 
   const pendingCount     = users.filter(u => u.status === "pending").length;
@@ -176,11 +194,26 @@ export default function UsersAdmin() {
                 {pendingCount > 0 && <span style={{ color: "var(--amber)", fontWeight: 600 }}> · {pendingCount} pendiente{pendingCount !== 1 ? "s" : ""}</span>}
               </p>
             </div>
-            <a href="/admin/create-user">
-              <button className="btn btn-primary btn-sm" style={{ cursor: "pointer" }}>
-                + Crear extensionista
+            <div style={{ display: "flex", gap: "8px" }}>
+              <button
+                className="btn btn-ghost btn-sm"
+                style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "6px", fontSize: "13px" }}
+                onClick={exportCSV}
+                disabled={users.length === 0}
+                title="Descargar lista como CSV"
+              >
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                  <path d="M7 2v7M4 6l3 3 3-3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M2 11h10" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
+                </svg>
+                Exportar CSV
               </button>
-            </a>
+              <a href="/admin/create-user">
+                <button className="btn btn-primary btn-sm" style={{ cursor: "pointer" }}>
+                  + Crear extensionista
+                </button>
+              </a>
+            </div>
           </div>
 
           {/* Tabs + Filters */}

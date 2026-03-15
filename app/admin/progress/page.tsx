@@ -8,7 +8,7 @@ import AdminGuard from "../../components/AdminGuard";
 import AdminNav from "../../components/AdminNav";
 import type { UserData } from "../../types";
 
-interface UserRow  { id: string; name: string; cluster: string; municipio: string; progress: number; moduleScores: Record<number,number>; }
+interface UserRow  { id: string; name: string; email: string; cluster: string; municipio: string; progress: number; moduleScores: Record<number,number>; }
 interface ClusterStat { cluster: string; progress: number; users: number; }
 
 /* Brand color tokens for Recharts (can't use CSS vars in SVG attributes) */
@@ -59,7 +59,7 @@ export default function AdminProgress() {
       const progList = progressSnap.docs.map(d => d.data() as { userId: string });
 
       const userRows: UserRow[] = users.map(u => ({
-        id: u.id, name: u.name, cluster: u.cluster ?? "", municipio: u.municipio ?? "",
+        id: u.id, name: u.name, email: u.email ?? "", cluster: u.cluster ?? "", municipio: u.municipio ?? "",
         moduleScores: u.moduleScores ?? {},
         progress: total ? Math.round((progList.filter(p => p.userId === u.id).length / total) * 100) : 0,
       }));
@@ -102,6 +102,25 @@ export default function AdminProgress() {
   const filtered = rows.filter(u =>
     `${u.name} ${u.cluster} ${u.municipio}`.toLowerCase().includes(search.toLowerCase())
   );
+
+  const exportCSV = () => {
+    // Collect all module orders that appear across all users
+    const allMods = Array.from(new Set(rows.flatMap(u => Object.keys(u.moduleScores).map(Number)))).sort((a, b) => a - b);
+    const headers = ["Nombre", "Email", "Clúster", "Municipio", "Progreso", ...allMods.map(m => `M${m} score`)];
+    const rowData = rows.map(u => [
+      u.name, u.email, u.cluster, u.municipio,
+      `${u.progress}%`,
+      ...allMods.map(m => u.moduleScores[m] !== undefined ? String(u.moduleScores[m]) : ""),
+    ]);
+    const csv = [headers, ...rowData]
+      .map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(","))
+      .join("\n");
+    const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = "progreso-programa.csv"; a.click();
+    URL.revokeObjectURL(url);
+  };
 
   const kpiCards = [
     { n: kpis.users,       l: "Total extensionistas", color: "var(--green)",  sub: "registrados" },
@@ -232,6 +251,20 @@ export default function AdminProgress() {
             <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "20px", fontWeight: 600 }}>
               Detalle por extensionista
             </h2>
+            <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+              <button
+                className="btn btn-ghost btn-sm"
+                style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "6px", fontSize: "13px" }}
+                onClick={exportCSV}
+                disabled={rows.length === 0}
+                title="Descargar reporte como CSV"
+              >
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                  <path d="M7 2v7M4 6l3 3 3-3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M2 11h10" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
+                </svg>
+                Exportar CSV
+              </button>
             <div style={{ position: "relative" }}>
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ position: "absolute", left: "10px", top: "50%", transform: "translateY(-50%)", color: "var(--text-muted)", pointerEvents: "none" }}>
                 <circle cx="6" cy="6" r="4" stroke="currentColor" strokeWidth="1.4"/>
@@ -244,6 +277,7 @@ export default function AdminProgress() {
                 onChange={e => setSearch(e.target.value)}
                 style={{ maxWidth: "220px", paddingLeft: "32px" }}
               />
+            </div>
             </div>
           </div>
 
