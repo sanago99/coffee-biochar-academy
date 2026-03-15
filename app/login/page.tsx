@@ -51,19 +51,21 @@ export default function Login() {
     setDemoLoading(role);
     setError("");
     const demoEmail = role === "student" ? DEMO_STUDENT_EMAIL : DEMO_ADMIN_EMAIL;
+    setLoading(true);
     try {
       await signInWithEmailAndPassword(auth, demoEmail, DEMO_PASSWORD);
-      router.push(role === "admin" ? "/admin" : "/dashboard");
+      const snap = await getDocs(query(collection(db, "users"), where("email", "==", demoEmail)));
+      if (snap.empty) {
+        setError(`Cuenta demo autenticada pero sin perfil en Firestore. Crea el documento en la colección 'users' con email: ${demoEmail}`);
+        setLoading(false); setDemoLoading(null); return;
+      }
+      const userData = snap.docs[0].data() as UserData;
+      if (userData.status === "pending") { router.push("/pending"); return; }
+      router.push(userData.role === "admin" ? "/admin" : "/dashboard");
     } catch (err: unknown) {
       const code = (err as { code?: string }).code ?? "";
-      if (code === "auth/wrong-password" || code === "auth/invalid-login-credentials" || code === "auth/invalid-credential") {
-        setError("Contraseña demo incorrecta. Agrega NEXT_PUBLIC_DEMO_PASSWORD=tucontraseña en .env.local");
-      } else if (code === "auth/user-not-found") {
-        setError("Cuenta demo no encontrada. Créala en Firebase Auth con el email: " + demoEmail);
-      } else {
-        setError(`Error al entrar al demo: ${code || String(err)}`);
-      }
-      setDemoLoading(null);
+      setError(`Error demo (${code || "desconocido"}): revisa que el email "${demoEmail}" exista en Firebase Auth con contraseña "${DEMO_PASSWORD}"`);
+      setLoading(false); setDemoLoading(null);
     }
   };
 
