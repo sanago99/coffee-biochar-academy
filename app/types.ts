@@ -9,6 +9,7 @@ export interface Module {
 export interface Session {
   id: string;
   title: string;
+  description?: string;
   link: string;
   material?: string;
   moduleId: string;

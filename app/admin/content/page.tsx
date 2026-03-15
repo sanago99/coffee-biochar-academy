@@ -46,10 +46,11 @@ export default function AdminContent() {
   const [modLoading,     setModLoading]     = useState(false);
 
   /* ── Create session ── */
-  const [sessionTitle,    setSessionTitle]    = useState("");
-  const [sessionLink,     setSessionLink]     = useState("");
-  const [sessionMaterial, setSessionMaterial] = useState("");
-  const [selectedModule,  setSelectedModule]  = useState("");
+  const [sessionTitle,       setSessionTitle]       = useState("");
+  const [sessionDescription, setSessionDescription] = useState("");
+  const [sessionLink,        setSessionLink]        = useState("");
+  const [sessionMaterial,    setSessionMaterial]    = useState("");
+  const [selectedModule,     setSelectedModule]     = useState("");
   const [sessionMsg,      setSessionMsg]      = useState<{ ok: boolean; text: string } | null>(null);
   const [sesLoading,      setSesLoading]      = useState(false);
 
@@ -63,7 +64,7 @@ export default function AdminContent() {
 
   /* ── Edit session ── */
   const [editingSes,  setEditingSes]  = useState<string | null>(null);
-  const [editSesData, setEditSesData] = useState<{ title: string; link: string; material: string }>({ title: "", link: "", material: "" });
+  const [editSesData, setEditSesData] = useState<{ title: string; description: string; link: string; material: string }>({ title: "", description: "", link: "", material: "" });
   const [savingSes,   setSavingSes]   = useState(false);
 
   /* ── Delete confirm ── */
@@ -87,8 +88,8 @@ export default function AdminContent() {
     if (!sessionTitle || !selectedModule) { setSessionMsg({ ok: false, text: "Título y módulo son obligatorios" }); return; }
     setSesLoading(true);
     try {
-      await addDoc(collection(db, "sessions"), { title: sessionTitle, link: sessionLink, material: sessionMaterial, moduleId: selectedModule, locked: false });
-      setSessionTitle(""); setSessionLink(""); setSessionMaterial(""); setSelectedModule("");
+      await addDoc(collection(db, "sessions"), { title: sessionTitle, description: sessionDescription, link: sessionLink, material: sessionMaterial, moduleId: selectedModule, locked: false });
+      setSessionTitle(""); setSessionDescription(""); setSessionLink(""); setSessionMaterial(""); setSelectedModule("");
       setSessionMsg({ ok: true, text: `Sesión "${sessionTitle}" creada` });
       refreshSessions();
     } catch { setSessionMsg({ ok: false, text: "Error al crear la sesión" }); }
@@ -121,7 +122,7 @@ export default function AdminContent() {
   /* ── Edit session handlers ── */
   const startEditSes = (s: Session) => {
     setEditingSes(s.id);
-    setEditSesData({ title: s.title, link: s.link ?? "", material: s.material ?? "" });
+    setEditSesData({ title: s.title, description: s.description ?? "", link: s.link ?? "", material: s.material ?? "" });
   };
 
   const saveEditSes = async (id: string) => {
@@ -130,6 +131,7 @@ export default function AdminContent() {
     try {
       await updateDoc(doc(db, "sessions", id), {
         title: editSesData.title,
+        description: editSesData.description,
         link: editSesData.link,
         material: editSesData.material,
       });
@@ -253,6 +255,12 @@ export default function AdminContent() {
                 <label className="form-label" htmlFor="ses-title">Título de la sesión *</label>
                 <input id="ses-title" className="input" placeholder="Ej: Comunicación efectiva"
                   value={sessionTitle} onChange={e => setSessionTitle(e.target.value)} />
+              </div>
+              <div style={{ marginTop: "14px" }}>
+                <label className="form-label" htmlFor="ses-desc">Descripción breve</label>
+                <textarea id="ses-desc" className="input" placeholder="Ej: Aprende los fundamentos del biochar y su aplicación..." rows={2}
+                  value={sessionDescription} onChange={e => setSessionDescription(e.target.value)}
+                  style={{ resize: "vertical", minHeight: "64px" }} />
               </div>
               <div style={{ marginTop: "14px" }}>
                 <label className="form-label" htmlFor="ses-link">Link del video (YouTube / Drive)</label>
@@ -398,6 +406,14 @@ export default function AdminContent() {
                                     style={{ fontSize: "14px", marginBottom: "8px" }}
                                     autoFocus
                                   />
+                                  <textarea
+                                    className="input"
+                                    placeholder="Descripción breve"
+                                    value={editSesData.description}
+                                    onChange={e => setEditSesData(d => ({ ...d, description: e.target.value }))}
+                                    rows={2}
+                                    style={{ fontSize: "14px", marginBottom: "8px", resize: "vertical", minHeight: "60px" }}
+                                  />
                                   <input
                                     className="input"
                                     placeholder="Link del video"
@@ -430,7 +446,8 @@ export default function AdminContent() {
                                     <IconSession />
                                   </div>
                                   <div style={{ flex: 1 }}>
-                                    <p style={{ fontSize: "14px", fontWeight: 500, color: "var(--text-primary)", marginBottom: "1px" }}>{s.title}</p>
+                                    <p style={{ fontSize: "14px", fontWeight: 500, color: "var(--text-primary)", marginBottom: "2px" }}>{s.title}</p>
+                                    {s.description && <p style={{ fontSize: "12px", color: "var(--text-secondary)", marginBottom: "2px" }}>{s.description}</p>}
                                     {s.link && <p style={{ fontSize: "11px", color: "var(--text-muted)" }}>Video · {s.link.slice(0, 50)}{s.link.length > 50 ? "…" : ""}</p>}
                                   </div>
                                   <div style={{ display: "flex", gap: "4px", flexShrink: 0 }}>

@@ -72,6 +72,9 @@ export default function UsersAdmin() {
   const [tab,      setTab]      = useState<Tab>("all");
   const [approving,       setApproving]       = useState<string | null>(null);
   const [confirmApprove,  setConfirmApprove]  = useState<string | null>(null);
+  const [selected,        setSelected]        = useState<Set<string>>(new Set());
+  const [confirmBulk,     setConfirmBulk]     = useState(false);
+  const [approvingBulk,   setApprovingBulk]   = useState(false);
 
   const load = () => {
     getDocs(collection(db, "users")).then(snap => {
@@ -105,11 +108,39 @@ export default function UsersAdmin() {
     }
   };
 
+  const toggleSelect = (id: string) => {
+    setSelected(prev => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  };
+
+  const doApproveBulk = async () => {
+    setConfirmBulk(false);
+    setApprovingBulk(true);
+    const ids = Array.from(selected);
+    const approvedUsers = users.filter(u => selected.has(u.id));
+    await Promise.all(ids.map(id => updateDoc(doc(db, "users", id), { status: "active" })));
+    setUsers(prev => prev.map(u => selected.has(u.id) ? { ...u, status: "active" } : u));
+    setSelected(new Set());
+    setApprovingBulk(false);
+    approvedUsers.forEach(u => {
+      if (u.email) {
+        fetch("/api/approve-email", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ toEmail: u.email, toName: u.name }),
+        }).catch(() => {});
+      }
+    });
+  };
+
   const clusters = Array.from(new Set(users.map(u => u.cluster).filter(Boolean)));
 
-  const pendingCount   = users.filter(u => u.status === "pending").length;
+  const pendingCount     = users.filter(u => u.status === "pending").length;
   const hasActiveFilters = search !== "" || cluster !== "all" || tab !== "all";
-  const clearFilters = () => { setSearch(""); setCluster("all"); setTab("all"); };
+  const clearFilters     = () => { setSearch(""); setCluster("all"); setTab("all"); setSelected(new Set()); };
 
   const filtered = users.filter(u => {
     const q = `${u.name} ${u.municipio} ${u.cluster}`.toLowerCase();
@@ -209,14 +240,43 @@ export default function UsersAdmin() {
           {/* Pending alert banner */}
           {pendingCount > 0 && tab !== "active" && (
             <div className="fade-up-1" style={{
-              padding: "14px 18px", borderRadius: "var(--radius-sm)", marginBottom: "16px",
+              padding: "12px 16px", borderRadius: "var(--radius-sm)", marginBottom: "16px",
               background: "rgba(245,166,35,0.07)", border: "1px solid var(--amber-border)",
-              display: "flex", alignItems: "center", gap: "12px",
+              display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px", flexWrap: "wrap",
             }}>
-              <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: "var(--amber)", flexShrink: 0 }} />
-              <p style={{ fontSize: "13px", color: "var(--amber)", fontWeight: 500 }}>
-                {pendingCount} extensionista{pendingCount !== 1 ? "s" : ""} esperando verificación — revisa la pestaña <strong>Pendientes</strong>
-              </p>
+              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: "var(--amber)", flexShrink: 0 }} />
+                <p style={{ fontSize: "13px", color: "var(--amber)", fontWeight: 500 }}>
+                  {selected.size > 0
+                    ? `${selected.size} extensionista${selected.size !== 1 ? "s" : ""} seleccionado${selected.size !== 1 ? "s" : ""}`
+                    : `${pendingCount} esperando verificación`}
+                </p>
+              </div>
+              <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                {tab === "pending" && filtered.filter(u => u.status === "pending").length > 0 && (
+                  <button
+                    style={{ fontSize: "12px", fontWeight: 600, color: "var(--amber)", background: "none", border: "none", cursor: "pointer", padding: "2px 0", textDecoration: "underline" }}
+                    onClick={() => {
+                      const pendingIds = filtered.filter(u => u.status === "pending").map(u => u.id);
+                      const allSelected = pendingIds.every(id => selected.has(id));
+                      setSelected(allSelected ? new Set() : new Set(pendingIds));
+                    }}
+                  >
+                    {filtered.filter(u => u.status === "pending").every(u => selected.has(u.id)) ? "Deseleccionar todo" : "Seleccionar todo"}
+                  </button>
+                )}
+                {selected.size > 0 && (
+                  <button
+                    className="btn btn-green btn-sm"
+                    style={{ cursor: approvingBulk ? "not-allowed" : "pointer", fontSize: "12px", padding: "5px 14px", minHeight: "32px", display: "flex", alignItems: "center", gap: "6px" }}
+                    disabled={approvingBulk}
+                    onClick={() => setConfirmBulk(true)}
+                  >
+                    <IconCheck />
+                    {approvingBulk ? "Aprobando..." : `Aprobar ${selected.size} seleccionado${selected.size !== 1 ? "s" : ""}`}
+                  </button>
+                )}
+              </div>
             </div>
           )}
 
@@ -232,6 +292,7 @@ export default function UsersAdmin() {
                 <table className="data-table">
                   <thead>
                     <tr>
+                      {tab === "pending" && <th style={{ width: "40px" }}></th>}
                       <th>Extensionista</th>
                       <th>Clúster · Municipio</th>
                       <th>Módulos</th>
@@ -243,12 +304,27 @@ export default function UsersAdmin() {
                   <tbody>
                     {filtered.map(user => {
                       const isPending = user.status === "pending";
+                      const isSelected = selected.has(user.id);
                       return (
                         <tr
                           key={user.id}
-                          style={{ cursor: isPending ? "default" : "pointer", opacity: isPending ? 0.9 : 1 }}
-                          onClick={() => !isPending && (window.location.href = `/admin/users/${user.id}`)}
+                          style={{ cursor: isPending ? "default" : "pointer", opacity: isPending ? 0.9 : 1, background: isSelected ? "rgba(245,166,35,0.04)" : undefined }}
+                          onClick={() => {
+                            if (isPending && tab === "pending") { toggleSelect(user.id); return; }
+                            if (!isPending) window.location.href = `/admin/users/${user.id}`;
+                          }}
                         >
+                          {tab === "pending" && (
+                            <td style={{ width: "40px" }} onClick={e => { e.stopPropagation(); toggleSelect(user.id); }}>
+                              <input
+                                type="checkbox"
+                                checked={isSelected}
+                                onChange={() => toggleSelect(user.id)}
+                                style={{ width: "15px", height: "15px", cursor: "pointer", accentColor: "var(--amber)" }}
+                                aria-label={`Seleccionar a ${user.name}`}
+                              />
+                            </td>
+                          )}
                           <td data-label="">
                             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                               <UserAvatar name={user.name || "?"} />
@@ -318,7 +394,7 @@ export default function UsersAdmin() {
                     })}
                     {filtered.length === 0 && (
                       <tr>
-                        <td colSpan={6} style={{ textAlign: "center", padding: "56px 20px" }}>
+                        <td colSpan={tab === "pending" ? 7 : 6} style={{ textAlign: "center", padding: "56px 20px" }}>
                           <p style={{ fontSize: "14px", color: "var(--text-muted)", marginBottom: "6px" }}>
                             {tab === "pending" ? "No hay cuentas pendientes de aprobación" : "No se encontraron usuarios"}
                           </p>
@@ -349,6 +425,15 @@ export default function UsersAdmin() {
           confirmLabel="Aprobar"
           onConfirm={() => doApprove(confirmApprove)}
           onCancel={() => setConfirmApprove(null)}
+        />
+      )}
+
+      {confirmBulk && (
+        <ConfirmModal
+          message={`¿Aprobar ${selected.size} extensionista${selected.size !== 1 ? "s" : ""}? Todos podrán acceder al programa de formación.`}
+          confirmLabel={approvingBulk ? "Aprobando..." : `Aprobar ${selected.size}`}
+          onConfirm={doApproveBulk}
+          onCancel={() => setConfirmBulk(false)}
         />
       )}
     </AdminGuard>

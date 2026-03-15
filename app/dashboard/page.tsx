@@ -529,10 +529,17 @@ export default function Dashboard() {
                             {done && <IconCheck />}
                           </div>
 
-                          {/* Title */}
-                          <span style={{ flex: 1, fontSize: "14px", color: done ? "var(--text-secondary)" : "var(--text-primary)", lineHeight: 1.4 }}>
-                            {session.title}
-                          </span>
+                          {/* Title + description */}
+                          <div style={{ flex: 1 }}>
+                            <span style={{ fontSize: "14px", color: done ? "var(--text-secondary)" : "var(--text-primary)", lineHeight: 1.4 }}>
+                              {session.title}
+                            </span>
+                            {session.description && (
+                              <p style={{ fontSize: "12px", color: "var(--text-muted)", marginTop: "2px", lineHeight: 1.4 }}>
+                                {session.description}
+                              </p>
+                            )}
+                          </div>
 
                           {/* Actions */}
                           <div style={{ display: "flex", gap: "8px", flexShrink: 0 }}>
