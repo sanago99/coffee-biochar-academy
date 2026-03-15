@@ -58,6 +58,15 @@ export default function PendingPage() {
           Cuando tu cuenta sea aprobada podrás acceder al programa de formación.
         </p>
 
+        <div style={{ padding: "12px 16px", borderRadius: "var(--radius-sm)", background: "rgba(245,166,35,0.06)", border: "1px solid var(--amber-border)", marginBottom: "20px" }}>
+          <p style={{ fontSize: "13px", color: "var(--amber)", fontWeight: 500 }}>
+            Tiempo estimado: <strong>1–2 días hábiles</strong>
+          </p>
+          <p style={{ fontSize: "12px", color: "var(--text-muted)", marginTop: "4px" }}>
+            Recibirás acceso automáticamente una vez aprobado.
+          </p>
+        </div>
+
         {userData && (
           <div style={{ padding: "16px", borderRadius: "var(--radius-sm)", background: "var(--bg-elevated)", border: "1px solid var(--border)", marginBottom: "20px", textAlign: "left" }}>
             <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
@@ -77,7 +86,10 @@ export default function PendingPage() {
         )}
 
         <p className="body-sm" style={{ fontSize: "12px", color: "var(--text-muted)", marginBottom: "24px" }}>
-          Si tienes dudas, contacta a tu coordinador de clúster.
+          ¿Preguntas? Escríbele a tu coordinador de clúster o a{" "}
+          <a href="mailto:info@coffeebiochar.com" style={{ color: "var(--amber)", textDecoration: "none" }}>
+            info@coffeebiochar.com
+          </a>
         </p>
 
         <button

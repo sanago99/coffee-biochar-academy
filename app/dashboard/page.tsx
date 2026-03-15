@@ -384,15 +384,31 @@ export default function Dashboard() {
                 key={module.id}
                 className={`card fade-up-${Math.min(idx + 1, 3)}`}
                 style={{
-                  opacity: isLocked ? 0.45 : 1,
+                  opacity: isLocked ? 0.6 : 1,
                   borderColor: status === "approved"
                     ? "var(--green-border)"
                     : status === "available"
                     ? "var(--amber-border)"
                     : undefined,
                   transition: "opacity .2s",
+                  position: "relative",
                 }}
               >
+                {/* Locked banner */}
+                {isLocked && (
+                  <div style={{
+                    display: "flex", alignItems: "center", gap: "8px",
+                    padding: "8px 12px", marginBottom: "14px",
+                    borderRadius: "var(--radius-sm)",
+                    background: "rgba(255,255,255,0.03)",
+                    border: "1px solid var(--border)",
+                    fontSize: "12px", color: "var(--text-muted)",
+                  }}>
+                    <IconLock />
+                    Completa y aprueba el módulo anterior para desbloquear este contenido
+                  </div>
+                )}
+
                 {/* Module header */}
                 <div className="flex-between" style={{ flexWrap: "wrap", gap: "10px" }}>
                   <div className="flex-gap-sm">

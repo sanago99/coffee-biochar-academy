@@ -34,9 +34,10 @@ export default function CreateUser() {
     });
   }, []);
 
-  const reset = () => {
+  const reset = (keepCluster = false) => {
     setName(""); setEmail(""); setPassword(""); setMunicipio("");
-    setCluster(""); setFinca(""); setTelefono("");
+    if (!keepCluster) setCluster("");
+    setFinca(""); setTelefono("");
   };
 
   const createUser = async () => {
@@ -59,7 +60,7 @@ export default function CreateUser() {
         role: "user", progress: 0, createdAt: new Date(),
       });
       setMsg({ ok: true, text: `Cuenta creada para ${name}. Ya puede iniciar sesión.` });
-      reset();
+      reset(false);
     } catch (e: unknown) {
       const errMsg = e instanceof Error ? e.message : "Error desconocido";
       if (errMsg.includes("email-already-in-use")) {
@@ -169,10 +170,21 @@ export default function CreateUser() {
 
               {msg && <p className={msg.ok ? "msg-success" : "msg-error"}>{msg.text}</p>}
 
-              <button className="btn btn-primary btn-full" style={{ marginTop: "24px", cursor: "pointer" }}
-                onClick={createUser} disabled={loading}>
-                {loading ? "Creando cuenta..." : "Crear extensionista"}
-              </button>
+              <div style={{ marginTop: "24px", display: "flex", gap: "10px" }}>
+                <button className="btn btn-primary" style={{ flex: 1, cursor: "pointer" }}
+                  onClick={createUser} disabled={loading}>
+                  {loading ? "Creando cuenta..." : "Crear extensionista"}
+                </button>
+                {msg?.ok && (
+                  <button
+                    className="btn btn-ghost"
+                    style={{ cursor: "pointer", whiteSpace: "nowrap" }}
+                    onClick={() => { reset(true); setMsg(null); }}
+                  >
+                    + Crear otro
+                  </button>
+                )}
+              </div>
 
             </div>
           </div>
