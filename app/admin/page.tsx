@@ -98,7 +98,7 @@ export default function AdminDashboard() {
                 {kpiLoading ? (
                   <div style={{ height: "36px", background: "var(--border)", borderRadius: "6px", marginBottom: "8px", animation: "pulse 1.5s ease-in-out infinite" }} />
                 ) : (
-                  <p style={{ fontFamily: "'Playfair Display',serif", fontSize: "36px", fontWeight: 700, color, lineHeight: 1, marginBottom: "6px" }}>{n}</p>
+                  <p className="stat-xl" style={{ color, marginBottom: "6px" }}>{n}</p>
                 )}
                 <p className="caption">{l}</p>
               </div>
@@ -108,24 +108,14 @@ export default function AdminDashboard() {
           {/* Nav cards */}
           <div className="fade-up-2" style={{ display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: "16px" }}>
             <style>{`@media(max-width:580px){ .admin-cards { grid-template-columns:1fr !important; } }`}</style>
-            {cards.map(({ href, Icon, title, desc, color, bg, border }) => (
+            {cards.map(({ href, Icon, title, desc, color, bg, border }, i) => (
               <div
                 key={href}
-                className="card"
+                className={`card ${i % 2 === 0 ? "card-hover-green" : "card-hover-amber"}`}
                 style={{ cursor: "pointer", padding: "28px", display: "flex", alignItems: "flex-start", gap: "18px",
                   transition: "border-color .2s, box-shadow .2s, transform .15s",
                 }}
                 onClick={() => router.push(href)}
-                onMouseEnter={e => {
-                  (e.currentTarget as HTMLElement).style.borderColor = border;
-                  (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
-                  (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 32px rgba(0,0,0,0.3)";
-                }}
-                onMouseLeave={e => {
-                  (e.currentTarget as HTMLElement).style.borderColor = "";
-                  (e.currentTarget as HTMLElement).style.transform = "";
-                  (e.currentTarget as HTMLElement).style.boxShadow = "";
-                }}
               >
                 <div style={{ width: "44px", height: "44px", borderRadius: "var(--radius-sm)", background: bg, border: `1px solid ${border}`, display: "flex", alignItems: "center", justifyContent: "center", color, flexShrink: 0 }}>
                   <Icon />

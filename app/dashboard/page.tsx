@@ -311,7 +311,7 @@ export default function Dashboard() {
               <p className="eyebrow" style={{ marginBottom: "4px" }}>Tu progreso</p>
               <div style={{ display: "flex", alignItems: "baseline", gap: "6px" }}>
                 <span
-                  style={{ fontFamily: "'Playfair Display',serif", fontSize: "36px", fontWeight: 700, lineHeight: 1, color: "var(--text-primary)" }}
+                  className="stat-xl"
                   title={`${completed.length} de ${sessions.length} sesiones completadas`}
                 >
                   {progress}%
@@ -321,7 +321,7 @@ export default function Dashboard() {
             </div>
             <div style={{ textAlign: "right" }}>
               <div style={{ display: "flex", alignItems: "baseline", gap: "4px", justifyContent: "flex-end" }}>
-                <span style={{ fontFamily: "'Playfair Display',serif", fontSize: "28px", fontWeight: 700, color: "var(--text-primary)" }}>
+                <span className="stat-lg">
                   {approvedModules}
                 </span>
                 <span style={{ fontSize: "14px", color: "var(--text-muted)" }}>/ {modules.length}</span>

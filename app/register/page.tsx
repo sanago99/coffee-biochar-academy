@@ -118,7 +118,7 @@ export default function Register() {
           Datos personales
         </p>
 
-        <div className="grid-2" style={{ gap: "14px" }}>
+        <div className="grid-2" style={{ gap: "16px" }}>
           <div>
             <label className="form-label">Nombre completo *</label>
             <input className="input" placeholder="Tu nombre" value={name}
@@ -141,7 +141,7 @@ export default function Register() {
           </div>
         </div>
 
-        <div style={{ marginTop: "14px" }}>
+        <div style={{ marginTop: "16px" }}>
           <label className="form-label">Teléfono</label>
           <input className="input" placeholder="300 000 0000" value={telefono}
             onChange={e => setTelefono(e.target.value)} inputMode="tel" />
@@ -159,7 +159,7 @@ export default function Register() {
           <input className="input" type="email" placeholder="tu@correo.com" value={email}
             onChange={e => setEmail(e.target.value)} inputMode="email" autoComplete="email" />
         </div>
-        <div style={{ marginTop: "14px" }}>
+        <div style={{ marginTop: "16px" }}>
           <label className="form-label">Contraseña *</label>
           <input className="input" type="password" placeholder="Mínimo 6 caracteres" value={password}
             onChange={e => setPassword(e.target.value)} autoComplete="new-password" />

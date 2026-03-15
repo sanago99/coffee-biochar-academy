@@ -101,7 +101,7 @@ export default function CreateUser() {
                 Datos personales
               </p>
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
                 <div>
                   <label className="form-label">Nombre completo *</label>
                   <input className="input" placeholder="Nombre y apellido" value={name}
@@ -114,7 +114,7 @@ export default function CreateUser() {
                 </div>
               </div>
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px", marginTop: "14px" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginTop: "16px" }}>
                 <div>
                   <label className="form-label">Clúster *</label>
                   <input
@@ -141,7 +141,7 @@ export default function CreateUser() {
                 </div>
               </div>
 
-              <div style={{ marginTop: "14px" }}>
+              <div style={{ marginTop: "16px" }}>
                 <label className="form-label">Teléfono</label>
                 <input className="input" placeholder="300 000 0000" value={telefono}
                   onChange={e => setTelefono(e.target.value)} inputMode="tel" />
@@ -159,7 +159,7 @@ export default function CreateUser() {
                 <input className="input" type="email" placeholder="correo@ejemplo.com" value={email}
                   onChange={e => setEmail(e.target.value)} autoComplete="off" />
               </div>
-              <div style={{ marginTop: "14px" }}>
+              <div style={{ marginTop: "16px" }}>
                 <label className="form-label">Contraseña *</label>
                 <input className="input" type="password" placeholder="Mínimo 6 caracteres" value={password}
                   onChange={e => setPassword(e.target.value)} autoComplete="new-password" />
