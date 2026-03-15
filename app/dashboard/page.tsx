@@ -60,7 +60,11 @@ export default function Dashboard() {
       if (!user) { router.push("/login"); return; }
       setFirebaseUser(user);
       const snap = await getDocs(query(collection(db, "users"), where("email", "==", user.email)));
-      if (!snap.empty) setUserData(snap.docs[0].data() as UserData);
+      if (!snap.empty) {
+        const data = snap.docs[0].data() as UserData;
+        if (data.status === "pending") { router.push("/pending"); return; }
+        setUserData(data);
+      }
       setAuthLoading(false);
     });
     return () => unsub();

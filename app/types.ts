@@ -24,6 +24,7 @@ export interface UserData {
   telefono?: string;
   progress: number;
   role?: "admin" | "user";
+  status?: "pending" | "active";
   moduleScores?: Record<number, number>;
   createdAt?: Date;
 }

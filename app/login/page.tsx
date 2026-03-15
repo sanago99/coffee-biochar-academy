@@ -32,6 +32,12 @@ export default function Login() {
       if (snap.empty) { setError("Usuario no encontrado"); setLoading(false); return; }
 
       const userData = snap.docs[0].data() as UserData;
+
+      if (userData.status === "pending") {
+        router.push("/pending");
+        return;
+      }
+
       router.push(userData.role === "admin" ? "/admin" : "/dashboard");
     } catch {
       setError("Correo o contraseña incorrectos");
