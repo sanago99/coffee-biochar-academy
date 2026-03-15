@@ -5,11 +5,11 @@ import { auth } from "../../firebase/config";
 import { signOut } from "firebase/auth";
 
 const links = [
-  { href: "/admin",              label: "Inicio"   },
-  { href: "/admin/content",      label: "Contenido" },
-  { href: "/admin/users",        label: "Usuarios"  },
-  { href: "/admin/create-user",  label: "Crear"     },
-  { href: "/admin/progress",     label: "Progreso"  },
+  { href: "/admin",             label: "Inicio"    },
+  { href: "/admin/content",     label: "Contenido" },
+  { href: "/admin/users",       label: "Usuarios"  },
+  { href: "/admin/create-user", label: "Crear"     },
+  { href: "/admin/progress",    label: "Progreso"  },
 ];
 
 export default function AdminNav() {
@@ -23,9 +23,9 @@ export default function AdminNav() {
 
   return (
     <nav className="topnav">
-      <a href="/admin" className="nav-logo">
-        Coffee <span>Biochar</span>
-      </a>
+      <div className="nav-logo">
+        <img src="/logo.png" alt="Coffee Biochar" style={{ height: "36px", width: "auto" }} />
+      </div>
 
       <div className="nav-links">
         {links.map(l => (
@@ -39,7 +39,7 @@ export default function AdminNav() {
         ))}
       </div>
 
-      <button onClick={logout} className="btn btn-ghost">
+      <button onClick={logout} className="btn btn-ghost btn-sm">
         Salir
       </button>
     </nav>

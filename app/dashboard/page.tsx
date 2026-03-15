@@ -106,7 +106,9 @@ export default function Dashboard() {
 
       {/* ── NAV ──────────────────────────────────── */}
       <nav className="topnav">
-        <span className="nav-logo">Coffee <span>Biochar</span></span>
+        <div className="nav-logo">
+          <img src="/logo.png" alt="Coffee Biochar" style={{ height: "34px", width: "auto" }} />
+        </div>
         <div className="flex-gap-sm">
           {userData && (
             <span style={{ fontSize: "14px", color: "var(--text-secondary)" }}>

@@ -31,9 +31,8 @@ export default function Register() {
       await addDoc(collection(db, "users"), {
         name, municipio, finca, cluster, telefono, progress: 0,
       });
-
       setSuccess(true);
-      setTimeout(() => router.push("/login"), 1800);
+      setTimeout(() => router.push("/login"), 2000);
     } catch {
       setError("Error al registrar. Inténtalo de nuevo.");
       setLoading(false);
@@ -44,36 +43,35 @@ export default function Register() {
     return (
       <div className="auth-wrap">
         <div className="auth-card fade-up" style={{ textAlign: "center" }}>
-          <div
-            style={{
-              width: "56px", height: "56px", borderRadius: "50%",
-              background: "var(--green-glow)", border: "1px solid var(--green-border)",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              margin: "0 auto 20px", fontSize: "24px",
-            }}
-          >
-            ✓
-          </div>
+          <img src="/logo.png" alt="Coffee Biochar" style={{ height: "60px", margin: "0 auto 24px" }} />
+          <div style={{
+            width: "52px", height: "52px", borderRadius: "50%",
+            background: "var(--green-glow)", border: "1px solid var(--green-border)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            margin: "0 auto 16px", fontSize: "22px", color: "var(--green)",
+          }}>✓</div>
           <h2 className="heading-3">¡Registro exitoso!</h2>
-          <p className="body-sm" style={{ marginTop: "8px" }}>
-            Redirigiendo al inicio de sesión...
-          </p>
+          <p className="body-sm" style={{ marginTop: "8px" }}>Redirigiendo al inicio de sesión...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="auth-wrap">
-      <div
-        className="auth-card fade-up"
-        style={{ maxWidth: "480px" }}
-      >
-        {/* Brand */}
+    <div
+      style={{
+        minHeight: "100vh",
+        background: "var(--bg-deep)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "40px 20px",
+      }}
+    >
+      <div className="auth-card fade-up" style={{ maxWidth: "500px" }}>
+
         <div style={{ textAlign: "center", marginBottom: "28px" }}>
-          <p className="nav-logo" style={{ fontSize: "20px" }}>
-            Coffee <span>Biochar</span>
-          </p>
+          <img src="/logo.png" alt="Coffee Biochar" style={{ height: "60px", width: "auto" }} />
         </div>
 
         <h2 className="heading-3" style={{ marginBottom: "4px" }}>Registro de extensionista</h2>
@@ -123,9 +121,7 @@ export default function Register() {
 
         <p style={{ textAlign: "center", marginTop: "20px", fontSize: "14px", color: "var(--text-muted)" }}>
           ¿Ya tienes cuenta?{" "}
-          <Link href="/login" style={{ color: "var(--green-accent)", fontWeight: 500 }}>
-            Iniciar sesión
-          </Link>
+          <Link href="/login" style={{ color: "var(--amber)", fontWeight: 500 }}>Iniciar sesión</Link>
         </p>
 
       </div>

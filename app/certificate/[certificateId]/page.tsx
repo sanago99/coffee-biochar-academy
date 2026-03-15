@@ -32,9 +32,9 @@ export default function CertificatePage() {
 
   if (!cert) {
     return (
-      <div className="auth-wrap">
+      <div className="auth-wrap" style={{ background: "var(--bg-deep)" }}>
         <div className="auth-card fade-up" style={{ textAlign: "center" }}>
-          <p style={{ fontSize: "40px", marginBottom: "16px" }}>🔍</p>
+          <img src="/logo.png" alt="Coffee Biochar" style={{ height: "56px", margin: "0 auto 20px" }} />
           <h2 className="heading-3">Certificado no encontrado</h2>
           <p className="body-sm" style={{ marginTop: "8px" }}>
             El ID del certificado no es válido o no existe.
@@ -46,93 +46,137 @@ export default function CertificatePage() {
 
   return (
     <div
-      className="page-wrap flex-center"
-      style={{ minHeight: "100vh", padding: "40px 20px" }}
+      style={{
+        minHeight: "100vh",
+        background: "var(--bg-deep)",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "40px 20px",
+      }}
     >
+      {/* Verified pill */}
       <div
         className="fade-up"
         style={{
-          maxWidth: "560px",
-          width: "100%",
-          textAlign: "center",
+          display: "inline-flex", alignItems: "center", gap: "8px",
+          padding: "8px 20px", borderRadius: "var(--radius-pill)",
+          background: "var(--green-glow)", border: "1px solid var(--green-border)",
+          marginBottom: "32px",
         }}
       >
-        {/* Verified badge */}
+        <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "var(--green)", display: "inline-block" }} />
+        <span style={{ fontSize: "13px", color: "var(--green)", fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase" }}>
+          Certificado verificado
+        </span>
+      </div>
+
+      {/* Certificate card */}
+      <div
+        className="card fade-up-1"
+        style={{
+          maxWidth: "600px",
+          width: "100%",
+          padding: "52px 48px",
+          textAlign: "center",
+          borderColor: "rgba(245,166,35,0.18)",
+          background: "linear-gradient(160deg, var(--bg-card) 0%, var(--bg-deep) 100%)",
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
+        {/* Background watermark */}
         <div
           style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "8px",
-            padding: "8px 18px",
-            borderRadius: "100px",
-            background: "rgba(82,183,136,0.12)",
-            border: "1px solid rgba(82,183,136,0.25)",
+            position: "absolute", top: "50%", left: "50%",
+            transform: "translate(-50%,-50%)",
+            opacity: 0.03, pointerEvents: "none",
+          }}
+        >
+          <img src="/logo.png" alt="" style={{ width: "300px" }} />
+        </div>
+
+        {/* Top bar */}
+        <div style={{
+          height: "3px", borderRadius: "2px",
+          background: "linear-gradient(90deg, var(--amber-dark), var(--amber), var(--green))",
+          marginBottom: "40px",
+        }} />
+
+        {/* Logos */}
+        <div style={{
+          display: "flex", justifyContent: "center", alignItems: "center",
+          gap: "24px", marginBottom: "32px", flexWrap: "wrap",
+        }}>
+          <img src="/logo.png" alt="Coffee Biochar" style={{ height: "72px", width: "auto" }} />
+          <div style={{ width: "1px", height: "48px", background: "var(--border)" }} />
+          <img
+            src="/brand/biodiversal.png"
+            alt="Biodiversal"
+            style={{ height: "32px", filter: "brightness(0) invert(1)", opacity: 0.5 }}
+          />
+        </div>
+
+        <p className="eyebrow" style={{ marginBottom: "20px" }}>
+          Certifica que
+        </p>
+
+        <h1
+          style={{
+            fontFamily: "'Playfair Display', serif",
+            fontSize: "clamp(28px,5vw,42px)",
+            fontWeight: 700,
+            color: "var(--text-primary)",
+            marginBottom: "16px",
+            lineHeight: 1.2,
+          }}
+        >
+          {cert.name}
+        </h1>
+
+        <p className="body-lg" style={{ margin: "0 auto 28px", maxWidth: "420px" }}>
+          Ha completado satisfactoriamente el programa de formación
+        </p>
+
+        <div
+          style={{
+            display: "inline-block",
+            padding: "10px 24px",
+            borderRadius: "var(--radius-sm)",
+            background: "var(--amber-glow)",
+            border: "1px solid var(--amber-border)",
             marginBottom: "32px",
           }}
         >
-          <span className="green-dot" />
-          <span style={{ fontSize: "13px", color: "var(--green-accent)", fontWeight: 600 }}>
-            Certificado verificado
-          </span>
+          <p style={{ fontSize: "16px", fontWeight: 700, color: "var(--amber)", fontFamily: "'Playfair Display',serif" }}>
+            Certified Coffee Biochar Extensionist
+          </p>
         </div>
 
-        {/* Certificate card */}
-        <div
-          className="card"
-          style={{
-            padding: "48px 40px",
-            borderColor: "rgba(82,183,136,0.2)",
-            background: "linear-gradient(160deg, #181818 0%, #111 100%)",
-          }}
-        >
-          {/* Decorative top line */}
-          <div style={{
-            height: "3px",
-            borderRadius: "2px",
-            background: "linear-gradient(90deg, var(--green-dark), var(--green-accent), var(--amber))",
-            marginBottom: "36px",
-          }} />
+        <div className="divider-sm" />
 
-          <p className="eyebrow" style={{ marginBottom: "16px" }}>Coffee Biochar Academy</p>
-
-          <h1
-            style={{
-              fontFamily: "'Playfair Display', serif",
-              fontSize: "clamp(28px,5vw,40px)",
-              fontWeight: 700,
-              color: "var(--text-primary)",
-              marginBottom: "8px",
-              lineHeight: 1.2,
-            }}
-          >
-            {cert.name}
-          </h1>
-
-          <p className="body-lg" style={{ margin: "16px 0 24px" }}>
-            Ha completado satisfactoriamente el programa de formación<br />
-            <strong style={{ color: "var(--green-accent)" }}>Certified Coffee Biochar Extensionist</strong>
-          </p>
-
-          <div className="divider-sm" />
-
-          <p style={{ fontSize: "12px", color: "var(--text-muted)", letterSpacing: "0.08em", marginTop: "20px" }}>
-            CERTIFICADO ID
-          </p>
-          <p style={{ fontSize: "13px", fontFamily: "monospace", color: "var(--text-secondary)", marginTop: "4px" }}>
-            {cert.certificateId}
-          </p>
-
-          {cert.issuedAt && (
-            <p style={{ fontSize: "12px", color: "var(--text-muted)", marginTop: "8px" }}>
-              Emitido por Biodiversal · Colombia
-            </p>
-          )}
-        </div>
-
-        <p style={{ marginTop: "24px", fontSize: "13px", color: "var(--text-muted)" }}>
-          Este certificado fue verificado exitosamente.
+        <p style={{ fontSize: "11px", color: "var(--text-muted)", letterSpacing: "0.1em", textTransform: "uppercase", marginTop: "20px" }}>
+          ID de Certificado
         </p>
+        <p style={{ fontSize: "12px", fontFamily: "monospace", color: "var(--text-secondary)", marginTop: "4px", letterSpacing: "0.05em" }}>
+          {cert.certificateId}
+        </p>
+        <p style={{ fontSize: "12px", color: "var(--text-muted)", marginTop: "8px" }}>
+          Emitido por Biodiversal · Agricultura Regenerativa · Colombia
+        </p>
+
+        {/* Bottom bar */}
+        <div style={{
+          height: "2px", borderRadius: "1px",
+          background: "linear-gradient(90deg, var(--rust), var(--amber))",
+          marginTop: "32px",
+        }} />
       </div>
+
+      <p className="fade-up-2" style={{ marginTop: "24px", fontSize: "13px", color: "var(--text-muted)" }}>
+        Este certificado fue verificado exitosamente.
+      </p>
     </div>
   );
 }
