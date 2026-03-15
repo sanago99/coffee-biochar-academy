@@ -19,6 +19,12 @@ export default function UserDetail() {
   const [saving,  setSaving]  = useState<Record<number, boolean>>({});
   const [saved,   setSaved]   = useState<Record<number, boolean>>({});
 
+  // user data editing
+  const [editingUser,  setEditingUser]  = useState(false);
+  const [userDraft,    setUserDraft]    = useState<{ name: string; cluster: string; municipio: string; finca: string; telefono: string }>({ name: "", cluster: "", municipio: "", finca: "", telefono: "" });
+  const [savingUser,   setSavingUser]   = useState(false);
+  const [savedUser,    setSavedUser]    = useState(false);
+
   useEffect(() => {
     (async () => {
       const [userDoc, modulesSnap] = await Promise.all([
@@ -33,6 +39,38 @@ export default function UserDetail() {
       setModules(list);
     })();
   }, [userId]);
+
+  const startEditUser = () => {
+    if (!user) return;
+    setUserDraft({
+      name:      user.name      ?? "",
+      cluster:   user.cluster   ?? "",
+      municipio: user.municipio ?? "",
+      finca:     user.finca     ?? "",
+      telefono:  user.telefono  ?? "",
+    });
+    setEditingUser(true);
+  };
+
+  const saveUser = async () => {
+    if (!userDraft.name) return;
+    setSavingUser(true);
+    try {
+      await updateDoc(doc(db, "users", userId), {
+        name:      userDraft.name,
+        cluster:   userDraft.cluster,
+        municipio: userDraft.municipio,
+        finca:     userDraft.finca,
+        telefono:  userDraft.telefono,
+      });
+      setUser(prev => prev ? { ...prev, ...userDraft } : prev);
+      setEditingUser(false);
+      setSavedUser(true);
+      setTimeout(() => setSavedUser(false), 2500);
+    } finally {
+      setSavingUser(false);
+    }
+  };
 
   const getStatus = (module: Module, u: UserData) => {
     const score = u.moduleScores?.[module.order];
@@ -105,32 +143,97 @@ export default function UserDetail() {
         <div className="admin-content">
 
           {/* HEADER */}
-          <div className="card card-green-left fade-up" style={{ padding: "28px", marginBottom: "32px" }}>
+          <div className="card card-green-left fade-up" style={{ padding: "28px", marginBottom: "24px" }}>
             <a href="/admin/users" style={{ fontSize: "13px", color: "var(--text-muted)", marginBottom: "16px", display: "block" }}>
               ← Volver a usuarios
             </a>
-            <h1 className="heading-1" style={{ marginBottom: "8px" }}>{user.name}</h1>
-            <div className="flex-wrap">
-              {user.cluster   && <span className="badge badge-muted">Cluster: {user.cluster}</span>}
-              {user.municipio && <span className="badge badge-muted">{user.municipio}</span>}
-              {user.finca     && <span className="badge badge-muted">Finca: {user.finca}</span>}
-            </div>
-            <div style={{ marginTop: "20px", display: "flex", gap: "32px", flexWrap: "wrap" }}>
-              <div>
-                <p className="stat-lg" style={{ marginBottom: "2px" }}>
-                  {passedCount}<span style={{ fontSize: "16px", color: "var(--text-muted)", fontWeight: 400 }}>/{modules.length}</span>
-                </p>
-                <p className="caption">Módulos aprobados</p>
-              </div>
-              {user.progress !== undefined && (
-                <div>
-                  <p className="stat-lg" style={{ color: "var(--green-accent)", marginBottom: "2px" }}>
-                    {user.progress}%
-                  </p>
-                  <p className="caption">Progreso del curso</p>
-                </div>
+
+            <div className="flex-between" style={{ flexWrap: "wrap", gap: "12px", marginBottom: "8px" }}>
+              <h1 className="heading-1">{user.name}</h1>
+              {!editingUser && (
+                <button
+                  className="btn btn-ghost btn-sm"
+                  style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "6px", fontSize: "12px" }}
+                  onClick={startEditUser}
+                >
+                  <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                    <path d="M9 2l2 2-7 7H2V9l7-7z" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  Editar datos
+                </button>
               )}
             </div>
+
+            {savedUser && (
+              <p className="msg-success" style={{ marginBottom: "12px" }}>Datos actualizados correctamente</p>
+            )}
+
+            {editingUser ? (
+              <div style={{ marginTop: "4px" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "12px" }}>
+                  <div>
+                    <label className="form-label" htmlFor="edit-name">Nombre completo *</label>
+                    <input id="edit-name" className="input" style={{ fontSize: "14px" }}
+                      value={userDraft.name} onChange={e => setUserDraft(d => ({ ...d, name: e.target.value }))} />
+                  </div>
+                  <div>
+                    <label className="form-label" htmlFor="edit-cluster">Clúster</label>
+                    <input id="edit-cluster" className="input" style={{ fontSize: "14px" }}
+                      value={userDraft.cluster} onChange={e => setUserDraft(d => ({ ...d, cluster: e.target.value }))} />
+                  </div>
+                  <div>
+                    <label className="form-label" htmlFor="edit-municipio">Municipio</label>
+                    <input id="edit-municipio" className="input" style={{ fontSize: "14px" }}
+                      value={userDraft.municipio} onChange={e => setUserDraft(d => ({ ...d, municipio: e.target.value }))} />
+                  </div>
+                  <div>
+                    <label className="form-label" htmlFor="edit-finca">Finca</label>
+                    <input id="edit-finca" className="input" style={{ fontSize: "14px" }}
+                      value={userDraft.finca} onChange={e => setUserDraft(d => ({ ...d, finca: e.target.value }))} />
+                  </div>
+                </div>
+                <div style={{ marginBottom: "16px" }}>
+                  <label className="form-label" htmlFor="edit-telefono">Teléfono</label>
+                  <input id="edit-telefono" className="input" style={{ fontSize: "14px", maxWidth: "240px" }}
+                    value={userDraft.telefono} onChange={e => setUserDraft(d => ({ ...d, telefono: e.target.value }))} />
+                </div>
+                <div style={{ display: "flex", gap: "8px" }}>
+                  <button className="btn btn-primary btn-sm" style={{ cursor: "pointer" }}
+                    onClick={saveUser} disabled={savingUser || !userDraft.name}>
+                    {savingUser ? "Guardando..." : "Guardar cambios"}
+                  </button>
+                  <button className="btn btn-ghost btn-sm" style={{ cursor: "pointer" }}
+                    onClick={() => setEditingUser(false)}>
+                    Cancelar
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <>
+                <div className="flex-wrap">
+                  {user.cluster   && <span className="badge badge-muted">Cluster: {user.cluster}</span>}
+                  {user.municipio && <span className="badge badge-muted">{user.municipio}</span>}
+                  {user.finca     && <span className="badge badge-muted">Finca: {user.finca}</span>}
+                  {user.telefono  && <span className="badge badge-muted">{user.telefono}</span>}
+                </div>
+                <div style={{ marginTop: "20px", display: "flex", gap: "32px", flexWrap: "wrap" }}>
+                  <div>
+                    <p className="stat-lg" style={{ marginBottom: "2px" }}>
+                      {passedCount}<span style={{ fontSize: "16px", color: "var(--text-muted)", fontWeight: 400 }}>/{modules.length}</span>
+                    </p>
+                    <p className="caption">Módulos aprobados</p>
+                  </div>
+                  {user.progress !== undefined && (
+                    <div>
+                      <p className="stat-lg" style={{ color: "var(--green-accent)", marginBottom: "2px" }}>
+                        {user.progress}%
+                      </p>
+                      <p className="caption">Progreso del curso</p>
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
           </div>
 
           {/* MODULE TABLE */}

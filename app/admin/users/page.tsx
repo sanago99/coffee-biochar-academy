@@ -91,8 +91,18 @@ export default function UsersAdmin() {
     setConfirmApprove(null);
     setApproving(userId);
     await updateDoc(doc(db, "users", userId), { status: "active" });
+    const approved = users.find(u => u.id === userId);
     setUsers(prev => prev.map(u => u.id === userId ? { ...u, status: "active" } : u));
     setApproving(null);
+
+    // Send approval notification email (best-effort, non-blocking)
+    if (approved?.email) {
+      fetch("/api/approve-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ toEmail: approved.email, toName: approved.name }),
+      }).catch(() => {/* silently ignore */});
+    }
   };
 
   const clusters = Array.from(new Set(users.map(u => u.cluster).filter(Boolean)));
