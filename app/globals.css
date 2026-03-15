@@ -522,6 +522,25 @@ select.input { appearance:none; cursor:pointer; }
   box-shadow:0 4px 20px var(--amber-glow); transform:translateY(-1px);
 }
 
+/* ─── Scroll to top button ────────────────────────── */
+.scroll-top-btn {
+  position:fixed; bottom:28px; right:24px; z-index:90;
+  width:40px; height:40px; border-radius:50%;
+  background:var(--bg-elevated); border:1px solid var(--border-light);
+  color:var(--text-secondary);
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; box-shadow:0 4px 16px rgba(0,0,0,0.35);
+  transition:all .2s; opacity:0.85;
+}
+.scroll-top-btn:hover { opacity:1; border-color:var(--amber-border); color:var(--amber); transform:translateY(-2px); }
+.scroll-top-btn:focus-visible { outline:2px solid var(--amber); outline-offset:2px; }
+
+/* ─── Tab button focus state ──────────────────────── */
+button:focus-visible {
+  outline:2px solid var(--amber);
+  outline-offset:2px;
+}
+
 /* ─── Mobile responsive table (admin/users) ───────── */
 @media(max-width:640px){
   .table-wrap { overflow-x:unset; }

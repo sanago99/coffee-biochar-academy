@@ -51,10 +51,11 @@ export default function Dashboard() {
   const [copied,       setCopied]       = useState(false);
   const [sessionToast, setSessionToast] = useState("");
   const [evalOpened,   setEvalOpened]   = useState<Record<string, boolean>>({});
+  const [scrolled,     setScrolled]     = useState(false);
   const certAttempted = useRef(false);
 
-  const { modules }                 = useModules();
-  const { sessions }                = useSessions();
+  const { modules, loading: modulesLoading } = useModules();
+  const { sessions }                         = useSessions();
   const { completed, setCompleted } = useUserProgress(firebaseUser?.uid ?? null);
 
   /* ── AUTH ─────────────────────────────────────────── */
@@ -141,6 +142,13 @@ export default function Dashboard() {
     })();
   }, [firebaseUser]);
 
+  /* ── SCROLL TO TOP ────────────────────────────────── */
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 400);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   /* ── COMPLETE SESSION ─────────────────────────────── */
   const completeSession = async (sessionId: string, sessionTitle?: string) => {
     if (completed.includes(sessionId)) return;
@@ -200,14 +208,18 @@ export default function Dashboard() {
 
         {/* ── SESSION TOAST ─────────────────── */}
         {sessionToast && (
-          <div className="fade-up" style={{
+          <div className="fade-up" role="status" aria-live="polite" style={{
             position: "fixed", bottom: "calc(24px + env(safe-area-inset-bottom, 0px))", left: "50%", transform: "translateX(-50%)",
             background: "var(--green-glow)", border: "1px solid var(--green-border)",
             color: "var(--green)", padding: "10px 20px", borderRadius: "var(--radius-pill)",
             fontSize: "13px", fontWeight: 600, zIndex: 50, whiteSpace: "nowrap",
             boxShadow: "0 4px 24px rgba(0,0,0,0.4)",
+            display: "flex", alignItems: "center", gap: "8px",
           }}>
-            ✓ {sessionToast}
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+              <path d="M2.5 7l3 3 6-6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            {sessionToast}
           </div>
         )}
 
@@ -341,7 +353,7 @@ export default function Dashboard() {
           </p>
 
           {/* module chips */}
-          <div className="flex-wrap" style={{ marginTop: "16px" }}>
+          <div className="flex-wrap" style={{ marginTop: "16px", alignItems: "center" }}>
             {modules.map((m, i) => {
               const s = getModuleStatus(m);
               const tooltipText = s === "approved"
@@ -363,6 +375,21 @@ export default function Dashboard() {
                 </span>
               );
             })}
+            {/* Color legend — visible on all screens */}
+            {modules.length > 0 && (
+              <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", marginLeft: "4px" }}>
+                {[
+                  { dot: "var(--green)", label: "Aprobado" },
+                  { dot: "var(--amber)", label: "En curso" },
+                  { dot: "var(--text-muted)", label: "Bloqueado" },
+                ].map(({ dot, label }) => (
+                  <span key={label} style={{ display: "flex", alignItems: "center", gap: "4px", fontSize: "10px", color: "var(--text-muted)" }}>
+                    <span style={{ width: "7px", height: "7px", borderRadius: "50%", background: dot, display: "inline-block", flexShrink: 0 }} />
+                    {label}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
@@ -372,7 +399,21 @@ export default function Dashboard() {
         </h2>
 
         <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-          {modules.map((module, idx) => {
+          {modulesLoading ? (
+            /* Skeleton cards */
+            [1, 2, 3].map(n => (
+              <div key={n} className="card" style={{ padding: "22px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
+                  <div style={{ width: "34px", height: "34px", borderRadius: "var(--radius-sm)", background: "var(--border)", animation: "pulse 1.5s ease-in-out infinite" }} />
+                  <div style={{ flex: 1 }}>
+                    <div style={{ height: "14px", width: "55%", background: "var(--border)", borderRadius: "4px", marginBottom: "8px", animation: "pulse 1.5s ease-in-out infinite" }} />
+                    <div style={{ height: "11px", width: "30%", background: "var(--border)", borderRadius: "4px", animation: "pulse 1.5s ease-in-out infinite" }} />
+                  </div>
+                  <div style={{ width: "72px", height: "24px", borderRadius: "var(--radius-pill)", background: "var(--border)", animation: "pulse 1.5s ease-in-out infinite" }} />
+                </div>
+              </div>
+            ))
+          ) : modules.map((module, idx) => {
             const moduleSessions = sessions.filter(s => s.moduleId === module.id);
             const status         = getModuleStatus(module);
             const score          = userData?.moduleScores?.[module.order];
@@ -559,9 +600,21 @@ export default function Dashboard() {
           })}
         </div>
 
-
         <div style={{ height: "48px" }} />
       </div>
+
+      {/* ── SCROLL TO TOP ──────────────────── */}
+      {scrolled && (
+        <button
+          className="scroll-top-btn"
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          aria-label="Volver arriba"
+        >
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M3 10l5-5 5 5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </button>
+      )}
     </div>
   );
 }

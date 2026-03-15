@@ -37,6 +37,13 @@ export default function AdminProgress() {
   const [kpis,         setKpis]         = useState({ users: 0, avgProgress: 0, certs: 0, active: 0 });
   const [loading,      setLoading]      = useState(true);
   const [search,       setSearch]       = useState("");
+  const [scrolled,     setScrolled]     = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 400);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -316,6 +323,18 @@ export default function AdminProgress() {
 
         </div>
       </div>
+
+      {scrolled && (
+        <button
+          className="scroll-top-btn"
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          aria-label="Volver arriba"
+        >
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M3 10l5-5 5 5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </button>
+      )}
     </AdminGuard>
   );
 }

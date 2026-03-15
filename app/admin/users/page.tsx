@@ -218,7 +218,7 @@ export default function UsersAdmin() {
             </div>
           ) : (
             <div className="card fade-up-2" style={{ padding: 0, overflow: "hidden" }}>
-              <div className="table-wrap">
+              <div className="table-wrap" aria-live="polite" aria-atomic="false">
                 <table className="data-table">
                   <thead>
                     <tr>
