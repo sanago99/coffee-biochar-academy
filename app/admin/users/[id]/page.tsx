@@ -31,10 +31,10 @@ export default function UserDetail() {
 
   const getStatus = (module: Module) => {
     const score = user?.moduleScores?.[module.order];
-    if (score !== undefined && score >= (module.passingScore || 60)) return { label: "Aprobado", cls: "badge-green" };
+    if (score !== undefined && score >= (module.passingScore || 70)) return { label: "Aprobado", cls: "badge-green" };
     if (module.order === 1) return { label: "Disponible", cls: "badge-amber" };
     const prev = user?.moduleScores?.[module.order - 1];
-    if (prev !== undefined && prev >= 60) return { label: "Disponible", cls: "badge-amber" };
+    if (prev !== undefined && prev >= (modules.find(m => m.order === module.order - 1)?.passingScore || 70)) return { label: "Disponible", cls: "badge-amber" };
     if (score !== undefined) return { label: "No aprobado", cls: "badge-muted" };
     return { label: "Bloqueado", cls: "badge-muted" };
   };
@@ -54,7 +54,7 @@ export default function UserDetail() {
 
   const passedCount = modules.filter(m => {
     const s = user.moduleScores?.[m.order];
-    return s !== undefined && s >= (m.passingScore || 60);
+    return s !== undefined && s >= (m.passingScore || 70);
   }).length;
 
   return (
@@ -124,7 +124,7 @@ export default function UserDetail() {
                         <td style={{ fontWeight: score !== undefined ? 600 : 400, color: score !== undefined ? "var(--text-primary)" : "var(--text-muted)" }}>
                           {score ?? "—"}
                         </td>
-                        <td style={{ color: "var(--text-muted)" }}>{module.passingScore || 60}</td>
+                        <td style={{ color: "var(--text-muted)" }}>{module.passingScore || 70}</td>
                       </tr>
                     );
                   })}
