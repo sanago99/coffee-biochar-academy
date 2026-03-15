@@ -3,77 +3,98 @@
 import { useEffect, useState } from "react";
 import { db } from "../../../firebase/config";
 import { collection, getDocs } from "firebase/firestore";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, LineChart, Line, CartesianGrid } from "recharts";
 import AdminGuard from "../../components/AdminGuard";
 import AdminNav from "../../components/AdminNav";
 import type { UserData } from "../../types";
 
 interface UserRow  { id: string; name: string; cluster: string; municipio: string; progress: number; moduleScores: Record<number,number>; }
-interface ClusterStat { cluster: string; progress: number; }
-interface ModuleStat  { module: string; score: number; }
-interface Stats { users: number; avgProgress: number; certificates: number; }
+interface ClusterStat { cluster: string; progress: number; users: number; }
+interface ModuleStat  { module: string; label: string; avg: number; approved: number; }
 
-const TooltipStyle = {
-  contentStyle: { background: "#181818", border: "1px solid #252525", borderRadius: "8px", color: "#f0efed" },
-  cursor:       { fill: "rgba(255,255,255,0.03)" },
+const tooltipStyle = {
+  contentStyle: { background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "8px", color: "var(--text-primary)", fontSize: "13px" },
+  cursor: { fill: "rgba(255,255,255,0.02)" },
+  labelStyle: { color: "var(--text-muted)" },
+};
+
+const moduleLabels: Record<number, string> = {
+  1: "Habilidades", 2: "Carbono", 3: "Biochar",
+  4: "Suelo", 5: "Agro", 6: "dMRV",
 };
 
 export default function AdminProgress() {
-  const [data,         setData]         = useState<UserRow[]>([]);
+  const [rows,         setRows]         = useState<UserRow[]>([]);
   const [clusterStats, setClusterStats] = useState<ClusterStat[]>([]);
   const [moduleStats,  setModuleStats]  = useState<ModuleStat[]>([]);
-  const [stats,        setStats]        = useState<Stats>({ users: 0, avgProgress: 0, certificates: 0 });
+  const [kpis,         setKpis]         = useState({ users: 0, avgProgress: 0, certs: 0, active: 0 });
   const [loading,      setLoading]      = useState(true);
   const [search,       setSearch]       = useState("");
 
   useEffect(() => {
     (async () => {
-      const [usersSnap, sessionsSnap, progressSnap] = await Promise.all([
+      const [usersSnap, sessionsSnap, progressSnap, certSnap] = await Promise.all([
         getDocs(collection(db, "users")),
         getDocs(collection(db, "sessions")),
         getDocs(collection(db, "progress")),
+        getDocs(collection(db, "certificates")),
       ]);
 
       const users    = usersSnap.docs.map(d => ({ id: d.id, ...d.data() } as UserData & { id: string }));
       const total    = sessionsSnap.size;
       const progList = progressSnap.docs.map(d => d.data() as { userId: string });
 
-      const rows: UserRow[] = users.map(u => ({
-        id: u.id, name: u.name, cluster: u.cluster, municipio: u.municipio,
+      const userRows: UserRow[] = users.map(u => ({
+        id: u.id, name: u.name, cluster: u.cluster ?? "", municipio: u.municipio ?? "",
         moduleScores: u.moduleScores ?? {},
         progress: total ? Math.round((progList.filter(p => p.userId === u.id).length / total) * 100) : 0,
       }));
 
-      setData(rows);
+      setRows(userRows);
       setLoading(false);
 
-      const avg  = rows.reduce((a, u) => a + u.progress, 0) / (rows.length || 1);
-      const certs = rows.filter(u => u.progress === 100).length;
-      setStats({ users: rows.length, avgProgress: Math.round(avg), certificates: certs });
+      const avg    = userRows.reduce((a, u) => a + u.progress, 0) / (userRows.length || 1);
+      const active = userRows.filter(u => u.progress > 0 && u.progress < 100).length;
+      setKpis({ users: userRows.length, avgProgress: Math.round(avg), certs: certSnap.size, active });
 
       // Cluster stats
       const cm: Record<string, { t: number; c: number }> = {};
-      rows.forEach(u => {
+      userRows.forEach(u => {
         if (!cm[u.cluster]) cm[u.cluster] = { t: 0, c: 0 };
         cm[u.cluster].t += u.progress; cm[u.cluster].c++;
       });
-      setClusterStats(Object.entries(cm).map(([cluster, { t, c }]) => ({ cluster, progress: Math.round(t / c) })));
+      setClusterStats(Object.entries(cm).map(([cluster, { t, c }]) => ({ cluster: cluster || "Sin cluster", progress: Math.round(t / c), users: c })));
 
       // Module stats
-      const mm: Record<string, { t: number; c: number }> = {};
+      const mm: Record<number, { t: number; c: number; approved: number }> = {};
       users.forEach(u => {
         Object.entries(u.moduleScores ?? {}).forEach(([mod, score]) => {
-          if (!mm[mod]) mm[mod] = { t: 0, c: 0 };
-          mm[mod].t += score as number; mm[mod].c++;
+          const n = Number(mod);
+          if (!mm[n]) mm[n] = { t: 0, c: 0, approved: 0 };
+          mm[n].t += score as number;
+          mm[n].c++;
+          if ((score as number) >= 70) mm[n].approved++;
         });
       });
-      setModuleStats(Object.entries(mm).map(([mod, { t, c }]) => ({ module: `M${mod}`, score: Math.round(t / c) })));
+      setModuleStats(Object.entries(mm)
+        .sort(([a], [b]) => Number(a) - Number(b))
+        .map(([mod, { t, c, approved }]) => ({
+          module: `M${mod}`, label: moduleLabels[Number(mod)] ?? `M${mod}`,
+          avg: Math.round(t / c), approved,
+        })));
     })();
   }, []);
 
-  const filtered = data.filter(u =>
+  const filtered = rows.filter(u =>
     `${u.name} ${u.cluster} ${u.municipio}`.toLowerCase().includes(search.toLowerCase())
   );
+
+  const kpiCards = [
+    { n: kpis.users,       l: "Total extensionistas", color: "var(--green)",  sub: "registrados" },
+    { n: `${kpis.avgProgress}%`, l: "Progreso promedio", color: "var(--amber)",  sub: "del programa" },
+    { n: kpis.active,      l: "En formación",         color: "var(--green)",  sub: "activos ahora" },
+    { n: kpis.certs,       l: "Certificados",          color: "var(--amber)",  sub: "completaron" },
+  ];
 
   return (
     <AdminGuard>
@@ -81,72 +102,142 @@ export default function AdminProgress() {
         <AdminNav />
         <div className="admin-content">
 
-          <h1 className="heading-1 fade-up" style={{ marginBottom: "32px" }}>Progreso del programa</h1>
+          {/* Header */}
+          <div className="fade-up" style={{ marginBottom: "32px" }}>
+            <p className="eyebrow" style={{ marginBottom: "4px" }}>Analytics</p>
+            <h1 className="heading-1">Progreso del programa</h1>
+          </div>
 
-          {/* STAT CARDS */}
-          <div className="grid-3 fade-up-1" style={{ marginBottom: "40px" }}>
-            {[
-              { n: stats.users,       l: "Extensionistas",   accent: "var(--green-accent)" },
-              { n: `${stats.avgProgress}%`, l: "Progreso promedio", accent: "var(--amber)" },
-              { n: stats.certificates, l: "Certificados",    accent: "var(--green-light)" },
-            ].map(({ n, l, accent }) => (
-              <div key={l} className="card" style={{ padding: "28px", borderTop: `2px solid ${accent}` }}>
-                <p style={{ fontSize: "40px", fontFamily: "'Playfair Display',serif", fontWeight: 700, color: "var(--text-primary)", lineHeight: 1, marginBottom: "8px" }}>
-                  {n}
-                </p>
-                <p className="caption">{l}</p>
+          {/* KPI cards */}
+          <div className="grid-4 fade-up-1" style={{ marginBottom: "32px" }}>
+            {kpiCards.map(({ n, l, color, sub }) => (
+              <div key={l} className="card" style={{ padding: "22px", borderLeft: `3px solid ${color}` }}>
+                <p style={{ fontFamily: "'Playfair Display',serif", fontSize: "34px", fontWeight: 700, color, lineHeight: 1, marginBottom: "6px" }}>{n}</p>
+                <p style={{ fontSize: "13px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "2px" }}>{l}</p>
+                <p className="body-sm" style={{ fontSize: "11px" }}>{sub}</p>
               </div>
             ))}
           </div>
 
-          {/* CHARTS */}
-          <div className="grid-2 fade-up-2" style={{ marginBottom: "40px", gap: "24px" }}>
+          {/* Charts */}
+          <div className="grid-2 fade-up-2" style={{ marginBottom: "32px", gap: "20px" }}>
+            {/* Cluster */}
             <div className="card" style={{ padding: "24px" }}>
-              <h3 className="heading-3" style={{ marginBottom: "20px", fontSize: "16px" }}>
-                Progreso por cluster
+              <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: "16px", fontWeight: 600, marginBottom: "4px", color: "var(--text-primary)" }}>
+                Progreso por clúster
               </h3>
-              <div style={{ height: "220px" }}>
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={clusterStats} {...TooltipStyle}>
-                    <XAxis dataKey="cluster" tick={{ fill: "#5a5a5a", fontSize: 12 }} axisLine={false} tickLine={false} />
-                    <YAxis tick={{ fill: "#5a5a5a", fontSize: 12 }} axisLine={false} tickLine={false} domain={[0, 100]} />
-                    <Tooltip {...TooltipStyle} formatter={(v) => [`${v}%`, "Progreso"]} />
-                    <Bar dataKey="progress" radius={[4,4,0,0]}>
-                      {clusterStats.map((_, i) => <Cell key={i} fill="#40916c" />)}
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
+              <p className="body-sm" style={{ marginBottom: "20px" }}>Promedio de sesiones completadas</p>
+              <div style={{ height: "200px" }}>
+                {clusterStats.length > 0 ? (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={clusterStats} barSize={32}>
+                      <XAxis dataKey="cluster" tick={{ fill: "var(--text-muted)", fontSize: 11 }} axisLine={false} tickLine={false} />
+                      <YAxis tick={{ fill: "var(--text-muted)", fontSize: 11 }} axisLine={false} tickLine={false} domain={[0, 100]} />
+                      <Tooltip {...tooltipStyle} formatter={(v) => [`${v}%`, "Progreso"]} />
+                      <Bar dataKey="progress" radius={[4, 4, 0, 0]}>
+                        {clusterStats.map((_, i) => <Cell key={i} fill={i % 2 === 0 ? "#7AB648" : "#5A9E32"} />)}
+                      </Bar>
+                    </BarChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <div style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <p className="body-sm">Sin datos aún</p>
+                  </div>
+                )}
               </div>
             </div>
 
+            {/* Modules */}
             <div className="card" style={{ padding: "24px" }}>
-              <h3 className="heading-3" style={{ marginBottom: "20px", fontSize: "16px" }}>
-                Score promedio por módulo
+              <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: "16px", fontWeight: 600, marginBottom: "4px", color: "var(--text-primary)" }}>
+                Evaluaciones por módulo
               </h3>
-              <div style={{ height: "220px" }}>
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={moduleStats}>
-                    <XAxis dataKey="module" tick={{ fill: "#5a5a5a", fontSize: 12 }} axisLine={false} tickLine={false} />
-                    <YAxis tick={{ fill: "#5a5a5a", fontSize: 12 }} axisLine={false} tickLine={false} domain={[0, 100]} />
-                    <Tooltip {...TooltipStyle} formatter={(v) => [`${v}`, "Score"]} />
-                    <Bar dataKey="score" radius={[4,4,0,0]}>
-                      {moduleStats.map((_, i) => <Cell key={i} fill="#e9c46a" />)}
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
+              <p className="body-sm" style={{ marginBottom: "20px" }}>Score promedio · aprobados</p>
+              <div style={{ height: "200px" }}>
+                {moduleStats.length > 0 ? (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={moduleStats} barSize={28}>
+                      <XAxis dataKey="label" tick={{ fill: "var(--text-muted)", fontSize: 10 }} axisLine={false} tickLine={false} />
+                      <YAxis tick={{ fill: "var(--text-muted)", fontSize: 11 }} axisLine={false} tickLine={false} domain={[0, 100]} />
+                      <Tooltip {...tooltipStyle} formatter={(v, name) => [name === "avg" ? `${v} pts` : `${v}`, name === "avg" ? "Score" : "Aprobados"]} />
+                      <Bar dataKey="avg" radius={[4, 4, 0, 0]}>
+                        {moduleStats.map((m, i) => <Cell key={i} fill={m.avg >= 70 ? "#F5A623" : "#C04A2A"} />)}
+                      </Bar>
+                    </BarChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <div style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <p className="body-sm">Sin evaluaciones aún</p>
+                  </div>
+                )}
+              </div>
+              {/* Legend */}
+              <div style={{ display: "flex", gap: "16px", marginTop: "12px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                  <div style={{ width: "10px", height: "10px", borderRadius: "2px", background: "#F5A623" }} />
+                  <span style={{ fontSize: "11px", color: "var(--text-muted)" }}>≥ 70 pts</span>
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                  <div style={{ width: "10px", height: "10px", borderRadius: "2px", background: "#C04A2A" }} />
+                  <span style={{ fontSize: "11px", color: "var(--text-muted)" }}>&lt; 70 pts</span>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* TABLE */}
+          {/* Progress distribution */}
+          <div className="card fade-up-2" style={{ padding: "24px", marginBottom: "32px" }}>
+            <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: "16px", fontWeight: 600, marginBottom: "4px", color: "var(--text-primary)" }}>
+              Distribución del progreso
+            </h3>
+            <p className="body-sm" style={{ marginBottom: "16px" }}>Extensionistas por rango de avance</p>
+            <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+              {[
+                { label: "0%",     range: [0, 0],    color: "var(--text-muted)" },
+                { label: "1–25%",  range: [1, 25],   color: "#C04A2A"           },
+                { label: "26–50%", range: [26, 50],  color: "#D4891A"           },
+                { label: "51–75%", range: [51, 75],  color: "var(--amber)"      },
+                { label: "76–99%", range: [76, 99],  color: "var(--green)"      },
+                { label: "100%",   range: [100, 100],color: "#7AB648"           },
+              ].map(({ label, range, color }) => {
+                const count = rows.filter(u => u.progress >= range[0] && u.progress <= range[1]).length;
+                const pct = rows.length ? Math.round((count / rows.length) * 100) : 0;
+                return (
+                  <div key={label} style={{ flex: 1, minWidth: "80px", padding: "14px 12px", borderRadius: "var(--radius-sm)", background: "var(--bg-elevated)", textAlign: "center" }}>
+                    <p style={{ fontSize: "20px", fontWeight: 700, color, fontFamily: "'Playfair Display',serif", marginBottom: "4px" }}>{count}</p>
+                    <p style={{ fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--text-muted)", marginBottom: "2px" }}>{label}</p>
+                    <p style={{ fontSize: "11px", color: "var(--text-muted)" }}>{pct}%</p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Detailed table */}
           <div className="flex-between fade-up-3" style={{ marginBottom: "16px", flexWrap: "wrap", gap: "12px" }}>
-            <h2 className="heading-2" style={{ fontSize: "22px" }}>Detalle por extensionista</h2>
-            <input className="input" placeholder="Buscar..." value={search}
-              onChange={e => setSearch(e.target.value)} style={{ maxWidth: "260px" }} />
+            <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "20px", fontWeight: 600 }}>
+              Detalle por extensionista
+            </h2>
+            <div style={{ position: "relative" }}>
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ position: "absolute", left: "10px", top: "50%", transform: "translateY(-50%)", color: "var(--text-muted)", pointerEvents: "none" }}>
+                <circle cx="6" cy="6" r="4" stroke="currentColor" strokeWidth="1.4"/>
+                <path d="M9 9l3 3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
+              </svg>
+              <input
+                className="input"
+                placeholder="Buscar..."
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                style={{ maxWidth: "220px", paddingLeft: "32px" }}
+              />
+            </div>
           </div>
 
           {loading ? (
-            <p className="body-sm">Cargando datos...</p>
+            <div style={{ padding: "60px", textAlign: "center" }}>
+              <div style={{ width: "32px", height: "32px", border: "2px solid var(--border)", borderTop: "2px solid var(--amber)", borderRadius: "50%", animation: "spin .8s linear infinite", margin: "0 auto 12px" }} />
+              <p className="body-sm">Cargando datos...</p>
+            </div>
           ) : (
             <div className="card" style={{ padding: 0, overflow: "hidden" }}>
               <div className="table-wrap">
@@ -154,41 +245,50 @@ export default function AdminProgress() {
                   <thead>
                     <tr>
                       <th>Extensionista</th>
-                      <th>Cluster</th>
+                      <th>Clúster</th>
                       <th>Municipio</th>
                       <th>Progreso</th>
-                      <th>Cert.</th>
-                      <th>Detalle</th>
+                      <th>Estado</th>
+                      <th></th>
                     </tr>
                   </thead>
                   <tbody>
-                    {filtered.map(u => (
-                      <tr key={u.id}>
-                        <td style={{ fontWeight: 500, color: "var(--text-primary)" }}>{u.name}</td>
-                        <td>{u.cluster || "—"}</td>
-                        <td>{u.municipio || "—"}</td>
-                        <td>
-                          <div style={{ display: "flex", alignItems: "center", gap: "8px", minWidth: "120px" }}>
-                            <div className="progress-track" style={{ flex: 1 }}>
-                              <div className="progress-fill-sm" style={{ width: `${u.progress}%` }} />
+                    {filtered.map(u => {
+                      const isCert  = u.progress >= 100;
+                      const isActive = u.progress > 0 && u.progress < 100;
+                      return (
+                        <tr key={u.id} style={{ cursor: "pointer" }} onClick={() => window.location.href = `/admin/users/${u.id}`}>
+                          <td style={{ fontWeight: 600, color: "var(--text-primary)" }}>{u.name}</td>
+                          <td>{u.cluster || "—"}</td>
+                          <td>{u.municipio || "—"}</td>
+                          <td>
+                            <div style={{ display: "flex", alignItems: "center", gap: "8px", minWidth: "110px" }}>
+                              <div className="progress-track" style={{ flex: 1 }}>
+                                <div className="progress-fill-sm" style={{ width: `${u.progress}%`, background: isCert ? "var(--green)" : undefined }} />
+                              </div>
+                              <span style={{ fontSize: "12px", color: isCert ? "var(--green)" : "var(--text-muted)", minWidth: "30px", fontWeight: 600 }}>
+                                {u.progress}%
+                              </span>
                             </div>
-                            <span style={{ fontSize: "12px", color: "var(--text-muted)", minWidth: "30px" }}>
-                              {u.progress}%
-                            </span>
-                          </div>
-                        </td>
-                        <td>
-                          {u.progress === 100
-                            ? <span className="badge badge-green">✓</span>
-                            : <span className="badge badge-muted">—</span>}
-                        </td>
-                        <td>
-                          <a href={`/admin/users/${u.id}`} style={{ fontSize: "13px", color: "var(--green-accent)", fontWeight: 500 }}>
-                            Ver →
-                          </a>
+                          </td>
+                          <td>
+                            {isCert  && <span className="badge badge-green" style={{ fontSize: "11px" }}>Certificado</span>}
+                            {isActive && <span className="badge badge-amber" style={{ fontSize: "11px" }}>En curso</span>}
+                            {!isCert && !isActive && <span className="badge badge-muted" style={{ fontSize: "11px" }}>Sin iniciar</span>}
+                          </td>
+                          <td>
+                            <span style={{ fontSize: "12px", color: "var(--amber)", fontWeight: 600 }}>Ver →</span>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                    {filtered.length === 0 && (
+                      <tr>
+                        <td colSpan={6} style={{ textAlign: "center", padding: "48px", color: "var(--text-muted)" }}>
+                          No hay resultados para "{search}"
                         </td>
                       </tr>
-                    ))}
+                    )}
                   </tbody>
                 </table>
               </div>
