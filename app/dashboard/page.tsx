@@ -355,8 +355,10 @@ export default function Dashboard() {
                   className={`badge badge-${s === "approved" ? "green" : s === "available" ? "amber" : "muted"}`}
                   style={{ cursor: "default" }}
                   title={tooltipText}
+                  aria-label={tooltipText}
+                  role="status"
                 >
-                  {s === "approved" ? <IconCheck /> : s === "locked" ? <IconLock /> : null}
+                  {s === "approved" ? <span aria-hidden="true"><IconCheck /></span> : s === "locked" ? <span aria-hidden="true"><IconLock /></span> : null}
                   M{i + 1}
                 </span>
               );

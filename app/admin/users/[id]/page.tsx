@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { db } from "../../../../firebase/config";
-import { doc, getDoc, collection, getDocs } from "firebase/firestore";
+import { doc, getDoc, updateDoc, collection, getDocs } from "firebase/firestore";
 import { useParams } from "next/navigation";
 import AdminGuard from "../../../components/AdminGuard";
 import AdminNav from "../../../components/AdminNav";
@@ -13,6 +13,11 @@ export default function UserDetail() {
 
   const [user,    setUser]    = useState<UserData | null>(null);
   const [modules, setModules] = useState<Module[]>([]);
+
+  // score editing state: moduleOrder → draft value string
+  const [drafts,  setDrafts]  = useState<Record<number, string>>({});
+  const [saving,  setSaving]  = useState<Record<number, boolean>>({});
+  const [saved,   setSaved]   = useState<Record<number, boolean>>({});
 
   useEffect(() => {
     (async () => {
@@ -29,14 +34,50 @@ export default function UserDetail() {
     })();
   }, [userId]);
 
-  const getStatus = (module: Module) => {
-    const score = user?.moduleScores?.[module.order];
+  const getStatus = (module: Module, u: UserData) => {
+    const score = u.moduleScores?.[module.order];
     if (score !== undefined && score >= (module.passingScore || 70)) return { label: "Aprobado", cls: "badge-green" };
     if (module.order === 1) return { label: "Disponible", cls: "badge-amber" };
-    const prev = user?.moduleScores?.[module.order - 1];
+    const prev = u.moduleScores?.[module.order - 1];
     if (prev !== undefined && prev >= (modules.find(m => m.order === module.order - 1)?.passingScore || 70)) return { label: "Disponible", cls: "badge-amber" };
     if (score !== undefined) return { label: "No aprobado", cls: "badge-muted" };
     return { label: "Bloqueado", cls: "badge-muted" };
+  };
+
+  const saveScore = async (module: Module) => {
+    const raw = drafts[module.order];
+    if (raw === undefined || raw === "") return;
+    const score = Number(raw);
+    if (isNaN(score) || score < 0 || score > 100) return;
+
+    setSaving(s => ({ ...s, [module.order]: true }));
+
+    try {
+      // Dot-notation update so we don't overwrite other moduleScores
+      await updateDoc(doc(db, "users", userId), {
+        [`moduleScores.${module.order}`]: score,
+      });
+
+      // Update local state
+      setUser(prev => {
+        if (!prev) return prev;
+        const newScores = { ...(prev.moduleScores ?? {}), [module.order]: score };
+        const passed = modules.filter(m => {
+          const s = newScores[m.order];
+          return s !== undefined && s >= (m.passingScore || 70);
+        }).length;
+        const progress = modules.length > 0 ? Math.round((passed / modules.length) * 100) : 0;
+        // also persist progress
+        updateDoc(doc(db, "users", userId), { progress });
+        return { ...prev, moduleScores: newScores, progress };
+      });
+
+      setDrafts(d => { const n = { ...d }; delete n[module.order]; return n; });
+      setSaved(s => ({ ...s, [module.order]: true }));
+      setTimeout(() => setSaved(s => ({ ...s, [module.order]: false })), 2000);
+    } finally {
+      setSaving(s => ({ ...s, [module.order]: false }));
+    }
   };
 
   if (!user) {
@@ -70,20 +111,20 @@ export default function UserDetail() {
             </a>
             <h1 className="heading-1" style={{ marginBottom: "8px" }}>{user.name}</h1>
             <div className="flex-wrap">
-              {user.cluster && <span className="badge badge-muted">Cluster: {user.cluster}</span>}
+              {user.cluster   && <span className="badge badge-muted">Cluster: {user.cluster}</span>}
               {user.municipio && <span className="badge badge-muted">{user.municipio}</span>}
-              {user.finca && <span className="badge badge-muted">Finca: {user.finca}</span>}
+              {user.finca     && <span className="badge badge-muted">Finca: {user.finca}</span>}
             </div>
             <div style={{ marginTop: "20px", display: "flex", gap: "32px", flexWrap: "wrap" }}>
               <div>
-                <p style={{ fontSize: "28px", fontFamily: "'Playfair Display',serif", fontWeight: 700 }}>
+                <p className="stat-lg" style={{ marginBottom: "2px" }}>
                   {passedCount}<span style={{ fontSize: "16px", color: "var(--text-muted)", fontWeight: 400 }}>/{modules.length}</span>
                 </p>
                 <p className="caption">Módulos aprobados</p>
               </div>
               {user.progress !== undefined && (
                 <div>
-                  <p style={{ fontSize: "28px", fontFamily: "'Playfair Display',serif", fontWeight: 700, color: "var(--green-accent)" }}>
+                  <p className="stat-lg" style={{ color: "var(--green-accent)", marginBottom: "2px" }}>
                     {user.progress}%
                   </p>
                   <p className="caption">Progreso del curso</p>
@@ -93,7 +134,10 @@ export default function UserDetail() {
           </div>
 
           {/* MODULE TABLE */}
-          <h2 className="heading-2 fade-up-1" style={{ marginBottom: "16px" }}>Progreso por módulo</h2>
+          <div style={{ display: "flex", alignItems: "baseline", gap: "12px", marginBottom: "16px" }} className="fade-up-1">
+            <h2 className="heading-2">Progreso por módulo</h2>
+            <p className="body-sm">Ingresa la nota para registrar el avance</p>
+          </div>
 
           <div className="card fade-up-2" style={{ padding: 0, overflow: "hidden" }}>
             <div className="table-wrap">
@@ -102,14 +146,22 @@ export default function UserDetail() {
                   <tr>
                     <th>Módulo</th>
                     <th>Estado</th>
-                    <th>Score</th>
+                    <th>Nota actual</th>
                     <th>Nota mínima</th>
+                    <th>Registrar nota</th>
                   </tr>
                 </thead>
                 <tbody>
                   {modules.map(module => {
-                    const { label, cls } = getStatus(module);
+                    const { label, cls } = getStatus(module, user);
                     const score = user.moduleScores?.[module.order];
+                    const draft = drafts[module.order] ?? "";
+                    const isSaving = saving[module.order] ?? false;
+                    const isSaved  = saved[module.order]  ?? false;
+                    const passing  = module.passingScore || 70;
+                    const draftNum = draft !== "" ? Number(draft) : NaN;
+                    const invalid  = draft !== "" && (isNaN(draftNum) || draftNum < 0 || draftNum > 100);
+
                     return (
                       <tr key={module.id}>
                         <td style={{ fontWeight: 500, color: "var(--text-primary)" }}>
@@ -121,10 +173,50 @@ export default function UserDetail() {
                           </div>
                         </td>
                         <td><span className={`badge ${cls}`}>{label}</span></td>
-                        <td style={{ fontWeight: score !== undefined ? 600 : 400, color: score !== undefined ? "var(--text-primary)" : "var(--text-muted)" }}>
+                        <td style={{
+                          fontWeight: score !== undefined ? 600 : 400,
+                          color: score !== undefined
+                            ? score >= passing ? "var(--green-accent)" : "var(--rust)"
+                            : "var(--text-muted)",
+                        }}>
                           {score ?? "—"}
                         </td>
-                        <td style={{ color: "var(--text-muted)" }}>{module.passingScore || 70}</td>
+                        <td style={{ color: "var(--text-muted)" }}>{passing}</td>
+                        <td>
+                          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                            <input
+                              type="number"
+                              min={0}
+                              max={100}
+                              placeholder="0–100"
+                              value={draft}
+                              onChange={e => setDrafts(d => ({ ...d, [module.order]: e.target.value }))}
+                              onKeyDown={e => { if (e.key === "Enter") saveScore(module); }}
+                              style={{
+                                width: "72px",
+                                padding: "5px 8px",
+                                fontSize: "13px",
+                                background: "var(--bg-elevated)",
+                                border: `1px solid ${invalid ? "var(--rust)" : "var(--border)"}`,
+                                borderRadius: "var(--radius-sm)",
+                                color: "var(--text-primary)",
+                                outline: "none",
+                              }}
+                            />
+                            {isSaved ? (
+                              <span style={{ fontSize: "12px", color: "var(--green-accent)", fontWeight: 600 }}>✓ Guardado</span>
+                            ) : (
+                              <button
+                                className="btn btn-sm btn-primary"
+                                style={{ cursor: draft === "" || invalid ? "not-allowed" : "pointer", opacity: draft === "" || invalid ? 0.45 : 1, padding: "5px 12px", fontSize: "12px" }}
+                                disabled={draft === "" || invalid || isSaving}
+                                onClick={() => saveScore(module)}
+                              >
+                                {isSaving ? "..." : "Guardar"}
+                              </button>
+                            )}
+                          </div>
+                        </td>
                       </tr>
                     );
                   })}

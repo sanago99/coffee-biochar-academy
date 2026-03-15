@@ -430,6 +430,17 @@ select.input { appearance:none; cursor:pointer; }
 .mt-lg { margin-top:32px; }
 .mt-xl { margin-top:56px; }
 
+/* ─── Link utilities ──────────────────────────────── */
+.link-amber { color:var(--amber); text-decoration:none; }
+.link-amber:hover { text-decoration:underline; }
+.link-amber:focus-visible { outline:2px solid var(--amber); outline-offset:2px; border-radius:2px; }
+
+/* ─── Tablet responsive grid ─────────────────────── */
+@media(max-width:900px) and (min-width:641px){
+  .grid-4 { grid-template-columns:repeat(2,1fr); }
+  .grid-3 { grid-template-columns:repeat(2,1fr); }
+}
+
 /* ─── Dashboard — Next Step Card ──────────────────── */
 .next-step-card {
   background:var(--bg-card);

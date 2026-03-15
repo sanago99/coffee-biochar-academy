@@ -92,24 +92,26 @@ export default function AdminContent() {
               </div>
 
               <div>
-                <label className="form-label">Nombre del módulo *</label>
-                <input className="input" placeholder="Ej: Fundamentos del biochar"
+                <label className="form-label" htmlFor="mod-title">Nombre del módulo *</label>
+                <input id="mod-title" className="input" placeholder="Ej: Fundamentos del biochar"
                   value={moduleTitle} onChange={e => setModuleTitle(e.target.value)} />
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginTop: "14px" }}>
                 <div>
-                  <label className="form-label">Orden</label>
-                  <input className="input" type="number" min={1} value={moduleOrder}
+                  <label className="form-label" htmlFor="mod-order">Orden</label>
+                  <input id="mod-order" className="input" type="number" min={1} value={moduleOrder}
                     onChange={e => setModuleOrder(Number(e.target.value))} />
                 </div>
                 <div>
-                  <label className="form-label">Puntos mínimos</label>
-                  <input className="input" type="number" value="70" disabled style={{ opacity: 0.5 }} />
+                  <label className="form-label" htmlFor="mod-passing">Puntos mínimos</label>
+                  <input id="mod-passing" className="input" type="number" value="70" disabled
+                    style={{ opacity: 0.45, cursor: "not-allowed", background: "var(--bg-elevated)", color: "var(--text-muted)" }}
+                    title="El puntaje mínimo está fijo en 70" />
                 </div>
               </div>
               <div style={{ marginTop: "14px" }}>
-                <label className="form-label">Link de evaluación (Google Forms)</label>
-                <input className="input" placeholder="https://forms.google.com/..."
+                <label className="form-label" htmlFor="mod-form">Link de evaluación (Google Forms)</label>
+                <input id="mod-form" className="input" placeholder="https://forms.google.com/..."
                   value={moduleFormLink} onChange={e => setModuleFormLink(e.target.value)} />
               </div>
 
@@ -134,25 +136,25 @@ export default function AdminContent() {
               </div>
 
               <div>
-                <label className="form-label">Módulo *</label>
-                <select className="input" value={selectedModule} onChange={e => setSelectedModule(e.target.value)}>
+                <label className="form-label" htmlFor="ses-module">Módulo *</label>
+                <select id="ses-module" className="input" value={selectedModule} onChange={e => setSelectedModule(e.target.value)}>
                   <option value="">Seleccionar módulo</option>
                   {modules.map(m => <option key={m.id} value={m.id}>{String(m.order).padStart(2,"0")} · {m.title}</option>)}
                 </select>
               </div>
               <div style={{ marginTop: "14px" }}>
-                <label className="form-label">Título de la sesión *</label>
-                <input className="input" placeholder="Ej: Comunicación efectiva"
+                <label className="form-label" htmlFor="ses-title">Título de la sesión *</label>
+                <input id="ses-title" className="input" placeholder="Ej: Comunicación efectiva"
                   value={sessionTitle} onChange={e => setSessionTitle(e.target.value)} />
               </div>
               <div style={{ marginTop: "14px" }}>
-                <label className="form-label">Link del video (YouTube / Drive)</label>
-                <input className="input" placeholder="https://youtube.com/watch?v=..."
+                <label className="form-label" htmlFor="ses-link">Link del video (YouTube / Drive)</label>
+                <input id="ses-link" className="input" placeholder="https://youtube.com/watch?v=..."
                   value={sessionLink} onChange={e => setSessionLink(e.target.value)} />
               </div>
               <div style={{ marginTop: "14px" }}>
-                <label className="form-label">Material adicional (URL)</label>
-                <input className="input" placeholder="https://drive.google.com/..."
+                <label className="form-label" htmlFor="ses-material">Material adicional (URL)</label>
+                <input id="ses-material" className="input" placeholder="https://drive.google.com/..."
                   value={sessionMaterial} onChange={e => setSessionMaterial(e.target.value)} />
               </div>
 

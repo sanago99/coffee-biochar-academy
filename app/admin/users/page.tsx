@@ -262,7 +262,12 @@ export default function UsersAdmin() {
                               <span style={{ fontSize: "12px", color: "var(--text-muted)" }}>—</span>
                             ) : (
                               <div style={{ display: "flex", alignItems: "center", gap: "10px", minWidth: "120px" }}>
-                                <div className="progress-track-sm" style={{ flex: 1 }}>
+                                <div className="progress-track-sm" style={{ flex: 1 }}
+                                  role="progressbar"
+                                  aria-valuenow={user.progress || 0}
+                                  aria-valuemin={0}
+                                  aria-valuemax={100}
+                                  aria-label={`Progreso de ${user.name}: ${user.progress || 0}%`}>
                                   <div className="progress-fill-sm" style={{ width: `${user.progress || 0}%` }} />
                                 </div>
                                 <span style={{ fontSize: "12px", color: "var(--text-muted)", minWidth: "30px", fontWeight: 600 }}>

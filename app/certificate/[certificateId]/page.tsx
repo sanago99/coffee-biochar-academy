@@ -35,10 +35,26 @@ export default function CertificatePage() {
       <div className="auth-wrap" style={{ background: "var(--bg-deep)" }}>
         <div className="auth-card fade-up" style={{ textAlign: "center" }}>
           <img src="/logo.png" alt="Coffee Biochar" style={{ height: "56px", margin: "0 auto 20px" }} />
-          <h2 className="heading-3">Certificado no encontrado</h2>
-          <p className="body-sm" style={{ marginTop: "8px" }}>
-            El ID del certificado no es válido o no existe.
+          <div style={{
+            width: "48px", height: "48px", borderRadius: "50%",
+            background: "rgba(192,74,42,0.1)", border: "1px solid rgba(192,74,42,0.25)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            margin: "0 auto 16px", color: "#e06040",
+          }}>
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+              <path d="M11 7v5M11 15v1" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+              <circle cx="11" cy="11" r="9" stroke="currentColor" strokeWidth="1.5"/>
+            </svg>
+          </div>
+          <h2 className="heading-3" style={{ marginBottom: "8px" }}>Certificado no encontrado</h2>
+          <p className="body-sm" style={{ marginBottom: "24px" }}>
+            El ID del certificado no es válido o no existe en nuestros registros.
           </p>
+          <a href="/dashboard">
+            <button className="btn btn-outline btn-full" style={{ cursor: "pointer" }}>
+              Ir al dashboard
+            </button>
+          </a>
         </div>
       </div>
     );

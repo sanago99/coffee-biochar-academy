@@ -120,30 +120,30 @@ export default function Register() {
 
         <div className="grid-2" style={{ gap: "16px" }}>
           <div>
-            <label className="form-label">Nombre completo *</label>
-            <input className="input" placeholder="Tu nombre" value={name}
+            <label className="form-label" htmlFor="reg-name">Nombre completo *</label>
+            <input id="reg-name" className="input" placeholder="Tu nombre" value={name}
               onChange={e => setName(e.target.value)} autoComplete="name" />
           </div>
           <div>
-            <label className="form-label">Municipio *</label>
-            <input className="input" placeholder="Tu municipio" value={municipio}
+            <label className="form-label" htmlFor="reg-municipio">Municipio *</label>
+            <input id="reg-municipio" className="input" placeholder="Tu municipio" value={municipio}
               onChange={e => setMunicipio(e.target.value)} />
           </div>
           <div>
-            <label className="form-label">Clúster *</label>
-            <input className="input" placeholder="Clúster asignado" value={cluster}
+            <label className="form-label" htmlFor="reg-cluster">Clúster *</label>
+            <input id="reg-cluster" className="input" placeholder="Clúster asignado" value={cluster}
               onChange={e => setCluster(e.target.value)} />
           </div>
           <div>
-            <label className="form-label">Finca</label>
-            <input className="input" placeholder="Nombre de la finca" value={finca}
+            <label className="form-label" htmlFor="reg-finca">Finca</label>
+            <input id="reg-finca" className="input" placeholder="Nombre de la finca" value={finca}
               onChange={e => setFinca(e.target.value)} />
           </div>
         </div>
 
         <div style={{ marginTop: "16px" }}>
-          <label className="form-label">Teléfono</label>
-          <input className="input" placeholder="300 000 0000" value={telefono}
+          <label className="form-label" htmlFor="reg-telefono">Teléfono</label>
+          <input id="reg-telefono" className="input" placeholder="300 000 0000" value={telefono}
             onChange={e => setTelefono(e.target.value)} inputMode="tel" />
         </div>
 
@@ -155,13 +155,13 @@ export default function Register() {
         </p>
 
         <div>
-          <label className="form-label">Correo electrónico *</label>
-          <input className="input" type="email" placeholder="tu@correo.com" value={email}
+          <label className="form-label" htmlFor="reg-email">Correo electrónico *</label>
+          <input id="reg-email" className="input" type="email" placeholder="tu@correo.com" value={email}
             onChange={e => setEmail(e.target.value)} inputMode="email" autoComplete="email" />
         </div>
         <div style={{ marginTop: "16px" }}>
-          <label className="form-label">Contraseña *</label>
-          <input className="input" type="password" placeholder="Mínimo 6 caracteres" value={password}
+          <label className="form-label" htmlFor="reg-password">Contraseña *</label>
+          <input id="reg-password" className="input" type="password" placeholder="Mínimo 6 caracteres" value={password}
             onChange={e => setPassword(e.target.value)} autoComplete="new-password" />
         </div>
 

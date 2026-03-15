@@ -87,7 +87,7 @@ export default function PendingPage() {
 
         <p className="body-sm" style={{ fontSize: "12px", color: "var(--text-muted)", marginBottom: "24px" }}>
           ¿Preguntas? Escríbele a tu coordinador de clúster o a{" "}
-          <a href="mailto:info@coffeebiochar.com" style={{ color: "var(--amber)", textDecoration: "none" }}>
+          <a href="mailto:info@coffeebiochar.com" className="link-amber">
             info@coffeebiochar.com
           </a>
         </p>

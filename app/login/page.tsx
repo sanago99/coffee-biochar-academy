@@ -115,8 +115,9 @@ export default function Login() {
           <p className="body-sm" style={{ marginBottom: "28px" }}>Ingresa con tu cuenta para continuar</p>
 
           <div className="form-group" style={{ marginTop: 0 }}>
-            <label className="form-label">Correo electrónico</label>
+            <label className="form-label" htmlFor="login-email">Correo electrónico</label>
             <input
+              id="login-email"
               className="input" type="email" placeholder="tu@correo.com"
               value={email} onChange={e => setEmail(e.target.value)}
               onKeyDown={onKey} inputMode="email" autoComplete="email"
@@ -124,8 +125,14 @@ export default function Login() {
           </div>
 
           <div className="form-group">
-            <label className="form-label">Contraseña</label>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "6px" }}>
+              <label className="form-label" htmlFor="login-password" style={{ marginBottom: 0 }}>Contraseña</label>
+              <Link href="/forgot-password" style={{ fontSize: "12px", color: "var(--text-muted)" }}>
+                ¿Olvidaste tu contraseña?
+              </Link>
+            </div>
             <input
+              id="login-password"
               className="input" type="password" placeholder="••••••••"
               value={password} onChange={e => setPassword(e.target.value)}
               onKeyDown={onKey} autoComplete="current-password"

@@ -277,7 +277,12 @@ export default function AdminProgress() {
                           <td>{u.municipio || "—"}</td>
                           <td>
                             <div style={{ display: "flex", alignItems: "center", gap: "8px", minWidth: "110px" }}>
-                              <div className="progress-track-sm" style={{ flex: 1 }}>
+                              <div className="progress-track-sm" style={{ flex: 1 }}
+                                role="progressbar"
+                                aria-valuenow={u.progress}
+                                aria-valuemin={0}
+                                aria-valuemax={100}
+                                aria-label={`Progreso de ${u.name}: ${u.progress}%`}>
                                 <div className="progress-fill-sm" style={{ width: `${u.progress}%`, background: isCert ? "var(--green)" : undefined }} />
                               </div>
                               <span style={{ fontSize: "12px", color: isCert ? "var(--green)" : "var(--text-muted)", minWidth: "30px", fontWeight: 600 }}>
