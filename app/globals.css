@@ -361,9 +361,10 @@ select.input { appearance:none; cursor:pointer; }
 .flex-wrap    { display:flex; flex-wrap:wrap; gap:10px; }
 
 /* ─── Animations ──────────────────────────────────── */
-@keyframes spin   { to { transform:rotate(360deg); } }
-@keyframes fadeUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+@keyframes spin    { to { transform:rotate(360deg); } }
+@keyframes fadeUp  { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
 @keyframes flicker { 0%,100%{opacity:1} 50%{opacity:.85} }
+@keyframes pulse   { 0%,100%{opacity:1} 50%{opacity:.4} }
 
 .fade-up   { animation:fadeUp .5s ease both; }
 .fade-up-1 { animation:fadeUp .5s .1s ease both; }

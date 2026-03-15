@@ -48,6 +48,8 @@ export default function Dashboard() {
   const [authLoading,  setAuthLoading]  = useState(true);
   const [certMsg,      setCertMsg]      = useState(false);
   const [certificate,  setCertificate]  = useState<{ certificateId: string } | null>(null);
+  const [copied,       setCopied]       = useState(false);
+  const [sessionToast, setSessionToast] = useState("");
   const certAttempted = useRef(false);
 
   const { modules }                 = useModules();
@@ -139,12 +141,20 @@ export default function Dashboard() {
   }, [firebaseUser]);
 
   /* ── COMPLETE SESSION ─────────────────────────────── */
-  const completeSession = async (sessionId: string) => {
+  const completeSession = async (sessionId: string, sessionTitle?: string) => {
     if (completed.includes(sessionId)) return;
     const user = auth.currentUser;
     if (!user) return;
     await addDoc(collection(db, "progress"), { userId: user.uid, sessionId });
     setCompleted([...completed, sessionId]);
+    setSessionToast(sessionTitle ? `"${sessionTitle}" marcada como completada` : "Sesión completada");
+    setTimeout(() => setSessionToast(""), 3000);
+  };
+
+  const copyLink = (certId: string) => {
+    navigator.clipboard.writeText(`${window.location.origin}/certificate/${certId}`);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2500);
   };
 
   /* ── LOADING ──────────────────────────────────────── */
@@ -187,11 +197,25 @@ export default function Dashboard() {
 
       <div className="page-content">
 
+        {/* ── SESSION TOAST ─────────────────── */}
+        {sessionToast && (
+          <div className="fade-up" style={{
+            position: "fixed", bottom: "24px", left: "50%", transform: "translateX(-50%)",
+            background: "var(--green-glow)", border: "1px solid var(--green-border)",
+            color: "var(--green)", padding: "10px 20px", borderRadius: "var(--radius-pill)",
+            fontSize: "13px", fontWeight: 600, zIndex: 50, whiteSpace: "nowrap",
+            boxShadow: "0 4px 24px rgba(0,0,0,0.4)",
+          }}>
+            ✓ {sessionToast}
+          </div>
+        )}
+
         {/* ── CERT NEW BANNER ───────────────── */}
         {certMsg && (
           <div className="msg-success fade-up" style={{ marginBottom: "20px", fontSize: "15px", display: "flex", alignItems: "center", gap: "10px" }}>
             <IconCert />
-            ¡Felicitaciones! Tu certificado ha sido generado y está listo para compartir.
+            <span style={{ flex: 1 }}>¡Felicitaciones! Tu certificado ha sido generado y está listo para compartir.</span>
+            <button onClick={() => setCertMsg(false)} style={{ background: "none", border: "none", cursor: "pointer", color: "inherit", opacity: 0.7, fontSize: "18px", lineHeight: 1, padding: "0 4px" }}>×</button>
           </div>
         )}
 
@@ -234,7 +258,7 @@ export default function Dashboard() {
                   window.open(nextStep.module.formLink, "_blank");
                 } else if (nextStep.session) {
                   window.open(nextStep.session.link, "_blank");
-                  completeSession(nextStep.session.id);
+                  completeSession(nextStep.session.id, nextStep.session.title);
                 }
               }}
             >
@@ -261,9 +285,18 @@ export default function Dashboard() {
               </div>
             </div>
             {certificate && (
-              <a href={`/certificate/${certificate.certificateId}`} target="_blank" rel="noreferrer">
-                <button className="btn btn-primary btn-sm" style={{ cursor: "pointer" }}>Ver certificado</button>
-              </a>
+              <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                <a href={`/certificate/${certificate.certificateId}`} target="_blank" rel="noreferrer">
+                  <button className="btn btn-primary btn-sm" style={{ cursor: "pointer" }}>Ver certificado</button>
+                </a>
+                <button
+                  className="btn btn-ghost btn-sm"
+                  style={{ cursor: "pointer", color: copied ? "var(--green)" : undefined, borderColor: copied ? "var(--green-border)" : undefined }}
+                  onClick={() => copyLink(certificate.certificateId)}
+                >
+                  {copied ? "¡Copiado!" : "Copiar enlace"}
+                </button>
+              </div>
             )}
           </div>
         )}
@@ -307,11 +340,17 @@ export default function Dashboard() {
           <div className="flex-wrap" style={{ marginTop: "16px" }}>
             {modules.map((m, i) => {
               const s = getModuleStatus(m);
+              const tooltipText = s === "approved"
+                ? `Módulo ${i + 1} aprobado`
+                : s === "available"
+                ? `Módulo ${i + 1} disponible`
+                : `Módulo ${i + 1} bloqueado — aprueba el módulo anterior`;
               return (
                 <span
                   key={m.id}
                   className={`badge badge-${s === "approved" ? "green" : s === "available" ? "amber" : "muted"}`}
                   style={{ cursor: "default" }}
+                  title={tooltipText}
                 >
                   {s === "approved" ? <IconCheck /> : s === "locked" ? <IconLock /> : null}
                   M{i + 1}
@@ -443,7 +482,7 @@ export default function Dashboard() {
                             <button
                               onClick={() => {
                                 window.open(session.link, "_blank");
-                                completeSession(session.id);
+                                completeSession(session.id, session.title);
                               }}
                               className={`btn btn-sm ${done ? "btn-ghost" : "btn-primary"}`}
                               style={{ fontSize: "12px", padding: "5px 14px", minHeight: "34px", cursor: "pointer", display: "flex", alignItems: "center", gap: "6px" }}
@@ -488,41 +527,6 @@ export default function Dashboard() {
           })}
         </div>
 
-        {/* ── CERTIFICATE DISPLAY ───────────── */}
-        {allDone && certificate && (
-          <div className="cert-card fade-up" style={{ marginTop: "32px" }}>
-            <div style={{
-              width: "52px", height: "52px", borderRadius: "50%",
-              background: "var(--green-glow)", border: "1px solid var(--green-border)",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              margin: "0 auto 16px", color: "var(--green)",
-            }}>
-              <IconCert />
-            </div>
-            <p className="eyebrow" style={{ marginBottom: "8px" }}>Certificado emitido</p>
-            <h2 className="heading-3" style={{ marginBottom: "8px" }}>{userData?.name}</h2>
-            <p className="body-sm" style={{ marginBottom: "4px" }}>Certified Coffee Biochar Extensionist</p>
-            <p style={{ fontFamily: "monospace", fontSize: "11px", color: "var(--text-muted)", marginBottom: "20px" }}>
-              {certificate.certificateId}
-            </p>
-            <div style={{ display: "flex", gap: "10px", justifyContent: "center", flexWrap: "wrap" }}>
-              <a href={`/certificate/${certificate.certificateId}`} target="_blank" rel="noreferrer">
-                <button className="btn btn-primary btn-sm" style={{ cursor: "pointer" }}>
-                  Ver certificado
-                </button>
-              </a>
-              <button
-                className="btn btn-ghost btn-sm"
-                style={{ cursor: "pointer" }}
-                onClick={() => {
-                  navigator.clipboard.writeText(`${window.location.origin}/certificate/${certificate.certificateId}`);
-                }}
-              >
-                Copiar enlace
-              </button>
-            </div>
-          </div>
-        )}
 
         <div style={{ height: "48px" }} />
       </div>

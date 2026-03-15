@@ -52,7 +52,11 @@ export default function AdminNav() {
   const pathname = usePathname();
   const router   = useRouter();
 
-  const logout = async () => { await signOut(auth); router.push("/login"); };
+  const logout = async () => {
+    if (!window.confirm("¿Cerrar sesión?")) return;
+    await signOut(auth);
+    router.push("/login");
+  };
 
   return (
     <nav className="topnav" style={{ paddingLeft: "20px", paddingRight: "20px" }}>

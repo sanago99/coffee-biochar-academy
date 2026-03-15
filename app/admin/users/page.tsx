@@ -82,6 +82,7 @@ export default function UsersAdmin() {
 
   const approve = async (userId: string, e: React.MouseEvent) => {
     e.stopPropagation();
+    if (!window.confirm("¿Aprobar esta cuenta? El extensionista podrá acceder al programa.")) return;
     setApproving(userId);
     await updateDoc(doc(db, "users", userId), { status: "active" });
     setUsers(prev => prev.map(u => u.id === userId ? { ...u, status: "active" } : u));

@@ -50,6 +50,7 @@ const cards = [
 export default function AdminDashboard() {
   const router = useRouter();
   const [counts, setCounts] = useState({ modules: 0, users: 0, certs: 0, sessions: 0 });
+  const [kpiLoading, setKpiLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
@@ -60,6 +61,7 @@ export default function AdminDashboard() {
         getDocs(collection(db, "sessions")),
       ]);
       setCounts({ modules: m.size, users: u.size, certs: c.size, sessions: s.size });
+      setKpiLoading(false);
     })();
   }, []);
 
@@ -93,7 +95,11 @@ export default function AdminDashboard() {
             <style>{`@media(max-width:640px){ .kpi-strip { grid-template-columns:repeat(2,1fr) !important; } }`}</style>
             {kpis.map(({ n, l, color }) => (
               <div key={l} style={{ background: "var(--bg-card)", padding: "24px 20px", textAlign: "center" }}>
-                <p style={{ fontFamily: "'Playfair Display',serif", fontSize: "36px", fontWeight: 700, color, lineHeight: 1, marginBottom: "6px" }}>{n}</p>
+                {kpiLoading ? (
+                  <div style={{ height: "36px", background: "var(--border)", borderRadius: "6px", marginBottom: "8px", animation: "pulse 1.5s ease-in-out infinite" }} />
+                ) : (
+                  <p style={{ fontFamily: "'Playfair Display',serif", fontSize: "36px", fontWeight: 700, color, lineHeight: 1, marginBottom: "6px" }}>{n}</p>
+                )}
                 <p className="caption">{l}</p>
               </div>
             ))}
