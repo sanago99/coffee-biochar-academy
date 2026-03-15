@@ -2,90 +2,60 @@
 
 import { useEffect, useState } from "react";
 import { auth, db } from "../../firebase/config";
-
-import {
-doc,
-getDoc,
-query,
-collection,
-where,
-getDocs
-} from "firebase/firestore";
-
+import { collection, query, where, getDocs } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { useRouter } from "next/navigation";
 
-export default function AdminGuard({children}:any){
+export default function AdminGuard({ children }: { children: React.ReactNode }) {
+  const router  = useRouter();
+  const [ok,    setOk]      = useState(false);
+  const [ready, setReady]   = useState(false);
 
-const router = useRouter();
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, async user => {
+      if (!user) { router.push("/login"); return; }
 
-const [allowed,setAllowed] = useState(false);
-const [loading,setLoading] = useState(true);
+      const snap = await getDocs(
+        query(collection(db, "users"), where("email", "==", user.email))
+      );
 
-useEffect(()=>{
+      if (snap.empty || snap.docs[0].data().role !== "admin") {
+        router.push("/dashboard");
+        return;
+      }
 
-const unsubscribe =
-onAuthStateChanged(auth, async(user)=>{
+      setOk(true);
+      setReady(true);
+    });
 
-if(!user){
+    return () => unsub();
+  }, []);
 
-router.push("/login");
-return;
+  if (!ready) {
+    return (
+      <div
+        className="page-wrap flex-center"
+        style={{ minHeight: "100vh" }}
+      >
+        <div style={{ textAlign: "center" }}>
+          <div
+            style={{
+              width: "36px",
+              height: "36px",
+              border: "2px solid var(--border)",
+              borderTop: "2px solid var(--green-accent)",
+              borderRadius: "50%",
+              animation: "spin 0.8s linear infinite",
+              margin: "0 auto 12px",
+            }}
+          />
+          <p className="body-sm">Verificando permisos...</p>
+        </div>
+      </div>
+    );
+  }
 
-}
+  if (!ok) return null;
 
-const q = query(
-collection(db,"users"),
-where("email","==",user.email)
-);
-
-const snap = await getDocs(q);
-
-if(snap.empty){
-
-router.push("/dashboard");
-return;
-
-}
-
-const data:any = snap.docs[0].data();
-
-if(data.role !== "admin"){
-
-router.push("/dashboard");
-return;
-
-}
-
-setAllowed(true);
-setLoading(false);
-
-});
-
-return ()=>unsubscribe();
-
-},[]);
-
-if(loading){
-
-return(
-<div style={{
-background:"#111",
-color:"white",
-padding:"40px"
-}}>
-Verificando permisos...
-</div>
-);
-
-}
-
-if(!allowed){
-
-return null;
-
-}
-
-return children;
-
+  return <>{children}</>;
 }

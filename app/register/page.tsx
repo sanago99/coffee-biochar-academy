@@ -1,114 +1,134 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { db } from "../../firebase/config";
 import { collection, addDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
-import Message, { MessageState } from "../components/Message";
-import { inputStyle, page } from "../styles";
 
 export default function Register() {
   const router = useRouter();
 
-  const [name, setName] = useState("");
+  const [name,      setName]      = useState("");
   const [municipio, setMunicipio] = useState("");
-  const [finca, setFinca] = useState("");
-  const [cluster, setCluster] = useState("");
-  const [telefono, setTelefono] = useState("");
-  const [message, setMessage] = useState<MessageState>(null);
-  const [loading, setLoading] = useState(false);
+  const [finca,     setFinca]     = useState("");
+  const [cluster,   setCluster]   = useState("");
+  const [telefono,  setTelefono]  = useState("");
+  const [error,     setError]     = useState("");
+  const [success,   setSuccess]   = useState(false);
+  const [loading,   setLoading]   = useState(false);
 
-  const registerUser = async () => {
+  const register = async () => {
     if (!name || !municipio || !cluster) {
-      setMessage({ text: "Nombre, municipio y cluster son obligatorios", type: "error" });
+      setError("Nombre, municipio y cluster son obligatorios");
       return;
     }
 
     setLoading(true);
-    setMessage(null);
+    setError("");
 
     try {
       await addDoc(collection(db, "users"), {
-        name,
-        municipio,
-        finca,
-        cluster,
-        telefono,
-        progress: 0,
+        name, municipio, finca, cluster, telefono, progress: 0,
       });
 
-      setMessage({ text: "Usuario registrado correctamente", type: "success" });
-
-      setTimeout(() => router.push("/login"), 1500);
+      setSuccess(true);
+      setTimeout(() => router.push("/login"), 1800);
     } catch {
-      setMessage({ text: "Error al registrar el usuario", type: "error" });
+      setError("Error al registrar. Inténtalo de nuevo.");
       setLoading(false);
     }
   };
 
+  if (success) {
+    return (
+      <div className="auth-wrap">
+        <div className="auth-card fade-up" style={{ textAlign: "center" }}>
+          <div
+            style={{
+              width: "56px", height: "56px", borderRadius: "50%",
+              background: "var(--green-glow)", border: "1px solid var(--green-border)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              margin: "0 auto 20px", fontSize: "24px",
+            }}
+          >
+            ✓
+          </div>
+          <h2 className="heading-3">¡Registro exitoso!</h2>
+          <p className="body-sm" style={{ marginTop: "8px" }}>
+            Redirigiendo al inicio de sesión...
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <main
-      style={{
-        ...page,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <h1>Registro de Extensionista</h1>
+    <div className="auth-wrap">
+      <div
+        className="auth-card fade-up"
+        style={{ maxWidth: "480px" }}
+      >
+        {/* Brand */}
+        <div style={{ textAlign: "center", marginBottom: "28px" }}>
+          <p className="nav-logo" style={{ fontSize: "20px" }}>
+            Coffee <span>Biochar</span>
+          </p>
+        </div>
 
-      <div style={{ width: "300px" }}>
-        <input
-          placeholder="Nombre"
-          value={name}
-          onChange={e => setName(e.target.value)}
-          style={inputStyle}
-        />
-        <input
-          placeholder="Municipio"
-          value={municipio}
-          onChange={e => setMunicipio(e.target.value)}
-          style={inputStyle}
-        />
-        <input
-          placeholder="Finca"
-          value={finca}
-          onChange={e => setFinca(e.target.value)}
-          style={inputStyle}
-        />
-        <input
-          placeholder="Cluster"
-          value={cluster}
-          onChange={e => setCluster(e.target.value)}
-          style={inputStyle}
-        />
-        <input
-          placeholder="Teléfono"
-          value={telefono}
-          onChange={e => setTelefono(e.target.value)}
-          style={inputStyle}
-        />
+        <h2 className="heading-3" style={{ marginBottom: "4px" }}>Registro de extensionista</h2>
+        <p className="body-sm" style={{ marginBottom: "24px" }}>
+          Crea tu cuenta para acceder al programa de formación
+        </p>
 
-        <Message message={message} />
+        <div className="grid-2" style={{ gap: "14px" }}>
+          <div>
+            <label className="form-label">Nombre completo *</label>
+            <input className="input" placeholder="Tu nombre" value={name}
+              onChange={e => setName(e.target.value)} autoComplete="name" />
+          </div>
+          <div>
+            <label className="form-label">Municipio *</label>
+            <input className="input" placeholder="Tu municipio" value={municipio}
+              onChange={e => setMunicipio(e.target.value)} />
+          </div>
+          <div>
+            <label className="form-label">Cluster *</label>
+            <input className="input" placeholder="Cluster asignado" value={cluster}
+              onChange={e => setCluster(e.target.value)} />
+          </div>
+          <div>
+            <label className="form-label">Finca</label>
+            <input className="input" placeholder="Nombre de la finca" value={finca}
+              onChange={e => setFinca(e.target.value)} />
+          </div>
+        </div>
+
+        <div style={{ marginTop: "14px" }}>
+          <label className="form-label">Teléfono</label>
+          <input className="input" placeholder="300 000 0000" value={telefono}
+            onChange={e => setTelefono(e.target.value)} inputMode="tel" />
+        </div>
+
+        {error && <p className="msg-error">{error}</p>}
 
         <button
-          onClick={registerUser}
+          className="btn btn-primary btn-full"
+          style={{ marginTop: "24px" }}
+          onClick={register}
           disabled={loading}
-          style={{
-            marginTop: "20px",
-            width: "100%",
-            padding: "10px 20px",
-            background: loading ? "#555" : "#2E7D32",
-            border: "none",
-            color: "white",
-            borderRadius: "5px",
-            cursor: loading ? "not-allowed" : "pointer",
-          }}
         >
-          {loading ? "Registrando..." : "Registrar"}
+          {loading ? "Registrando..." : "Crear cuenta"}
         </button>
+
+        <p style={{ textAlign: "center", marginTop: "20px", fontSize: "14px", color: "var(--text-muted)" }}>
+          ¿Ya tienes cuenta?{" "}
+          <Link href="/login" style={{ color: "var(--green-accent)", fontWeight: 500 }}>
+            Iniciar sesión
+          </Link>
+        </p>
+
       </div>
-    </main>
+    </div>
   );
 }

@@ -4,177 +4,151 @@ import { useState } from "react";
 import { db } from "../../../firebase/config";
 import { collection, addDoc } from "firebase/firestore";
 import AdminGuard from "../../components/AdminGuard";
-import Message, { MessageState } from "../../components/Message";
+import AdminNav from "../../components/AdminNav";
 import { useModules } from "../../hooks/useModules";
 import { useSessions } from "../../hooks/useSessions";
-import { page, inputStyle, btn, colors } from "../../styles";
 
 export default function AdminContent() {
   const { modules, refresh: refreshModules } = useModules();
   const { sessions, refresh: refreshSessions } = useSessions();
 
-  /* MODULE FORM */
-  const [moduleTitle, setModuleTitle] = useState("");
-  const [moduleOrder, setModuleOrder] = useState<number>(1);
+  const [moduleTitle,    setModuleTitle]    = useState("");
+  const [moduleOrder,    setModuleOrder]    = useState<number>(1);
   const [moduleFormLink, setModuleFormLink] = useState("");
-  const [moduleMessage, setModuleMessage] = useState<MessageState>(null);
+  const [moduleMsg,      setModuleMsg]      = useState<{ ok: boolean; text: string } | null>(null);
 
-  /* SESSION FORM */
-  const [sessionTitle, setSessionTitle] = useState("");
-  const [sessionLink, setSessionLink] = useState("");
+  const [sessionTitle,    setSessionTitle]    = useState("");
+  const [sessionLink,     setSessionLink]     = useState("");
   const [sessionMaterial, setSessionMaterial] = useState("");
-  const [selectedModule, setSelectedModule] = useState("");
-  const [sessionMessage, setSessionMessage] = useState<MessageState>(null);
-
-  /* CREATE MODULE */
+  const [selectedModule,  setSelectedModule]  = useState("");
+  const [sessionMsg,      setSessionMsg]      = useState<{ ok: boolean; text: string } | null>(null);
 
   const createModule = async () => {
-    if (!moduleTitle) {
-      setModuleMessage({ text: "Escribe el nombre del módulo", type: "error" });
-      return;
-    }
-
+    if (!moduleTitle) { setModuleMsg({ ok: false, text: "El nombre del módulo es obligatorio" }); return; }
     try {
       await addDoc(collection(db, "modules"), {
-        title: moduleTitle,
-        order: moduleOrder,
-        formLink: moduleFormLink,
-        passingScore: 60,
+        title: moduleTitle, order: moduleOrder, formLink: moduleFormLink, passingScore: 60,
       });
-
-      setModuleTitle("");
-      setModuleFormLink("");
-      setModuleMessage({ text: "Módulo creado correctamente", type: "success" });
+      setModuleTitle(""); setModuleFormLink("");
+      setModuleMsg({ ok: true, text: "Módulo creado correctamente" });
       refreshModules();
-    } catch {
-      setModuleMessage({ text: "Error al crear el módulo", type: "error" });
-    }
+    } catch { setModuleMsg({ ok: false, text: "Error al crear el módulo" }); }
   };
 
-  /* CREATE SESSION */
-
   const createSession = async () => {
-    if (!sessionTitle || !selectedModule) {
-      setSessionMessage({ text: "Completa los campos obligatorios", type: "error" });
-      return;
-    }
-
+    if (!sessionTitle || !selectedModule) { setSessionMsg({ ok: false, text: "Título y módulo son obligatorios" }); return; }
     try {
       await addDoc(collection(db, "sessions"), {
-        title: sessionTitle,
-        link: sessionLink,
-        material: sessionMaterial,
-        moduleId: selectedModule,
-        locked: false,
+        title: sessionTitle, link: sessionLink, material: sessionMaterial, moduleId: selectedModule, locked: false,
       });
-
-      setSessionTitle("");
-      setSessionLink("");
-      setSessionMaterial("");
-      setSessionMessage({ text: "Sesión creada correctamente", type: "success" });
+      setSessionTitle(""); setSessionLink(""); setSessionMaterial(""); setSelectedModule("");
+      setSessionMsg({ ok: true, text: "Sesión creada correctamente" });
       refreshSessions();
-    } catch {
-      setSessionMessage({ text: "Error al crear la sesión", type: "error" });
-    }
+    } catch { setSessionMsg({ ok: false, text: "Error al crear la sesión" }); }
   };
 
   return (
     <AdminGuard>
-      <div style={page}>
-        <h1>Gestión de contenido</h1>
+      <div className="page-wrap">
+        <AdminNav />
+        <div className="admin-content">
 
-        {/* CREATE MODULE */}
+          <h1 className="heading-1 fade-up" style={{ marginBottom: "40px" }}>Gestión de contenido</h1>
 
-        <h2 style={{ marginTop: "40px" }}>Crear módulo</h2>
+          <div className="grid-2" style={{ gap: "32px", alignItems: "start" }}>
 
-        <input
-          placeholder="Nombre del módulo"
-          value={moduleTitle}
-          onChange={e => setModuleTitle(e.target.value)}
-          style={inputStyle}
-        />
-        <input
-          type="number"
-          placeholder="Orden del módulo"
-          value={moduleOrder}
-          onChange={e => setModuleOrder(Number(e.target.value))}
-          style={inputStyle}
-        />
-        <input
-          placeholder="Link evaluación (Google Forms)"
-          value={moduleFormLink}
-          onChange={e => setModuleFormLink(e.target.value)}
-          style={inputStyle}
-        />
+            {/* CREATE MODULE */}
+            <div className="card fade-up-1" style={{ padding: "28px" }}>
+              <h2 className="heading-3" style={{ marginBottom: "4px" }}>Nuevo módulo</h2>
+              <p className="body-sm" style={{ marginBottom: "20px" }}>Agrega un módulo al programa</p>
 
-        <Message message={moduleMessage} />
+              <div className="form-group" style={{ marginTop: 0 }}>
+                <label className="form-label">Nombre del módulo *</label>
+                <input className="input" placeholder="Ej: Fundamentos del biochar"
+                  value={moduleTitle} onChange={e => setModuleTitle(e.target.value)} />
+              </div>
+              <div className="form-group">
+                <label className="form-label">Orden</label>
+                <input className="input" type="number" placeholder="1"
+                  value={moduleOrder} onChange={e => setModuleOrder(Number(e.target.value))} />
+              </div>
+              <div className="form-group">
+                <label className="form-label">Link de evaluación (Google Forms)</label>
+                <input className="input" placeholder="https://forms.google.com/..."
+                  value={moduleFormLink} onChange={e => setModuleFormLink(e.target.value)} />
+              </div>
 
-        <button onClick={createModule} style={{ ...btn(colors.green), marginTop: "10px" }}>
-          Crear módulo
-        </button>
+              {moduleMsg && (
+                <p className={moduleMsg.ok ? "msg-success" : "msg-error"}>{moduleMsg.text}</p>
+              )}
 
-        {/* CREATE SESSION */}
-
-        <h2 style={{ marginTop: "50px" }}>Crear sesión</h2>
-
-        <input
-          placeholder="Título sesión"
-          value={sessionTitle}
-          onChange={e => setSessionTitle(e.target.value)}
-          style={inputStyle}
-        />
-        <input
-          placeholder="Link sesión (video)"
-          value={sessionLink}
-          onChange={e => setSessionLink(e.target.value)}
-          style={inputStyle}
-        />
-        <input
-          placeholder="Material adicional"
-          value={sessionMaterial}
-          onChange={e => setSessionMaterial(e.target.value)}
-          style={inputStyle}
-        />
-
-        <select
-          value={selectedModule}
-          onChange={e => setSelectedModule(e.target.value)}
-          style={{ ...inputStyle, marginTop: "10px" }}
-        >
-          <option value="">Seleccionar módulo</option>
-          {modules.map(m => (
-            <option key={m.id} value={m.id}>{m.title}</option>
-          ))}
-        </select>
-
-        <Message message={sessionMessage} />
-
-        <button onClick={createSession} style={{ ...btn(colors.yellow), marginTop: "10px", color: "#111" }}>
-          Crear sesión
-        </button>
-
-        {/* MODULE LIST */}
-
-        <h2 style={{ marginTop: "50px" }}>Módulos existentes</h2>
-
-        {modules.map(module => {
-          const moduleSessions = sessions.filter(s => s.moduleId === module.id);
-          return (
-            <div
-              key={module.id}
-              style={{
-                border: `1px solid ${colors.border}`,
-                padding: "15px",
-                borderRadius: "8px",
-                marginTop: "10px",
-              }}
-            >
-              <h3>{module.title}</h3>
-              <p style={{ color: colors.textMuted }}>Orden: {module.order}</p>
-              <p style={{ color: colors.textMuted }}>{moduleSessions.length} sesiones</p>
+              <button className="btn btn-primary btn-full" style={{ marginTop: "24px" }} onClick={createModule}>
+                Crear módulo
+              </button>
             </div>
-          );
-        })}
+
+            {/* CREATE SESSION */}
+            <div className="card fade-up-2" style={{ padding: "28px" }}>
+              <h2 className="heading-3" style={{ marginBottom: "4px" }}>Nueva sesión</h2>
+              <p className="body-sm" style={{ marginBottom: "20px" }}>Agrega una sesión a un módulo</p>
+
+              <div className="form-group" style={{ marginTop: 0 }}>
+                <label className="form-label">Título de la sesión *</label>
+                <input className="input" placeholder="Ej: Introducción al biochar"
+                  value={sessionTitle} onChange={e => setSessionTitle(e.target.value)} />
+              </div>
+              <div className="form-group">
+                <label className="form-label">Link del video</label>
+                <input className="input" placeholder="https://youtube.com/..."
+                  value={sessionLink} onChange={e => setSessionLink(e.target.value)} />
+              </div>
+              <div className="form-group">
+                <label className="form-label">Material adicional (URL)</label>
+                <input className="input" placeholder="https://drive.google.com/..."
+                  value={sessionMaterial} onChange={e => setSessionMaterial(e.target.value)} />
+              </div>
+              <div className="form-group">
+                <label className="form-label">Módulo *</label>
+                <select className="input" value={selectedModule} onChange={e => setSelectedModule(e.target.value)}>
+                  <option value="">Seleccionar módulo</option>
+                  {modules.map(m => (
+                    <option key={m.id} value={m.id}>{m.title}</option>
+                  ))}
+                </select>
+              </div>
+
+              {sessionMsg && (
+                <p className={sessionMsg.ok ? "msg-success" : "msg-error"}>{sessionMsg.text}</p>
+              )}
+
+              <button className="btn btn-amber btn-full" style={{ marginTop: "24px" }} onClick={createSession}>
+                Crear sesión
+              </button>
+            </div>
+          </div>
+
+          {/* MODULE LIST */}
+          <h2 className="heading-2" style={{ marginTop: "48px", marginBottom: "16px" }}>
+            Módulos existentes
+          </h2>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+            {modules.map(module => {
+              const count = sessions.filter(s => s.moduleId === module.id).length;
+              return (
+                <div key={module.id} className="card" style={{ display: "flex", alignItems: "center", gap: "16px", padding: "16px 20px" }}>
+                  <div className="mod-num">{String(module.order).padStart(2, "0")}</div>
+                  <div style={{ flex: 1 }}>
+                    <p style={{ fontWeight: 500, fontSize: "15px", marginBottom: "2px" }}>{module.title}</p>
+                    <p className="body-sm">{count} sesiones</p>
+                  </div>
+                  <span className="badge badge-muted">Orden {module.order}</span>
+                </div>
+              );
+            })}
+          </div>
+
+        </div>
       </div>
     </AdminGuard>
   );

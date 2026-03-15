@@ -1,69 +1,81 @@
-import type { CSSProperties } from "react";
+// Design tokens — mirror of CSS variables in globals.css
+// Use CSS variables (var(--name)) in inline styles when possible.
+// Use these constants when you need to compute values in JS.
 
 export const colors = {
-  bg: "#111",
-  bgCard: "#1a1a1a",
-  border: "#333",
-  borderLight: "#444",
-  text: "#fff",
-  textMuted: "#aaa",
-  green: "#4CAF50",
-  greenDark: "#2E7D32",
-  yellow: "#FFC107",
-  blue: "#2196F3",
-  orange: "#FF9800",
-  gray: "#555",
+  bgDeep:    "#080808",
+  bg:        "#111111",
+  bgCard:    "#181818",
+  bgElevated:"#222222",
+
+  greenDark:   "#2d6a4f",
+  greenMid:    "#40916c",
+  greenAccent: "#52b788",
+  greenLight:  "#95d5b2",
+  greenGlow:   "rgba(82,183,136,0.12)",
+  greenBorder: "rgba(82,183,136,0.25)",
+
+  amber:     "#e9c46a",
+  amberWarm: "#f4a261",
+
+  textPrimary:   "#f0efed",
+  textSecondary: "#9a9a9a",
+  textMuted:     "#5a5a5a",
+
+  border:      "#252525",
+  borderLight: "#2e2e2e",
 };
 
-export const page: CSSProperties = {
+// Keep these for legacy/transition usage
+export const page = {
   background: colors.bg,
-  minHeight: "100vh",
-  color: colors.text,
-  padding: "40px",
-  fontFamily: "Arial",
-};
+  minHeight:  "100vh",
+  color:      colors.textPrimary,
+  padding:    "40px 24px",
+  fontFamily: "'Inter', sans-serif",
+} as const;
 
-export const card: CSSProperties = {
-  border: `1px solid ${colors.border}`,
+export const card = {
+  background:   colors.bgCard,
+  border:       `1px solid ${colors.border}`,
+  borderRadius: "12px",
+  padding:      "20px",
+} as const;
+
+export const inputStyle = {
+  width:        "100%",
+  background:   colors.bgElevated,
+  border:       `1px solid ${colors.border}`,
+  color:        colors.textPrimary,
+  padding:      "13px 16px",
   borderRadius: "8px",
-  padding: "15px",
-  marginTop: "15px",
+  fontFamily:   "'Inter', sans-serif",
+  fontSize:     "15px",
+  outline:      "none",
+  display:      "block",
+  boxSizing:    "border-box" as const,
+  minHeight:    "48px",
 };
 
-export const inputStyle: CSSProperties = {
-  display: "block",
-  marginTop: "10px",
-  padding: "10px",
-  background: "#222",
-  border: `1px solid ${colors.border}`,
-  color: "white",
-  borderRadius: "4px",
-  width: "100%",
-  boxSizing: "border-box",
-};
+export const btn = (bg: string, color = "#fff") => ({
+  border:       "none",
+  padding:      "13px 24px",
+  borderRadius: "8px",
+  cursor:       "pointer",
+  color,
+  background:   bg,
+  fontFamily:   "'Inter', sans-serif",
+  fontSize:     "15px",
+  fontWeight:   500,
+  minHeight:    "48px",
+  display:      "inline-flex",
+  alignItems:   "center",
+  justifyContent: "center",
+  gap:          "8px",
+  transition:   "all 0.2s",
+} as const);
 
-export const btn = (bg: string): CSSProperties => ({
-  border: "none",
-  padding: "8px 14px",
-  borderRadius: "5px",
-  cursor: "pointer",
-  color: "white",
-  background: bg,
-});
-
-export const tableHeader: CSSProperties = {
-  borderBottom: `1px solid ${colors.borderLight}`,
-};
-
-export const tableRow: CSSProperties = {
-  borderBottom: `1px solid ${colors.border}`,
-};
-
-export const th: CSSProperties = {
-  textAlign: "left",
-  padding: "10px",
-};
-
-export const td: CSSProperties = {
-  padding: "10px",
-};
+export const tableHeader = { borderBottom: `1px solid ${colors.border}` } as const;
+export const tableRow    = { borderBottom: `1px solid rgba(255,255,255,0.03)` } as const;
+export const th = { textAlign: "left" as const, padding: "10px 16px", fontSize: "11px", fontWeight: 700 as const, textTransform: "uppercase" as const, letterSpacing: "0.1em", color: colors.textMuted, whiteSpace: "nowrap" as const };
+export const td = { padding: "14px 16px", color: colors.textSecondary, verticalAlign: "middle" as const };

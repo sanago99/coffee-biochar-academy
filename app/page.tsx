@@ -1,131 +1,171 @@
 import Link from "next/link";
 
+const curriculum = [
+  { n: "01", title: "Habilidades del extensionista rural" },
+  { n: "02", title: "Fundamentos del proyecto y carbono" },
+  { n: "03", title: "Ciencia y tecnología del biochar" },
+  { n: "04", title: "Bases agronómicas del suelo" },
+  { n: "05", title: "Beneficios agronómicos del biochar" },
+  { n: "06", title: "Disciplina operativa y dMRV" },
+];
+
 export default function Home() {
   return (
-    <main
-      style={{
-        minHeight: "100vh",
-        background: "#0f0f0f",
-        color: "white",
-        fontFamily: "Arial",
-      }}
-    >
-      {/* HERO */}
+    <div className="page-wrap" style={{ background: "var(--bg-deep)" }}>
 
+      {/* NAV */}
+      <nav className="topnav">
+        <span className="nav-logo">Coffee <span>Biochar</span></span>
+        <div style={{ display: "flex", gap: "10px" }}>
+          <Link href="/login">
+            <button className="btn btn-ghost btn-sm">Iniciar sesión</button>
+          </Link>
+          <Link href="/register">
+            <button className="btn btn-primary btn-sm">Registrarse</button>
+          </Link>
+        </div>
+      </nav>
+
+      {/* HERO */}
       <section
         style={{
+          position: "relative",
           textAlign: "center",
-          padding: "120px 20px",
+          overflow: "hidden",
+          padding: "100px 20px 96px",
         }}
       >
-        <h1 style={{ fontSize: "48px", marginBottom: "10px" }}>
-          Coffee Biochar Academy
-        </h1>
+        <div className="hero-glow" />
 
-        <p style={{ fontSize: "20px", color: "#bbb", marginBottom: "40px" }}>
-          Formación de extensionistas del proyecto Coffee Biochar
+        <p className="eyebrow fade-up" style={{ marginBottom: "20px" }}>
+          Programa de formación · Colombia
         </p>
 
-        <div style={{ display: "flex", justifyContent: "center", gap: "20px" }}>
-          
+        <h1
+          className="display fade-up-1"
+          style={{ maxWidth: "680px", margin: "0 auto" }}
+        >
+          Coffee Biochar<br />
+          <span style={{ color: "var(--green-accent)" }}>Academy</span>
+        </h1>
+
+        <p
+          className="body-lg fade-up-2"
+          style={{ maxWidth: "500px", margin: "24px auto 0" }}
+        >
+          Formación certificada para extensionistas del proyecto Coffee Biochar
+          en Colombia. Transforma el campo con ciencia y sostenibilidad.
+        </p>
+
+        <div
+          className="fade-up-3"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            gap: "12px",
+            marginTop: "40px",
+            flexWrap: "wrap",
+          }}
+        >
           <Link href="/login">
-            <button
-              style={{
-                padding: "14px 28px",
-                fontSize: "16px",
-                background: "#2E7D32",
-                border: "none",
-                borderRadius: "6px",
-                color: "white",
-                cursor: "pointer",
-              }}
-            >
+            <button className="btn btn-primary" style={{ minWidth: "160px" }}>
               Iniciar sesión
             </button>
           </Link>
-
           <Link href="/register">
-            <button
-              style={{
-                padding: "14px 28px",
-                fontSize: "16px",
-                background: "#444",
-                border: "none",
-                borderRadius: "6px",
-                color: "white",
-                cursor: "pointer",
-              }}
-            >
-              Registrarse
+            <button className="btn btn-outline" style={{ minWidth: "160px" }}>
+              Crear cuenta
             </button>
           </Link>
-
         </div>
       </section>
 
       {/* STATS */}
-
-      <section
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          gap: "80px",
-          padding: "60px 20px",
-          borderTop: "1px solid #222",
-          borderBottom: "1px solid #222",
-        }}
-      >
-        <div>
-          <h2 style={{ fontSize: "32px" }}>16</h2>
-          <p style={{ color: "#aaa" }}>Semanas</p>
+      <div style={{ borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)" }}>
+        <div className="container">
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(3,1fr)",
+              background: "var(--border)",
+              gap: "1px",
+            }}
+          >
+            {[
+              { n: "16", l: "Semanas" },
+              { n: "34", l: "Horas de formación" },
+              { n: "6",  l: "Módulos" },
+            ].map(({ n, l }) => (
+              <div
+                key={l}
+                className="stat-block"
+                style={{ background: "var(--bg-deep)", padding: "56px 20px" }}
+              >
+                <div className="stat-num">{n}</div>
+                <div className="stat-lbl">{l}</div>
+              </div>
+            ))}
+          </div>
         </div>
+      </div>
 
-        <div>
-          <h2 style={{ fontSize: "32px" }}>34</h2>
-          <p style={{ color: "#aaa" }}>Horas de formación</p>
+      {/* CURRICULUM */}
+      <section style={{ padding: "80px 0" }}>
+        <div className="container-md">
+          <div className="section-title">
+            <p className="eyebrow" style={{ marginBottom: "14px" }}>Curriculum</p>
+            <h2 className="heading-1">Programa de formación</h2>
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+            {curriculum.map((m, i) => (
+              <div
+                key={m.n}
+                className="card card-hover"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "16px",
+                  padding: "18px 20px",
+                  animationDelay: `${i * 0.07}s`,
+                }}
+              >
+                <div className="mod-num">{m.n}</div>
+                <span style={{ fontSize: "15px", color: "var(--text-secondary)", fontWeight: 400 }}>
+                  {m.title}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ textAlign: "center", marginTop: "48px" }}>
+            <Link href="/register">
+              <button className="btn btn-primary" style={{ minWidth: "200px" }}>
+                Comenzar ahora
+              </button>
+            </Link>
+          </div>
         </div>
-
-        <div>
-          <h2 style={{ fontSize: "32px" }}>6</h2>
-          <p style={{ color: "#aaa" }}>Módulos</p>
-        </div>
-      </section>
-
-      {/* PROGRAM */}
-
-      <section
-        style={{
-          padding: "80px 20px",
-          maxWidth: "900px",
-          margin: "auto",
-        }}
-      >
-        <h2 style={{ textAlign: "center", marginBottom: "40px" }}>
-          Programa de formación
-        </h2>
-
-        <ul style={{ lineHeight: "2", color: "#ccc" }}>
-          <li>M1 — Habilidades del extensionista rural</li>
-          <li>M2 — Fundamentos del proyecto y carbono</li>
-          <li>M3 — Ciencia y tecnología del biochar</li>
-          <li>M4 — Bases agronómicas del suelo</li>
-          <li>M5 — Beneficios agronómicos del biochar</li>
-          <li>M6 — Disciplina operativa y dMRV</li>
-        </ul>
       </section>
 
       {/* FOOTER */}
-
       <footer
         style={{
-          textAlign: "center",
-          padding: "40px",
-          borderTop: "1px solid #222",
-          color: "#777",
+          borderTop: "1px solid var(--border)",
+          padding: "28px 24px",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: "12px",
         }}
       >
-        Coffee Biochar Academy — Biodiversal
+        <span className="nav-logo">Coffee <span>Biochar</span></span>
+        <span style={{ fontSize: "13px", color: "var(--text-muted)" }}>
+          Biodiversal · {new Date().getFullYear()}
+        </span>
       </footer>
-    </main>
+
+    </div>
   );
 }
