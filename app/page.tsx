@@ -1,12 +1,49 @@
 import Link from "next/link";
 
 const curriculum = [
-  { n: "01", title: "Habilidades del extensionista rural",     desc: "Comunicación, liderazgo y trabajo comunitario en el campo." },
-  { n: "02", title: "Fundamentos del proyecto y carbono",      desc: "Créditos de carbono, mercados voluntarios y el rol del biochar." },
-  { n: "03", title: "Ciencia y tecnología del biochar",        desc: "Pirólisis, tipos de biomasa y control del proceso de producción." },
-  { n: "04", title: "Bases agronómicas del suelo",             desc: "Estructura del suelo, microbioma y nutrición de cultivos." },
-  { n: "05", title: "Beneficios agronómicos del biochar",      desc: "Retención de agua, fertilidad y aplicación práctica." },
-  { n: "06", title: "Disciplina operativa y dMRV",             desc: "Registro digital, monitoreo y reporte de impacto." },
+  {
+    n: "01",
+    title: "Habilidades del extensionista rural",
+    weeks: "Semanas 1–2 · 4 horas · 2 sesiones",
+    desc: "Comunicación efectiva, liderazgo en territorio y manejo de resistencia al cambio. Aprende a construir confianza con los productores y a mantener la disciplina profesional que el proyecto exige.",
+  },
+  {
+    n: "02",
+    title: "Fundamentos del proyecto y carbono",
+    weeks: "Semanas 3–5 · 6 horas · 3 sesiones",
+    desc: "Ciclo del carbono, mercados voluntarios y el estándar Global Artisan C-Sink. Entiende el por qué profundo del proyecto antes de operar cualquier horno Kon-Tiki.",
+  },
+  {
+    n: "03",
+    title: "Ciencia y tecnología del biochar",
+    weeks: "Semanas 6–8 · 6 horas · 3 sesiones",
+    desc: "Pirólisis, variables críticas del proceso Kon-Tiki y caracterización del biochar. Conoce la fracción PAC, la ratio H/C y los 5 parámetros que garantizan la calidad del crédito.",
+  },
+  {
+    n: "04",
+    title: "Bases agronómicas del suelo",
+    weeks: "Semanas 9–11 · 6 horas · 3 sesiones",
+    desc: "Física, química y biología del suelo cafetero. Aprende a leer un análisis de laboratorio, entender el SOC y diagnosticar el estado del suelo en campo sin equipo.",
+  },
+  {
+    n: "05",
+    title: "Beneficios agronómicos del biochar",
+    weeks: "Semanas 12–14 · 6 horas · 3 sesiones",
+    desc: "+45% nutrientes disponibles, +15% retención de agua, +39% carbono orgánico en suelo. Defiende con autoridad técnica el impacto del biochar y aplícalo correctamente en campo.",
+  },
+  {
+    n: "06",
+    title: "Disciplina operativa y dMRV",
+    weeks: "Semanas 15–16 · 6 horas · 2 sesiones + simulacro",
+    desc: "Flujo end-to-end del proyecto, app Planboo y responsabilidad legal del dato. Un dato incorrecto compromete el crédito de todo el clúster — esta sesión elimina ese riesgo.",
+  },
+];
+
+const benefits = [
+  { stat: "+45%", label: "Nutrientes disponibles en suelo", color: "var(--green)" },
+  { stat: "+15%", label: "Retención de agua en la planta", color: "var(--amber)" },
+  { stat: "+39%", label: "Carbono orgánico en suelo (SOC)", color: "var(--green)" },
+  { stat: "−29%", label: "Absorción de metales pesados", color: "var(--amber)" },
 ];
 
 export default function Home() {
@@ -20,10 +57,10 @@ export default function Home() {
         </div>
         <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
           <Link href="/login">
-            <button className="btn btn-ghost btn-sm">Iniciar sesión</button>
+            <button className="btn btn-ghost btn-sm" style={{ cursor: "pointer" }}>Iniciar sesión</button>
           </Link>
           <Link href="/register">
-            <button className="btn btn-primary btn-sm">Registrarse</button>
+            <button className="btn btn-primary btn-sm" style={{ cursor: "pointer" }}>Registrarse</button>
           </Link>
         </div>
       </nav>
@@ -40,40 +77,48 @@ export default function Home() {
         <div className="hero-content">
           <div className="container">
 
-            {/* Logo grande */}
-            <div className="fade-up" style={{ marginBottom: "32px" }}>
+            <div className="fade-up" style={{ marginBottom: "28px" }}>
               <img
                 src="/logo.png"
                 alt="Coffee Biochar — A Carbon Removal Program"
-                style={{ height: "130px", width: "auto", filter: "drop-shadow(0 4px 24px rgba(245,166,35,0.3))" }}
+                style={{ height: "120px", width: "auto", filter: "drop-shadow(0 4px 28px rgba(245,166,35,0.35))" }}
               />
             </div>
 
-            <p className="eyebrow fade-up-1" style={{ marginBottom: "16px" }}>
+            <p className="eyebrow fade-up-1" style={{ marginBottom: "14px" }}>
               Plataforma de formación · Colombia
             </p>
 
-            <h1 className="display fade-up-2" style={{ maxWidth: "680px", marginBottom: "20px" }}>
+            <h1 className="display fade-up-2" style={{ maxWidth: "700px", marginBottom: "16px" }}>
               Academy
             </h1>
 
+            <p className="body-lg fade-up-3" style={{ maxWidth: "560px", marginBottom: "12px" }}>
+              Formación certificada para extensionistas rurales del proyecto Coffee Biochar.
+            </p>
+
             <p
-              className="body-lg fade-up-3"
-              style={{ maxWidth: "520px", marginBottom: "40px" }}
+              className="fade-up-3"
+              style={{
+                fontSize: "14px",
+                color: "var(--amber)",
+                fontStyle: "italic",
+                marginBottom: "36px",
+                maxWidth: "520px",
+                opacity: 0.9,
+              }}
             >
-              Formación certificada para extensionistas rurales del proyecto
-              Coffee Biochar. Transforma el campo colombiano con ciencia
-              y agricultura regenerativa.
+              "Transformando la Zoca en Biochar — Transformando extensionistas en líderes de territorio"
             </p>
 
             <div className="fade-up-4" style={{ display: "flex", gap: "14px", flexWrap: "wrap" }}>
               <Link href="/login">
-                <button className="btn btn-primary" style={{ minWidth: "170px" }}>
+                <button className="btn btn-primary" style={{ minWidth: "170px", cursor: "pointer" }}>
                   Iniciar sesión
                 </button>
               </Link>
               <Link href="/register">
-                <button className="btn btn-outline" style={{ minWidth: "170px" }}>
+                <button className="btn btn-outline" style={{ minWidth: "170px", cursor: "pointer" }}>
                   Crear cuenta
                 </button>
               </Link>
@@ -89,26 +134,28 @@ export default function Home() {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(3,1fr)",
+              gridTemplateColumns: "repeat(4,1fr)",
               background: "var(--border)",
               gap: "1px",
             }}
           >
+            <style>{`@media(max-width:640px){ .stats-grid { grid-template-columns:repeat(2,1fr) !important; } }`}</style>
             {[
-              { n: "16", l: "Semanas de programa" },
-              { n: "34", l: "Horas de formación" },
-              { n: "6",  l: "Módulos certificados" },
+              { n: "16",  l: "Semanas de programa" },
+              { n: "34h", l: "Formación sincrónica" },
+              { n: "6",   l: "Módulos certificados" },
+              { n: "70",  l: "Puntos para aprobar" },
             ].map(({ n, l }) => (
               <div
                 key={l}
                 style={{
                   background: "var(--bg-card)",
                   textAlign: "center",
-                  padding: "56px 20px",
+                  padding: "48px 16px",
                 }}
               >
                 <div className="stat-num">{n}</div>
-                <div className="stat-lbl" style={{ marginTop: "10px" }}>{l}</div>
+                <div className="stat-lbl" style={{ marginTop: "8px" }}>{l}</div>
               </div>
             ))}
           </div>
@@ -128,7 +175,6 @@ export default function Home() {
               alignItems: "center",
             }}
           >
-            {/* Text */}
             <div>
               <div className="amber-line" />
               <p className="eyebrow" style={{ marginBottom: "12px" }}>El proyecto</p>
@@ -136,28 +182,33 @@ export default function Home() {
                 ¿Qué es<br />Coffee Biochar?
               </h2>
               <p className="body-lg" style={{ marginBottom: "16px" }}>
-                Coffee Biochar es un programa de remoción de carbono que transforma
-                residuos de biomasa de fincas cafeteras en biochar — un carbón vegetal
-                estable que mejora el suelo y captura CO₂ por siglos.
+                Coffee Biochar es un programa de remoción de carbono que transforma la biomasa
+                de la <strong style={{ color: "var(--text-primary)" }}>zoca del café</strong> en
+                biochar usando hornos de pirólisis Kon-Tiki. El biochar producido se aplica al
+                suelo y genera créditos verificados bajo el estándar
+                <strong style={{ color: "var(--text-primary)" }}> Global Artisan C-Sink</strong>.
               </p>
-              <p className="body-lg" style={{ marginBottom: "32px" }}>
-                Los extensionistas son el corazón del proyecto. Esta academia los
-                forma para producir, aplicar y registrar el biochar con precisión técnica
-                y científica en campo.
+              <p className="body-lg" style={{ marginBottom: "28px" }}>
+                Operado por <strong style={{ color: "var(--text-primary)" }}>Biodiversal SAS BIC</strong> en
+                alianza con Cirkular Agro, el proyecto trabaja con productores cafeteros en
+                Ataco (Tolima) y Huila. Los extensionistas son el corazón del modelo.
               </p>
-              <div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
+              <div style={{ display: "flex", gap: "24px", flexWrap: "wrap" }}>
                 <div>
-                  <p style={{ fontSize: "28px", fontFamily: "'Playfair Display',serif", fontWeight: 700, color: "var(--amber)" }}>CO₂</p>
-                  <p className="caption">Remoción verificada</p>
+                  <p style={{ fontSize: "22px", fontFamily: "'Playfair Display',serif", fontWeight: 700, color: "var(--amber)" }}>2.1 tCO₂e</p>
+                  <p className="caption">por tonelada de biochar</p>
                 </div>
                 <div>
-                  <p style={{ fontSize: "28px", fontFamily: "'Playfair Display',serif", fontWeight: 700, color: "var(--green)" }}>dMRV</p>
-                  <p className="caption">Monitoreo digital</p>
+                  <p style={{ fontSize: "22px", fontFamily: "'Playfair Display',serif", fontWeight: 700, color: "var(--green)" }}>1000+ años</p>
+                  <p className="caption">Fracción PAC en suelo</p>
+                </div>
+                <div>
+                  <p style={{ fontSize: "22px", fontFamily: "'Playfair Display',serif", fontWeight: 700, color: "var(--text-primary)" }}>dMRV</p>
+                  <p className="caption">Monitoreo digital Planboo</p>
                 </div>
               </div>
             </div>
 
-            {/* Photo */}
             <div
               style={{
                 borderRadius: "var(--radius-lg)",
@@ -179,11 +230,35 @@ export default function Home() {
                 style={{
                   position: "absolute", bottom: 0, left: 0, right: 0,
                   height: "40%",
-                  background: "linear-gradient(transparent, rgba(12,10,7,0.7))",
+                  background: "linear-gradient(transparent, rgba(12,10,7,0.75))",
                 }}
               />
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* ── BIOCHAR BENEFITS ─────────────────────────── */}
+      <section style={{ padding: "0 0 88px" }}>
+        <div className="container">
+          <div style={{ textAlign: "center", marginBottom: "48px" }}>
+            <div className="amber-line" style={{ margin: "0 auto 16px" }} />
+            <p className="eyebrow" style={{ marginBottom: "10px" }}>Evidencia científica</p>
+            <h2 className="heading-1">Lo que hace el biochar<br />en el suelo cafetero</h2>
+          </div>
+          <div className="grid-4">
+            {benefits.map(b => (
+              <div key={b.label} className="card card-hover" style={{ textAlign: "center", padding: "28px 20px" }}>
+                <p style={{ fontFamily: "'Playfair Display',serif", fontSize: "32px", fontWeight: 700, color: b.color, lineHeight: 1, marginBottom: "10px" }}>
+                  {b.stat}
+                </p>
+                <p className="body-sm" style={{ fontSize: "13px", lineHeight: 1.5 }}>{b.label}</p>
+              </div>
+            ))}
+          </div>
+          <p style={{ textAlign: "center", marginTop: "20px", fontSize: "12px", color: "var(--text-muted)" }}>
+            Fuente: Lehmann &amp; Joseph 2009; Singh et al. 2023 · Valores registrados en suelos cafeteros colombianos
+          </p>
         </div>
       </section>
 
@@ -194,23 +269,23 @@ export default function Home() {
             <style>{`@media(max-width:768px){ .photo-grid-responsive { grid-template-columns:1fr 1fr !important; } .photo-grid-responsive .span-col { grid-row:auto !important; } }`}</style>
             <div className="photo-card" style={{ aspectRatio: "16/10", gridRow: "span 2" }}>
               <img src="/fotos/training.jpg" alt="Sesión de formación en campo" />
-              <div className="photo-card-label">Formación en campo</div>
+              <div className="photo-card-label">Formación en campo · Tolima</div>
             </div>
             <div className="photo-card" style={{ aspectRatio: "1/1" }}>
               <img src="/fotos/coffee-flower.jpg" alt="Flor de café" />
               <div className="photo-card-label">Café colombiano</div>
             </div>
             <div className="photo-card" style={{ aspectRatio: "1/1" }}>
-              <img src="/fotos/kiln.jpg" alt="Horno de biochar" />
-              <div className="photo-card-label">Producción de biochar</div>
+              <img src="/fotos/kiln.jpg" alt="Horno Kon-Tiki de biochar" />
+              <div className="photo-card-label">Horno Kon-Tiki</div>
             </div>
             <div className="photo-card" style={{ aspectRatio: "1/1" }}>
-              <img src="/fotos/phone.jpg" alt="Extensionista usando la app" />
-              <div className="photo-card-label">Registro digital</div>
+              <img src="/fotos/phone.jpg" alt="Extensionista usando la app Planboo" />
+              <div className="photo-card-label">App Planboo · dMRV</div>
             </div>
             <div className="photo-card" style={{ aspectRatio: "1/1" }}>
               <img src="/fotos/session.jpg" alt="Sesión de extensionistas" />
-              <div className="photo-card-label">Trabajo comunitario</div>
+              <div className="photo-card-label">Formación sincrónica</div>
             </div>
           </div>
         </div>
@@ -221,8 +296,11 @@ export default function Home() {
         <div className="container-md">
           <div style={{ textAlign: "center", marginBottom: "56px" }}>
             <div className="amber-line" style={{ margin: "0 auto 16px" }} />
-            <p className="eyebrow" style={{ marginBottom: "12px" }}>Curriculum</p>
-            <h2 className="heading-1">Programa de formación</h2>
+            <p className="eyebrow" style={{ marginBottom: "12px" }}>Programa de formación</p>
+            <h2 className="heading-1">16 semanas · 6 módulos · 34 horas</h2>
+            <p className="body-lg" style={{ marginTop: "12px", maxWidth: "500px", margin: "12px auto 0" }}>
+              Evaluación de 10 preguntas al final de cada módulo. Nota mínima de aprobación: 70 puntos.
+            </p>
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
@@ -234,16 +312,19 @@ export default function Home() {
                   display: "flex",
                   alignItems: "flex-start",
                   gap: "18px",
-                  padding: "20px 22px",
+                  padding: "22px",
                   animationDelay: `${i * 0.07}s`,
                 }}
               >
-                <div className="mod-num" style={{ marginTop: "2px" }}>{m.n}</div>
+                <div className="mod-num" style={{ marginTop: "2px", flexShrink: 0 }}>{m.n}</div>
                 <div>
-                  <p style={{ fontWeight: 600, fontSize: "15px", marginBottom: "4px", color: "var(--text-primary)" }}>
+                  <p style={{ fontWeight: 600, fontSize: "16px", marginBottom: "4px", color: "var(--text-primary)", fontFamily: "'Playfair Display',serif" }}>
                     {m.title}
                   </p>
-                  <p className="body-sm">{m.desc}</p>
+                  <p style={{ fontSize: "11px", color: "var(--amber)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "6px" }}>
+                    {m.weeks}
+                  </p>
+                  <p className="body-sm" style={{ lineHeight: 1.6 }}>{m.desc}</p>
                 </div>
               </div>
             ))}
@@ -251,7 +332,7 @@ export default function Home() {
 
           <div style={{ textAlign: "center", marginTop: "48px" }}>
             <Link href="/register">
-              <button className="btn btn-primary" style={{ minWidth: "220px" }}>
+              <button className="btn btn-primary" style={{ minWidth: "220px", cursor: "pointer" }}>
                 Comenzar formación
               </button>
             </Link>
@@ -266,33 +347,47 @@ export default function Home() {
           <div style={{ textAlign: "center", padding: "0 24px" }}>
             <p className="eyebrow" style={{ marginBottom: "16px" }}>Nuestra comunidad</p>
             <h2 className="heading-1" style={{ maxWidth: "560px" }}>
-              Más de 50 extensionistas<br />transformando el campo
+              Extensionistas transformando<br />el campo colombiano
             </h2>
-            <p className="body-lg" style={{ marginTop: "16px", maxWidth: "440px", margin: "16px auto 0" }}>
-              Campesinos cafeteros de diferentes municipios de Colombia
-              certificados como extensionistas de carbono.
+            <p className="body-lg" style={{ marginTop: "16px", maxWidth: "480px", margin: "16px auto 0" }}>
+              Campesinos cafeteros de Ataco y Huila certificados como extensionistas de carbono.
+              Cuando los KPIs se cumplen, la tasa de financiamiento baja — y el productor gana más.
             </p>
           </div>
         </div>
       </div>
 
+      {/* ── PARTNERS ─────────────────────────────────── */}
+      <section style={{ padding: "64px 0", borderBottom: "1px solid var(--border)" }}>
+        <div className="container" style={{ textAlign: "center" }}>
+          <p className="eyebrow" style={{ marginBottom: "32px" }}>Aliados del proyecto</p>
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "48px", flexWrap: "wrap", opacity: 0.6 }}>
+            <img src="/logo.png" alt="Coffee Biochar" style={{ height: "44px", filter: "brightness(0.9)" }} />
+            <img src="/brand/biodiversal.png" alt="Biodiversal" style={{ height: "28px", filter: "brightness(0) invert(1)" }} />
+            <p style={{ fontSize: "14px", color: "var(--text-muted)", fontWeight: 600 }}>CIRKULAR AGRO</p>
+            <p style={{ fontSize: "14px", color: "var(--text-muted)", fontWeight: 600 }}>INCOFIN</p>
+            <p style={{ fontSize: "14px", color: "var(--text-muted)", fontWeight: 600 }}>PLANBOO</p>
+          </div>
+        </div>
+      </section>
+
       {/* ── FINAL CTA ────────────────────────────────── */}
       <section className="section">
         <div className="container" style={{ textAlign: "center" }}>
           <div className="amber-line" style={{ margin: "0 auto 20px" }} />
-          <h2 className="heading-1" style={{ maxWidth: "480px", margin: "0 auto 20px" }}>
-            ¿Listo para comenzar tu formación?
+          <h2 className="heading-1" style={{ maxWidth: "480px", margin: "0 auto 16px" }}>
+            ¿Listo para comenzar<br />tu formación?
           </h2>
-          <p className="body-lg" style={{ maxWidth: "400px", margin: "0 auto 36px" }}>
-            Accede al programa, completa los módulos y obtén tu certificado
-            como extensionista Coffee Biochar.
+          <p className="body-lg" style={{ maxWidth: "420px", margin: "0 auto 36px" }}>
+            Accede al programa, completa los 6 módulos y obtén tu certificado como
+            Extensionista Certificado Coffee Biochar.
           </p>
           <div style={{ display: "flex", gap: "14px", justifyContent: "center", flexWrap: "wrap" }}>
             <Link href="/register">
-              <button className="btn btn-primary" style={{ minWidth: "180px" }}>Crear cuenta</button>
+              <button className="btn btn-primary" style={{ minWidth: "180px", cursor: "pointer" }}>Crear cuenta</button>
             </Link>
             <Link href="/login">
-              <button className="btn btn-outline" style={{ minWidth: "180px" }}>Iniciar sesión</button>
+              <button className="btn btn-outline" style={{ minWidth: "180px", cursor: "pointer" }}>Iniciar sesión</button>
             </Link>
           </div>
         </div>
@@ -316,10 +411,10 @@ export default function Home() {
           <img
             src="/brand/biodiversal.png"
             alt="Biodiversal"
-            style={{ height: "32px", width: "auto", filter: "brightness(0) invert(1)", opacity: 0.45 }}
+            style={{ height: "28px", width: "auto", filter: "brightness(0) invert(1)", opacity: 0.4 }}
           />
-          <span style={{ fontSize: "13px", color: "var(--text-muted)" }}>
-            Agricultura Regenerativa · Colombia · {new Date().getFullYear()}
+          <span style={{ fontSize: "12px", color: "var(--text-muted)" }}>
+            Bioimpacto · Biodiversal SAS BIC · Colombia · {new Date().getFullYear()}
           </span>
         </div>
       </footer>

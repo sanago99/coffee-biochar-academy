@@ -403,3 +403,84 @@ select.input { appearance:none; cursor:pointer; }
 .mt-md { margin-top:16px; }
 .mt-lg { margin-top:32px; }
 .mt-xl { margin-top:56px; }
+
+/* ─── Dashboard — Next Step Card ──────────────────── */
+.next-step-card {
+  background:var(--bg-card);
+  border:1px solid var(--green-border);
+  border-left:3px solid var(--green);
+  border-radius:var(--radius-md);
+  padding:18px 22px;
+  display:flex; align-items:center; justify-content:space-between;
+  gap:16px; flex-wrap:wrap;
+  box-shadow:0 2px 24px rgba(122,182,72,0.08);
+}
+
+/* ─── Dashboard — Session row ─────────────────────── */
+.session-row {
+  display:flex; align-items:center; gap:12px;
+  padding:12px 14px; border-radius:var(--radius-sm);
+  background:var(--bg-elevated);
+  transition:background .15s;
+}
+.session-row:hover { background:rgba(245,166,35,0.05); }
+.session-row-done  { background:rgba(122,182,72,0.04); }
+
+.session-check {
+  width:22px; height:22px; border-radius:50%; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  border:1.5px solid var(--border-light);
+  font-size:11px; color:var(--text-muted); transition:all .2s;
+}
+.session-check-done {
+  background:var(--green-glow);
+  border-color:var(--green-border);
+  color:var(--green);
+}
+
+/* ─── Dashboard — Module inner progress ───────────── */
+.module-progress {
+  height:3px; border-radius:2px;
+  background:rgba(255,255,255,0.06);
+  margin-top:12px; overflow:hidden;
+}
+.module-progress-fill {
+  height:100%; border-radius:2px;
+  background:linear-gradient(90deg, var(--amber-dark), var(--amber));
+  transition:width .8s cubic-bezier(.4,0,.2,1);
+}
+
+/* ─── Dashboard — Eval CTA ────────────────────────── */
+.eval-cta {
+  margin-top:12px; padding:16px 18px;
+  border-radius:var(--radius-sm);
+  background:rgba(245,166,35,0.05);
+  border:1px solid var(--amber-border);
+  display:flex; align-items:center; justify-content:space-between;
+  flex-wrap:wrap; gap:12px;
+}
+
+/* ─── Dashboard — Certificate card ────────────────── */
+.cert-card {
+  background:linear-gradient(135deg, var(--bg-card) 0%, rgba(122,182,72,0.06) 100%);
+  border:1px solid var(--green-border);
+  border-radius:var(--radius-md);
+  padding:28px; text-align:center;
+  position:relative; overflow:hidden;
+}
+.cert-card::before {
+  content:''; position:absolute; top:-40px; right:-40px;
+  width:160px; height:160px; border-radius:50%;
+  background:radial-gradient(circle, rgba(122,182,72,0.08) 0%, transparent 70%);
+  pointer-events:none;
+}
+
+/* ─── btn-amber ───────────────────────────────────── */
+.btn-amber {
+  background:rgba(245,166,35,0.12);
+  color:var(--amber); border:1px solid var(--amber-border); font-weight:600;
+}
+.btn-amber:hover:not(:disabled) {
+  background:rgba(245,166,35,0.2); border-color:var(--amber);
+  box-shadow:0 4px 20px var(--amber-glow); transform:translateY(-1px);
+}
