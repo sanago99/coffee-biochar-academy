@@ -50,6 +50,7 @@ export default function Dashboard() {
   const [certificate,  setCertificate]  = useState<{ certificateId: string } | null>(null);
   const [copied,       setCopied]       = useState(false);
   const [sessionToast, setSessionToast] = useState("");
+  const [evalOpened,   setEvalOpened]   = useState<Record<string, boolean>>({});
   const certAttempted = useRef(false);
 
   const { modules }                 = useModules();
@@ -309,10 +310,13 @@ export default function Dashboard() {
             <div>
               <p className="eyebrow" style={{ marginBottom: "4px" }}>Tu progreso</p>
               <div style={{ display: "flex", alignItems: "baseline", gap: "6px" }}>
-                <span style={{ fontFamily: "'Playfair Display',serif", fontSize: "36px", fontWeight: 700, lineHeight: 1, color: "var(--text-primary)" }}>
+                <span
+                  style={{ fontFamily: "'Playfair Display',serif", fontSize: "36px", fontWeight: 700, lineHeight: 1, color: "var(--text-primary)" }}
+                  title={`${completed.length} de ${sessions.length} sesiones completadas`}
+                >
                   {progress}%
                 </span>
-                <span className="body-sm">completado</span>
+                <span className="body-sm">de sesiones</span>
               </div>
             </div>
             <div style={{ textAlign: "right" }}>
@@ -497,21 +501,31 @@ export default function Dashboard() {
 
                     {/* Eval CTA */}
                     {status === "available" && allSessionsDone && (
-                      <div className="eval-cta">
-                        <div>
-                          <p style={{ fontSize: "14px", fontWeight: 600, color: "var(--amber)", marginBottom: "2px" }}>
-                            Sesiones completadas · ¡Puedes evaluar!
-                          </p>
-                          <p className="body-sm">Nota mínima de aprobación: 70 puntos</p>
+                      <>
+                        <div className="eval-cta">
+                          <div>
+                            <p style={{ fontSize: "14px", fontWeight: 600, color: "var(--amber)", marginBottom: "2px" }}>
+                              Sesiones completadas · ¡Puedes evaluar!
+                            </p>
+                            <p className="body-sm">Nota mínima de aprobación: 70 puntos</p>
+                          </div>
+                          <button
+                            className="btn btn-amber btn-sm"
+                            style={{ cursor: "pointer" }}
+                            onClick={() => {
+                              window.open(module.formLink, "_blank");
+                              setEvalOpened(prev => ({ ...prev, [module.id]: true }));
+                            }}
+                          >
+                            Tomar evaluación
+                          </button>
                         </div>
-                        <button
-                          className="btn btn-amber btn-sm"
-                          style={{ cursor: "pointer" }}
-                          onClick={() => window.open(module.formLink, "_blank")}
-                        >
-                          Tomar evaluación
-                        </button>
-                      </div>
+                        {evalOpened[module.id] && (
+                          <p style={{ fontSize: "12px", color: "var(--text-muted)", marginTop: "8px", textAlign: "center", lineHeight: 1.5 }}>
+                            Completa el formulario y regresa aquí — el admin registrará tu puntaje para desbloquear el siguiente módulo.
+                          </p>
+                        )}
+                      </>
                     )}
                   </div>
                 )}

@@ -8,6 +8,7 @@
   --bg-main:    #131008;
   --bg-card:    #1C1912;
   --bg-elevated:#242018;
+  --bg-hover:   rgba(245,166,35,0.04);
 
   /* Coffee Biochar Brand — exact logo colors */
   --amber:        #F5A623;   /* logo outer ring */
@@ -484,4 +485,29 @@ select.input { appearance:none; cursor:pointer; }
 .btn-amber:hover:not(:disabled) {
   background:rgba(245,166,35,0.2); border-color:var(--amber);
   box-shadow:0 4px 20px var(--amber-glow); transform:translateY(-1px);
+}
+
+/* ─── Mobile responsive table (admin/users) ───────── */
+@media(max-width:640px){
+  .table-wrap { overflow-x:unset; }
+  .data-table, .data-table thead, .data-table tbody,
+  .data-table th, .data-table td, .data-table tr { display:block; }
+  .data-table thead tr { position:absolute; top:-9999px; left:-9999px; }
+  .data-table tr {
+    border:1px solid var(--border); border-radius:var(--radius-md);
+    margin-bottom:10px; padding:14px 16px; background:var(--bg-card);
+  }
+  .data-table td {
+    border:none; padding:5px 0;
+    display:flex; align-items:center; gap:8px;
+    font-size:13px;
+  }
+  .data-table td::before {
+    content:attr(data-label);
+    font-size:10px; font-weight:700; text-transform:uppercase;
+    letter-spacing:0.08em; color:var(--text-muted);
+    min-width:80px; flex-shrink:0;
+  }
+  .data-table td:first-child { padding-bottom:10px; border-bottom:1px solid var(--border); margin-bottom:6px; }
+  .data-table td:last-child { padding-top:10px; border-top:1px solid var(--border); margin-top:4px; }
 }

@@ -257,7 +257,14 @@ export default function AdminProgress() {
                       const isCert  = u.progress >= 100;
                       const isActive = u.progress > 0 && u.progress < 100;
                       return (
-                        <tr key={u.id} style={{ cursor: "pointer" }} onClick={() => window.location.href = `/admin/users/${u.id}`}>
+                        <tr
+                          key={u.id}
+                          style={{ cursor: "pointer" }}
+                          onClick={() => window.location.href = `/admin/users/${u.id}`}
+                          onMouseEnter={e => (e.currentTarget.style.background = "var(--bg-hover)")}
+                          onMouseLeave={e => (e.currentTarget.style.background = "")}
+                          title="Ver detalle del extensionista"
+                        >
                           <td style={{ fontWeight: 600, color: "var(--text-primary)" }}>{u.name}</td>
                           <td>{u.cluster || "—"}</td>
                           <td>{u.municipio || "—"}</td>

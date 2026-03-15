@@ -91,7 +91,9 @@ export default function UsersAdmin() {
 
   const clusters = Array.from(new Set(users.map(u => u.cluster).filter(Boolean)));
 
-  const pendingCount = users.filter(u => u.status === "pending").length;
+  const pendingCount   = users.filter(u => u.status === "pending").length;
+  const hasActiveFilters = search !== "" || cluster !== "all" || tab !== "all";
+  const clearFilters = () => { setSearch(""); setCluster("all"); setTab("all"); };
 
   const filtered = users.filter(u => {
     const q = `${u.name} ${u.municipio} ${u.cluster}`.toLowerCase();
@@ -155,6 +157,15 @@ export default function UsersAdmin() {
             </div>
 
             {/* Search + cluster filter */}
+            <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", alignItems: "center" }}>
+              {hasActiveFilters && (
+                <button onClick={clearFilters} style={{
+                  fontSize: "12px", fontWeight: 600, color: "var(--text-muted)", background: "none",
+                  border: "1px solid var(--border)", borderRadius: "var(--radius-pill)",
+                  padding: "6px 12px", cursor: "pointer", display: "flex", alignItems: "center", gap: "4px",
+                }}>× Limpiar filtros</button>
+              )}
+            </div>
             <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", alignItems: "center" }}>
               <div style={{ position: "relative", flex: 1, minWidth: "200px", maxWidth: "300px" }}>
                 <IconSearch />
@@ -222,7 +233,7 @@ export default function UsersAdmin() {
                           style={{ cursor: isPending ? "default" : "pointer", opacity: isPending ? 0.9 : 1 }}
                           onClick={() => !isPending && (window.location.href = `/admin/users/${user.id}`)}
                         >
-                          <td>
+                          <td data-label="">
                             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                               <UserAvatar name={user.name || "?"} />
                               <div>
@@ -231,16 +242,16 @@ export default function UsersAdmin() {
                               </div>
                             </div>
                           </td>
-                          <td>
+                          <td data-label="Clúster">
                             <p style={{ fontSize: "13px", color: "var(--text-primary)", marginBottom: "1px" }}>{user.cluster || "—"}</p>
                             <p style={{ fontSize: "11px", color: "var(--text-muted)" }}>{user.municipio || "—"}</p>
                           </td>
-                          <td>
+                          <td data-label="Módulos">
                             {isPending
                               ? <span style={{ fontSize: "12px", color: "var(--text-muted)" }}>—</span>
                               : <ScoreDots scores={user.moduleScores ?? {}} />}
                           </td>
-                          <td>
+                          <td data-label="Progreso">
                             {isPending ? (
                               <span style={{ fontSize: "12px", color: "var(--text-muted)" }}>—</span>
                             ) : (
@@ -254,7 +265,7 @@ export default function UsersAdmin() {
                               </div>
                             )}
                           </td>
-                          <td>
+                          <td data-label="Estado">
                             {isPending ? (
                               <span className="badge badge-amber" style={{ fontSize: "11px" }}>Pendiente</span>
                             ) : (
@@ -263,7 +274,7 @@ export default function UsersAdmin() {
                               </span>
                             )}
                           </td>
-                          <td onClick={e => e.stopPropagation()}>
+                          <td data-label="" onClick={e => e.stopPropagation()}>
                             {isPending ? (
                               <button
                                 className="btn btn-green btn-sm"
