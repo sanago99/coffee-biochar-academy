@@ -190,9 +190,14 @@ export default function Dashboard() {
         </div>
         <div className="flex-gap-sm">
           {userData && (
-            <span style={{ fontSize: "14px", color: "var(--text-secondary)" }}>
-              {userData.name}
-            </span>
+            <a href="/profile" style={{ fontSize: "14px", color: "var(--text-secondary)", display: "flex", alignItems: "center", gap: "6px" }}
+              title="Ver mi perfil">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <circle cx="8" cy="5.5" r="2.5" stroke="currentColor" strokeWidth="1.3"/>
+                <path d="M2.5 13c0-3.04 2.46-5.5 5.5-5.5s5.5 2.46 5.5 5.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
+              </svg>
+              {userData.name.split(" ")[0]}
+            </a>
           )}
           <button
             className="btn btn-ghost btn-sm"

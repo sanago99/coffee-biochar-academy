@@ -6,6 +6,89 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import { useParams } from "next/navigation";
 import type { Certificate } from "../../types";
 
+function downloadCertPDF(cert: Certificate) {
+  import("jspdf").then(({ default: jsPDF }) => {
+    const pdf = new jsPDF({ orientation: "landscape", unit: "mm", format: "a4" });
+    const W = 297, H = 210;
+
+    // Background
+    pdf.setFillColor(12, 10, 7);
+    pdf.rect(0, 0, W, H, "F");
+
+    // Top gold bar
+    pdf.setFillColor(245, 166, 35);
+    pdf.rect(0, 0, W, 3, "F");
+
+    // Bottom rust bar
+    pdf.setFillColor(192, 74, 42);
+    pdf.rect(0, H - 3, W, 3, "F");
+
+    // Subtle border
+    pdf.setDrawColor(42, 36, 24);
+    pdf.setLineWidth(0.5);
+    pdf.rect(10, 10, W - 20, H - 20);
+
+    // Academy name
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(10);
+    pdf.setTextColor(245, 166, 35);
+    pdf.text("COFFEE BIOCHAR ACADEMY", W / 2, 28, { align: "center" });
+
+    // Divider
+    pdf.setDrawColor(42, 36, 24);
+    pdf.setLineWidth(0.3);
+    pdf.line(W / 2 - 40, 32, W / 2 + 40, 32);
+
+    // "Certifica que"
+    pdf.setFont("helvetica", "normal");
+    pdf.setFontSize(11);
+    pdf.setTextColor(160, 144, 128);
+    pdf.text("CERTIFICA QUE", W / 2, 45, { align: "center" });
+
+    // Name
+    pdf.setFont("times", "bold");
+    pdf.setFontSize(36);
+    pdf.setTextColor(242, 237, 227);
+    pdf.text(cert.name, W / 2, 72, { align: "center" });
+
+    // Description
+    pdf.setFont("helvetica", "normal");
+    pdf.setFontSize(11);
+    pdf.setTextColor(160, 144, 128);
+    pdf.text("Ha completado satisfactoriamente el programa de formación en", W / 2, 88, { align: "center" });
+    pdf.text("Prácticas de Biochar para Extensionistas Rurales", W / 2, 96, { align: "center" });
+
+    // Title badge
+    pdf.setFillColor(28, 25, 18);
+    pdf.setDrawColor(245, 166, 35);
+    pdf.setLineWidth(0.4);
+    pdf.roundedRect(W / 2 - 60, 105, 120, 14, 3, 3, "FD");
+    pdf.setFont("times", "bold");
+    pdf.setFontSize(13);
+    pdf.setTextColor(245, 166, 35);
+    pdf.text("Certified Coffee Biochar Extensionist", W / 2, 114, { align: "center" });
+
+    // Divider
+    pdf.setDrawColor(42, 36, 24);
+    pdf.setLineWidth(0.3);
+    pdf.line(W / 2 - 50, 128, W / 2 + 50, 128);
+
+    // Cert ID
+    pdf.setFont("courier", "normal");
+    pdf.setFontSize(8);
+    pdf.setTextColor(94, 82, 72);
+    pdf.text(`ID: ${cert.certificateId}`, W / 2, 136, { align: "center" });
+
+    // Footer
+    pdf.setFont("helvetica", "normal");
+    pdf.setFontSize(8);
+    pdf.setTextColor(94, 82, 72);
+    pdf.text("Biodiversal SAS BIC  ·  Agricultura Regenerativa  ·  Colombia", W / 2, H - 12, { align: "center" });
+
+    pdf.save(`certificado-${cert.name.replace(/\s+/g, "-").toLowerCase()}.pdf`);
+  });
+}
+
 export default function CertificatePage() {
   const { certificateId } = useParams() as { certificateId: string };
 
@@ -190,9 +273,22 @@ export default function CertificatePage() {
         }} />
       </div>
 
-      <p className="fade-up-2" style={{ marginTop: "24px", fontSize: "13px", color: "var(--text-muted)" }}>
-        Este certificado fue verificado exitosamente.
-      </p>
+      <div className="fade-up-2" style={{ marginTop: "24px", display: "flex", gap: "10px", flexWrap: "wrap", justifyContent: "center" }}>
+        <button
+          className="btn btn-primary btn-sm"
+          style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "8px" }}
+          onClick={() => downloadCertPDF(cert)}
+        >
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M7 2v7M4 6l3 3 3-3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M2 11h10" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
+          </svg>
+          Descargar PDF
+        </button>
+        <p style={{ fontSize: "13px", color: "var(--text-muted)", alignSelf: "center" }}>
+          Certificado verificado exitosamente.
+        </p>
+      </div>
     </div>
   );
 }
