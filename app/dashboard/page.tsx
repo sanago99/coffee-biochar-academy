@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { useModules } from "../hooks/useModules";
 import { useSessions } from "../hooks/useSessions";
 import { useUserProgress } from "../hooks/useUserProgress";
+import DemoBanner from "../components/DemoBanner";
 import type { Module, UserData } from "../types";
 
 /* ── SVG icons (no emojis) ── */
@@ -208,6 +209,8 @@ export default function Dashboard() {
           </button>
         </div>
       </nav>
+
+      <DemoBanner />
 
       <div className="page-content">
 

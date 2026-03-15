@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { auth } from "../../firebase/config";
 import { signOut } from "firebase/auth";
 import ConfirmModal from "./ConfirmModal";
+import DemoBanner from "./DemoBanner";
 
 const IconHome = () => (
   <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
@@ -182,6 +183,8 @@ export default function AdminNav() {
           onCancel={() => setShowLogoutModal(false)}
         />
       )}
+
+      <DemoBanner />
     </>
   );
 }
