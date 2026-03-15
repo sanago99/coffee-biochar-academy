@@ -1,120 +1,68 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { db, auth } from "../../../firebase/config";
+import { db } from "../../../firebase/config";
 import { collection, getDocs } from "firebase/firestore";
-import { useRouter } from "next/navigation";
+import AdminGuard from "../../components/AdminGuard";
+import { page, colors, tableHeader, tableRow, th, td } from "../../styles";
+import type { UserData } from "../../types";
 
-export default function UsersAdmin(){
+type UserRow = UserData & { id: string };
 
-  const router = useRouter();
+export default function UsersAdmin() {
+  const [users, setUsers] = useState<UserRow[]>([]);
 
-  const [users,setUsers] = useState<any[]>([]);
-
-  useEffect(()=>{
-
-    const user = auth.currentUser;
-
-    if(!user || user.email !== "santiago@biodiversal.co"){
-      router.push("/login");
-      return;
-    }
+  useEffect(() => {
+    const loadUsers = async () => {
+      const snapshot = await getDocs(collection(db, "users"));
+      const list: UserRow[] = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      } as UserRow));
+      setUsers(list);
+    };
 
     loadUsers();
+  }, []);
 
-  },[]);
+  return (
+    <AdminGuard>
+      <main style={page}>
+        <h1>Extensionistas registrados</h1>
 
-  const loadUsers = async ()=>{
-
-    const snapshot = await getDocs(collection(db,"users"));
-
-    const list:any[] = [];
-
-    snapshot.forEach(doc=>{
-      list.push({id:doc.id,...doc.data()});
-    });
-
-    setUsers(list);
-
-  };
-
-  return(
-
-    <main style={{
-      minHeight:"100vh",
-      background:"#111",
-      color:"white",
-      padding:"40px",
-      fontFamily:"Arial"
-    }}>
-
-      <h1>Extensionistas registrados</h1>
-
-      <table style={{
-        width:"100%",
-        marginTop:"30px",
-        borderCollapse:"collapse"
-      }}>
-
-        <thead>
-
-          <tr style={{borderBottom:"1px solid #444"}}>
-
-            <th style={{textAlign:"left",padding:"10px"}}>Nombre</th>
-            <th style={{textAlign:"left",padding:"10px"}}>Municipio</th>
-            <th style={{textAlign:"left",padding:"10px"}}>Cluster</th>
-            <th style={{textAlign:"left",padding:"10px"}}>Progreso</th>
-
-          </tr>
-
-        </thead>
-
-        <tbody>
-
-          {users.map(user=>(
-
-            <tr key={user.id} style={{borderBottom:"1px solid #333"}}>
-
-              <td style={{padding:"10px"}}>{user.name}</td>
-
-              <td style={{padding:"10px"}}>{user.municipio}</td>
-
-              <td style={{padding:"10px"}}>{user.cluster}</td>
-
-              <td style={{padding:"10px"}}>
-
-                <div style={{
-                  width:"150px",
-                  height:"10px",
-                  background:"#333",
-                  borderRadius:"5px"
-                }}>
-
-                  <div style={{
-                    width:(user.progress || 0)+"%",
-                    height:"10px",
-                    background:"#2E7D32",
-                    borderRadius:"5px"
-                  }}></div>
-
-                </div>
-
-                <span style={{marginLeft:"10px"}}>
-                  {user.progress || 0}%
-                </span>
-
-              </td>
-
+        <table style={{ width: "100%", marginTop: "30px", borderCollapse: "collapse" }}>
+          <thead>
+            <tr style={tableHeader}>
+              <th style={th}>Nombre</th>
+              <th style={th}>Municipio</th>
+              <th style={th}>Cluster</th>
+              <th style={th}>Progreso</th>
             </tr>
-
-          ))}
-
-        </tbody>
-
-      </table>
-
-    </main>
-
+          </thead>
+          <tbody>
+            {users.map(user => (
+              <tr key={user.id} style={tableRow}>
+                <td style={td}>{user.name}</td>
+                <td style={td}>{user.municipio}</td>
+                <td style={td}>{user.cluster}</td>
+                <td style={td}>
+                  <div style={{ width: "150px", height: "10px", background: "#333", borderRadius: "5px" }}>
+                    <div
+                      style={{
+                        width: `${user.progress || 0}%`,
+                        height: "10px",
+                        background: colors.greenDark,
+                        borderRadius: "5px",
+                      }}
+                    />
+                  </div>
+                  <span style={{ marginLeft: "10px" }}>{user.progress || 0}%</span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </main>
+    </AdminGuard>
   );
-
 }
