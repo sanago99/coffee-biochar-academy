@@ -201,7 +201,7 @@ export default function Dashboard() {
         {/* ── SESSION TOAST ─────────────────── */}
         {sessionToast && (
           <div className="fade-up" style={{
-            position: "fixed", bottom: "24px", left: "50%", transform: "translateX(-50%)",
+            position: "fixed", bottom: "calc(24px + env(safe-area-inset-bottom, 0px))", left: "50%", transform: "translateX(-50%)",
             background: "var(--green-glow)", border: "1px solid var(--green-border)",
             color: "var(--green)", padding: "10px 20px", borderRadius: "var(--radius-pill)",
             fontSize: "13px", fontWeight: 600, zIndex: 50, whiteSpace: "nowrap",
