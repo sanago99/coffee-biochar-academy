@@ -29,14 +29,14 @@ const IconCheck = () => (
 
 function UserAvatar({ name }: { name: string }) {
   const initials = name.split(" ").filter(Boolean).slice(0, 2).map(w => w[0].toUpperCase()).join("");
-  const colors: [string, string][] = [
-    ["rgba(122,182,72,0.15)", "var(--green)"],
-    ["rgba(245,166,35,0.15)", "var(--amber)"],
-    ["rgba(192,74,42,0.15)",  "#e06040"],
+  const colors: [string, string, string][] = [
+    ["rgba(122,182,72,0.22)", "var(--green)",  "rgba(122,182,72,0.45)"],
+    ["rgba(245,166,35,0.22)", "var(--amber)",  "rgba(245,166,35,0.45)"],
+    ["rgba(192,74,42,0.22)",  "#e06040",       "rgba(192,74,42,0.45)" ],
   ];
-  const [bg, color] = colors[name.charCodeAt(0) % 3];
+  const [bg, color, border] = colors[name.charCodeAt(0) % 3];
   return (
-    <div style={{ width: "34px", height: "34px", borderRadius: "50%", background: bg, border: `1px solid ${color}40`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", fontWeight: 700, color, flexShrink: 0, fontFamily: "'Inter',sans-serif" }}>
+    <div style={{ width: "34px", height: "34px", borderRadius: "50%", background: bg, border: `1px solid ${border}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", fontWeight: 700, color, flexShrink: 0, fontFamily: "'Inter',sans-serif" }}>
       {initials || "?"}
     </div>
   );

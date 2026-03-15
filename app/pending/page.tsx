@@ -42,11 +42,11 @@ export default function PendingPage() {
           width: "64px", height: "64px", borderRadius: "50%",
           background: "var(--amber-glow)", border: "1px solid var(--amber-border)",
           display: "flex", alignItems: "center", justifyContent: "center",
-          margin: "0 auto 20px",
+          margin: "0 auto 20px", color: "var(--amber)",
         }}>
           <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-            <circle cx="14" cy="14" r="11" stroke="var(--amber)" strokeWidth="1.6"/>
-            <path d="M14 8v7l4 2" stroke="var(--amber)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+            <circle cx="14" cy="14" r="11" stroke="currentColor" strokeWidth="1.6"/>
+            <path d="M14 8v7l4 2" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </div>
 

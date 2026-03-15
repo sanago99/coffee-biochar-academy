@@ -65,12 +65,12 @@ export default function Register() {
             width: "56px", height: "56px", borderRadius: "50%",
             background: "var(--amber-glow)", border: "1px solid var(--amber-border)",
             display: "flex", alignItems: "center", justifyContent: "center",
-            margin: "0 auto 16px",
+            margin: "0 auto 16px", color: "var(--amber)",
           }}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z" fill="var(--amber)" opacity=".3"/>
-              <circle cx="12" cy="12" r="10" stroke="var(--amber)" strokeWidth="1.5"/>
-              <path d="M12 7v6M12 16v1" stroke="var(--amber)" strokeWidth="1.8" strokeLinecap="round"/>
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z" fill="currentColor" opacity=".35"/>
+              <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.5"/>
+              <path d="M12 7v6M12 16v1" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
             </svg>
           </div>
 
