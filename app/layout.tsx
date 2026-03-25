@@ -1,34 +1,21 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "Coffee Biochar Academy",
-  description: "Plataforma de formación para extensionistas del proyecto Coffee Biochar en Colombia",
+  description: "Plataforma de formación certificada para extensionistas rurales del proyecto Coffee Biochar — Biodiversal SAS BIC × Cirkular Agro · Colombia",
+  keywords: ["biochar", "café", "Colombia", "extensionistas", "carbono", "sostenibilidad"],
+  openGraph: {
+    title: "Coffee Biochar Academy",
+    description: "Formación certificada para extensionistas del proyecto Coffee Biochar en Colombia",
+    type: "website",
+  },
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
+    <html lang="es">
+      <body>{children}</body>
     </html>
   );
 }
