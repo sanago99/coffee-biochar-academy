@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>S5.2 · Agua, Microbiología y Resiliencia Climática · Coffee Biochar Academy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/theme/white.css" />
+  <style>
+    :root {
+      --green: #3A7D44;
+      --dark-green: #1F4D27;
+      --brown: #6B3527;
+      --amber: #D4881E;
+      --cream: #F7F3EC;
+      --text: #1C1C1C;
+      --teal: #1B7A6E;
+    }
+
+    .reveal {
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background: var(--cream);
+    }
+
+    .reveal .slides section {
+      text-align: left;
+      padding: 40px 60px;
+      box-sizing: border-box;
+    }
+
+    .reveal h1, .reveal h2, .reveal h3 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      text-transform: none;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 0.3em;
+    }
+
+    /* COVER */
+    .slide-cover {
+      display: flex !important;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: flex-start;
+      padding: 60px 80px !important;
+      min-height: 100%;
+    }
+    .cover-badge {
+      background: var(--teal);
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 0.75em;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 8px 18px;
+      border-radius: 40px;
+      margin-bottom: 20px;
+      display: inline-block;
+    }
+    .cover-title {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 3.2em !important;
+      line-height: 1.05;
+      color: #fff;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+      text-transform: none;
+      margin: 0 0 16px !important;
+    }
+    .cover-sub {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95em;
+      color: rgba(255,255,255,0.88);
+      letter-spacing: 0.04em;
+      margin: 0;
+    }
+    .cover-divider {
+      width: 80px;
+      height: 5px;
+      background: var(--teal);
+      border-radius: 3px;
+      margin: 18px 0;
+    }
+
+    /* LABELS */
+    .section-label {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.65em;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 8px;
+    }
+    .slide-title {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 1.85em !important;
+      color: var(--dark-green);
+      text-transform: none;
+      line-height: 1.1;
+      margin: 0 0 18px !important;
+    }
+    .slide-title.teal  { color: var(--teal);  }
+    .slide-title.brown { color: var(--brown); }
+    .slide-title.amber { color: var(--amber); }
+
+    /* HERO NUMBERS */
+    .hero-number {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 4.5em;
+      line-height: 1;
+      color: var(--teal);
+      letter-spacing: -0.04em;
+    }
+    .hero-number.green { color: var(--green); }
+    .hero-number.amber { color: var(--amber); }
+    .hero-number.brown { color: var(--brown); }
+    .hero-label {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.82em;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text);
+      opacity: 0.7;
+      margin-top: 4px;
+    }
+
+    /* CARDS */
+    .cards { display: grid; gap: 16px; }
+    .cards-2 { grid-template-columns: 1fr 1fr; }
+    .cards-3 { grid-template-columns: 1fr 1fr 1fr; }
+    .cards-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 16px 18px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      border-left: 5px solid var(--teal);
+    }
+    .card.green-border { border-left-color: var(--green); }
+    .card.amber-border { border-left-color: var(--amber); }
+    .card.brown-border { border-left-color: var(--brown); }
+    .card.teal-border  { border-left-color: var(--teal);  }
+    .card.teal-bg {
+      background: var(--teal);
+      color: #fff;
+      border-left-color: #134f47;
+    }
+    .card.green-bg {
+      background: var(--green);
+      color: #fff;
+      border-left-color: var(--dark-green);
+    }
+    .card.dark-bg {
+      background: var(--dark-green);
+      color: #fff;
+      border-left-color: #0d2914;
+    }
+
+    .card-icon { font-size: 2rem; margin-bottom: 8px; display: block; }
+    .card-title {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 0.82em;
+      text-transform: none;
+      letter-spacing: 0.03em;
+      margin-bottom: 5px;
+    }
+    .card-body { font-size: 0.78em; line-height: 1.55; opacity: 0.9; }
+
+    /* CHIPS */
+    .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+    .chip {
+      background: var(--teal);
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.72em;
+      padding: 8px 16px;
+      border-radius: 40px;
+      letter-spacing: 0.04em;
+    }
+    .chip.green  { background: var(--green); }
+    .chip.amber  { background: var(--amber); }
+    .chip.brown  { background: var(--brown); }
+
+    /* CALLOUTS */
+    .callout {
+      background: linear-gradient(135deg, var(--dark-green), var(--green));
+      color: #fff;
+      border-radius: 16px;
+      padding: 24px 28px;
+      margin-top: 16px;
+      font-size: 0.9em;
+      line-height: 1.55;
+    }
+    .callout strong { color: var(--amber); }
+    .callout.teal-grad { background: linear-gradient(135deg, #134f47, var(--teal)); }
+    .callout.amber-grad { background: linear-gradient(135deg, #a8660e, var(--amber)); }
+    .callout.brown-grad { background: linear-gradient(135deg, var(--brown), #9b4e38); }
+
+    /* LAYOUT */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; }
+    .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; align-items: start; }
+
+    /* STAT STRIP */
+    .stat-strip {
+      display: flex;
+      gap: 0;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+      margin-top: 20px;
+    }
+    .stat-block {
+      flex: 1;
+      padding: 22px 18px;
+      text-align: center;
+    }
+    .stat-block .num {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 1.8em;
+      line-height: 1;
+    }
+    .stat-block .lbl {
+      font-size: 0.65em;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      opacity: 0.85;
+      margin-top: 6px;
+    }
+
+    /* TIMELINE */
+    .timeline { display: flex; flex-direction: column; gap: 12px; }
+    .tl-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+    .tl-dot {
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--teal);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.88em;
+      margin-top: 2px;
+    }
+    .tl-content { flex: 1; }
+    .tl-title {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 0.82em;
+      text-transform: uppercase;
+      color: var(--dark-green);
+      margin-bottom: 3px;
+    }
+    .tl-body { font-size: 0.78em; line-height: 1.5; color: #444; }
+
+    /* EXERCISE */
+    .exercise-box {
+      background: linear-gradient(135deg, var(--teal), #1B7A6E);
+      color: #fff;
+      border-radius: 20px;
+      padding: 32px 36px;
+      max-width: 700px;
+    }
+    .exercise-box h3 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 1.1em;
+      color: #fff;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .exercise-box p { font-size: 0.88em; line-height: 1.65; color: rgba(255,255,255,0.9); }
+    .exercise-timer {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      border-radius: 40px;
+      padding: 6px 18px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 0.75em;
+      letter-spacing: 0.08em;
+      margin-bottom: 16px;
+    }
+
+    /* CLOSING */
+    .closing-card {
+      background: linear-gradient(135deg, var(--teal), var(--dark-green));
+      color: #fff;
+      border-radius: 20px;
+      padding: 32px 36px;
+    }
+    .closing-card h3 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 1em;
+      color: var(--amber);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    /* REVEAL */
+    .reveal .progress { color: var(--teal); height: 5px; }
+    .reveal .slide-number {
+      background: var(--teal);
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.65em;
+      padding: 4px 10px;
+      border-radius: 8px 0 0 0;
+    }
+    .reveal .controls button { color: var(--teal); }
+    .reveal .fragment { transition: all 0.4s ease; }
+    .reveal .fragment.fade-up { transform: translateY(20px); }
+    .reveal .fragment.fade-up.visible { transform: translateY(0); }
+
+    /* BADGE */
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.65em;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .badge.teal  { background: #e0f2f0; color: #134f47; }
+    .badge.green { background: #e8f5eb; color: var(--dark-green); }
+    .badge.amber { background: #fdf0d8; color: #a8660e; }
+
+    /* MICRO ICON GRID */
+    .icon-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .icon-cell {
+      background: #fff;
+      border-radius: 14px;
+      padding: 18px 14px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .icon-cell .ico { font-size: 2rem; }
+    .icon-cell .ico-label {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.68em;
+      text-transform: uppercase;
+      color: var(--dark-green);
+      margin-top: 6px;
+    }
+  </style>
+</head>
+<body>
+<div class="reveal">
+  <div class="slides">
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 1 · COVER
+    ══════════════════════════════════════════ -->
+    <section
+      class="slide-cover"
+      data-background-image="../Fotos/20250724/IMG_7572.jpg"
+      data-background-size="cover"
+      data-background-position="center"
+      data-background-opacity="0.3"
+      data-background-color="#1B7A6E">
+
+      <div class="cover-badge fragment fade-up">☕ Coffee Biochar Academy × Biodiversal</div>
+      <h1 class="cover-title fragment fade-up">Agua, Microbiología<br />y Resiliencia<br />Climática</h1>
+      <div class="cover-divider fragment fade-up"></div>
+      <p class="cover-sub fragment fade-up">💧 Módulo 5 · Sesión 2 &nbsp;·&nbsp; Beneficios Climáticos del Biochar</p>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 2 · EL PROBLEMA: SEQUÍAS
+    ══════════════════════════════════════════ -->
+    <section style="background: var(--cream);">
+      <div class="section-label">Módulo 5 · Sesión 2</div>
+      <h2 class="slide-title teal">El problema: Sequías más frecuentes ☀️</h2>
+
+      <div class="two-col">
+        <div>
+          <div class="timeline">
+            <div class="tl-item fragment fade-up">
+              <div class="tl-dot">🌍</div>
+              <div class="tl-content">
+                <div class="tl-title">Variabilidad climática creciente</div>
+                <div class="tl-body">El cambio climático aumenta la frecuencia e intensidad de los eventos extremos en Colombia.</div>
+              </div>
+            </div>
+            <div class="tl-item fragment fade-up">
+              <div class="tl-dot" style="background:var(--amber);">☀️</div>
+              <div class="tl-content">
+                <div class="tl-title">El Niño → más severo</div>
+                <div class="tl-body">Los períodos de sequía durante El Niño son cada vez más intensos y prolongados en las zonas cafeteras.</div>
+              </div>
+            </div>
+            <div class="tl-item fragment fade-up">
+              <div class="tl-dot" style="background:var(--green);">💧</div>
+              <div class="tl-content">
+                <div class="tl-title">El café necesita equilibrio</div>
+                <div class="tl-body">El café requiere <strong>1.800–2.500 mm/año</strong> bien distribuidos. No demasiado, no demasiado poco.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="fragment fade-up">
+          <div style="background: linear-gradient(135deg, #a8660e, var(--amber)); border-radius:20px; padding:28px 24px; color:#fff; text-align:center;">
+            <div style="font-size:3rem; margin-bottom:12px;">⚠️</div>
+            <div style="font-family:'Montserrat',sans-serif; font-weight:900; font-size:1.1em; text-transform:uppercase; line-height:1.2;">Estrés hídrico</div>
+            <div style="font-size:0.82em; opacity:0.9; margin-top:12px; line-height:1.6;">= cosecha perdida, floración fallida, pérdida de producción de toda la temporada</div>
+          </div>
+          <div class="fragment fade-up" style="margin-top:14px;">
+            <div class="callout teal-grad" style="font-size:0.82em;">
+              🌿 El biochar no puede controlar el clima — pero puede hacer que tu cafetal <strong>lo aguante mejor</strong>.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 3 · +15% RETENCIÓN DE AGUA
+    ══════════════════════════════════════════ -->
+    <section style="background: #fff;">
+      <div class="section-label">Módulo 5 · Sesión 2</div>
+      <h2 class="slide-title teal">+15% Retención de Agua 💧</h2>
+
+      <div class="two-col">
+        <div>
+          <div class="fragment fade-up">
+            <div style="text-align:center; background:linear-gradient(135deg,#134f47,var(--teal)); border-radius:20px; padding:32px; color:#fff;">
+              <div class="hero-number" style="color:#7df0e4;">+15%</div>
+              <div class="hero-label" style="color:rgba(255,255,255,0.8);">retención de agua en el suelo</div>
+              <div style="margin-top:14px; background:rgba(255,255,255,0.15); border-radius:10px; padding:10px 16px; font-size:0.75em;">
+                Medido con aplicación de <strong>2 t/ha</strong> de biochar en suelos tropicales
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="fragment fade-up" style="margin-bottom:14px;">
+            <div class="card teal-border">
+              <span class="card-icon">🔬</span>
+              <div class="card-title">¿Por qué funciona?</div>
+              <div class="card-body">El biochar está <strong>lleno de microporos</strong>. Cada microporo es un reservorio microscópico de agua disponible para las raíces.</div>
+            </div>
+          </div>
+          <div class="fragment fade-up" style="margin-bottom:14px;">
+            <div class="card green-border">
+              <span class="card-icon">🌧️</span>
+              <div class="card-title">Durante la lluvia</div>
+              <div class="card-body">Los microporos absorben el exceso → menos escorrentía, menos erosión del suelo en pendientes.</div>
+            </div>
+          </div>
+          <div class="fragment fade-up">
+            <div class="card amber-border">
+              <span class="card-icon">☀️</span>
+              <div class="card-title">Durante la sequía</div>
+              <div class="card-body">Los microporos liberan el agua gradualmente → las raíces del café tienen acceso constante.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 4 · MICROPOROS COMO RESERVORIOS
+    ══════════════════════════════════════════ -->
+    <section style="background: var(--cream);">
+      <div class="section-label">Módulo 5 · Sesión 2</div>
+      <h2 class="slide-title">Los microporos como reservorios</h2>
+
+      <div class="two-col">
+        <div>
+          <div class="fragment fade-up">
+            <div style="background:#fff; border-radius:20px; padding:24px; box-shadow:0 4px 20px rgba(0,0,0,0.08);">
+              <div style="font-size:4rem; text-align:center; margin-bottom:12px;">🧫</div>
+              <div style="font-family:'Montserrat',sans-serif; font-weight:900; font-size:0.82em; text-transform:uppercase; color:var(--teal); text-align:center; margin-bottom:16px;">Anatomía del biochar</div>
+              <div style="display:flex; flex-direction:column; gap:8px;">
+                <div style="display:flex; align-items:center; gap:10px; background:var(--cream); padding:10px 14px; border-radius:10px;">
+                  <span style="font-size:1.2rem;">⬡</span>
+                  <span style="font-size:0.75em;">Estructura carbónica porosa y estable</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:10px; background:var(--cream); padding:10px 14px; border-radius:10px;">
+                  <span style="font-size:1.2rem;">💧</span>
+                  <span style="font-size:0.75em;">Microporos: 1–50 nanómetros de diámetro</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:10px; background:var(--cream); padding:10px 14px; border-radius:10px;">
+                  <span style="font-size:1.2rem;">📐</span>
+                  <span style="font-size:0.75em;">Superficie específica: 100–600 m²/g</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="fragment fade-up">
+            <div class="card teal-bg" style="margin-bottom:14px;">
+              <span class="card-icon">🌊</span>
+              <div class="card-title" style="color:#fff;">Durante la lluvia</div>
+              <div class="card-body" style="color:rgba(255,255,255,0.9);">Absorben el exceso → menos escorrentía, menos erosión, menos nutrientes perdidos hacia las quebradas.</div>
+            </div>
+          </div>
+          <div class="fragment fade-up">
+            <div class="card green-bg" style="margin-bottom:14px;">
+              <span class="card-icon">🌵</span>
+              <div class="card-title" style="color:#fff;">Durante la sequía</div>
+              <div class="card-body" style="color:rgba(255,255,255,0.9);">Liberan agua gradualmente → tampón hídrico natural que sostiene al café entre lluvias.</div>
+            </div>
+          </div>
+          <div class="fragment fade-up">
+            <div class="callout teal-grad" style="font-size:0.88em; text-align:center; margin-top:0;">
+              💡 <strong>"El biochar es el sistema de riego natural más barato del mundo."</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 5 · ACTIVACIÓN MICROBIOLÓGICA
+    ══════════════════════════════════════════ -->
+    <section style="background: #fff;">
+      <div class="section-label">Módulo 5 · Sesión 2</div>
+      <h2 class="slide-title">Activación microbiológica 🦠</h2>
+
+      <div class="two-col">
+        <div>
+          <div class="fragment fade-up">
+            <div class="callout teal-grad" style="margin-bottom:20px; font-size:0.9em;">
+              🏠 Los microporos del biochar son el <strong>hábitat ideal</strong> para bacterias, hongos y micorrizas.
+            </div>
+          </div>
+
+          <div class="cards" style="gap:12px;">
+            <div class="card teal-border fragment fade-up">
+              <span class="card-icon">🦠</span>
+              <div class="card-title">Proliferación microbiana</div>
+              <div class="card-body">Las cavernas del biochar protegen a los microorganismos de la desecación y depredación.</div>
+            </div>
+            <div class="card green-border fragment fade-up">
+              <span class="card-icon">♻️</span>
+              <div class="card-title">Ciclo de nutrientes</div>
+              <div class="card-body">Más microorganismos activos = más nutrientes ciclados incluso durante períodos secos.</div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="fragment fade-up">
+            <div style="background: var(--cream); border-radius:16px; padding:20px 22px; margin-bottom:14px;">
+              <div class="section-label" style="margin-bottom:12px;">🍄 Micorrizas: el superpoder oculto</div>
+              <div style="display:flex; flex-direction:column; gap:10px;">
+                <div style="display:flex; gap:10px; align-items:flex-start;">
+                  <span style="font-size:1.3rem; flex-shrink:0;">🌐</span>
+                  <span style="font-size:0.82em;">Las micorrizas forman redes que <strong>extienden el alcance radical del café</strong> hasta 10× su longitud normal.</span>
+                </div>
+                <div style="display:flex; gap:10px; align-items:flex-start;">
+                  <span style="font-size:1.3rem; flex-shrink:0;">💧</span>
+                  <span style="font-size:0.82em;">Con biochar, las micorrizas son más abundantes y activas → <strong>acceden a agua en profundidad</strong> durante la sequía.</span>
+                </div>
+                <div style="display:flex; gap:10px; align-items:flex-start;">
+                  <span style="font-size:1.3rem; flex-shrink:0;">🔗</span>
+                  <span style="font-size:0.82em;">Conectan los árboles entre sí, compartiendo recursos → comunidad de plantas más resiliente.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="fragment fade-up">
+            <div class="card amber-border">
+              <span class="card-icon">📊</span>
+              <div class="card-title">Impacto medido</div>
+              <div class="card-body">Suelos con biochar muestran entre 2× y 5× más biomasa microbiana vs. control en estudios tropicales.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 6 · -29% METALES PESADOS
+    ══════════════════════════════════════════ -->
+    <section style="background: var(--cream);">
+      <div class="section-label">Módulo 5 · Sesión 2</div>
+      <h2 class="slide-title brown">-29% absorción de metales pesados 🔒</h2>
+
+      <div class="two-col">
+        <div>
+          <div class="fragment fade-up">
+            <div style="text-align:center; background:#fff; border-radius:20px; padding:28px; box-shadow:0 4px 20px rgba(0,0,0,0.08);">
+              <div class="hero-number brown" style="font-size:5.5em;">-29%</div>
+              <div class="hero-label" style="text-align:center;">absorción de metales en el café</div>
+            </div>
+          </div>
+
+          <div class="fragment fade-up" style="margin-top:16px;">
+            <div class="chips">
+              <span class="chip brown">Cd · Cadmio</span>
+              <span class="chip" style="background:#5a4a3a;">Pb · Plomo</span>
+              <span class="chip" style="background:#7a5c2e;">As · Arsénico</span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="fragment fade-up" style="margin-bottom:14px;">
+            <div class="card brown-border">
+              <span class="card-icon">🔒</span>
+              <div class="card-title">Mecanismo de adsorción</div>
+              <div class="card-body">El biochar adsorbe los metales pesados en sus microporos y los <strong>retiene fuera del alcance de la planta</strong>. El café no puede absorber lo que está inmovilizado.</div>
+            </div>
+          </div>
+          <div class="fragment fade-up" style="margin-bottom:14px;">
+            <div class="card amber-border">
+              <span class="card-icon">☕</span>
+              <div class="card-title">Café más limpio</div>
+              <div class="card-body">Reducción de metales en grano → <strong>mayor calidad</strong> para certificaciones premium, mercados de especialidad y exportación.</div>
+            </div>
+          </div>
+          <div class="fragment fade-up">
+            <div class="callout brown-grad" style="font-size:0.82em;">
+              🏆 El Cadmio es un reto creciente en suelos cafeteros colombianos. La UE ya regula sus niveles máximos en café. <strong style="color:#ffd4b0;">El biochar ayuda a cumplir con esa normativa.</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 7 · +39% SOC
+    ══════════════════════════════════════════ -->
+    <section style="background: #fff;">
+      <div class="section-label">Módulo 5 · Sesión 2</div>
+      <h2 class="slide-title">+39% SOC en el suelo 🌱</h2>
+
+      <div class="two-col">
+        <div>
+          <div class="fragment fade-up">
+            <div style="text-align:center; background:linear-gradient(135deg,var(--dark-green),var(--green)); border-radius:20px; padding:32px; color:#fff;">
+              <div class="hero-number" style="color:#a8f0b4;">+39%</div>
+              <div class="hero-label" style="color:rgba(255,255,255,0.8);">Soil Organic Carbon (SOC)</div>
+              <div style="margin-top:16px; font-size:0.75em; opacity:0.85; line-height:1.5;">
+                El biochar estable aumenta directamente el carbono orgánico del suelo — y permanece allí por siglos.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="section-label fragment fade-up" style="margin-bottom:12px;">¿Qué significa más SOC?</div>
+          <div class="cards" style="gap:12px;">
+            <div class="card green-border fragment fade-up">
+              <span class="card-icon">🧽</span>
+              <div class="card-title">Suelo más esponjoso</div>
+              <div class="card-body">Mayor SOC → mejor estructura → más porosidad → mejor drenaje Y mejor retención de agua al mismo tiempo.</div>
+            </div>
+            <div class="card teal-border fragment fade-up">
+              <span class="card-icon">⚡</span>
+              <div class="card-title">Más activo biológicamente</div>
+              <div class="card-body">El carbono orgánico es la fuente de energía de toda la microbiología del suelo. Más SOC = más vida.</div>
+            </div>
+            <div class="card amber-border fragment fade-up">
+              <span class="card-icon">💪</span>
+              <div class="card-title">Más resistente a la sequía</div>
+              <div class="card-body">Suelos con más SOC soportan mejor el estrés hídrico — recuperan su estructura más rápido.</div>
+            </div>
+          </div>
+          <div class="fragment fade-up" style="margin-top:14px;">
+            <div class="callout teal-grad" style="font-size:0.82em; text-align:center; padding:16px 20px;">
+              🌍 <strong>"Un suelo con más SOC es un suelo que envejece al revés."</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 8 · EL PAQUETE COMPLETO
+    ══════════════════════════════════════════ -->
+    <section style="background: var(--cream);">
+      <div class="section-label">Módulo 5 · Sesión 2</div>
+      <h2 class="slide-title">Resiliencia Climática: el paquete completo 🌍</h2>
+
+      <div class="stat-strip fragment fade-up">
+        <div class="stat-block" style="background:var(--teal); color:#fff;">
+          <div class="num">+15%</div>
+          <div class="lbl">agua disponible</div>
+        </div>
+        <div class="stat-block" style="background:var(--green); color:#fff;">
+          <div class="num">+39%</div>
+          <div class="lbl">SOC en suelo</div>
+        </div>
+        <div class="stat-block" style="background:var(--amber); color:#fff;">
+          <div class="num">↑×5</div>
+          <div class="lbl">biomasa microbiana</div>
+        </div>
+        <div class="stat-block" style="background:var(--brown); color:#fff;">
+          <div class="num">-29%</div>
+          <div class="lbl">metales pesados</div>
+        </div>
+      </div>
+
+      <div class="fragment fade-up" style="margin-top:20px; text-align:center; font-size:2rem; color:var(--amber);">+</div>
+
+      <div class="fragment fade-up" style="margin-top:4px;">
+        <div style="background:linear-gradient(135deg,var(--dark-green),var(--teal)); border-radius:16px; padding:24px 28px; color:#fff; text-align:center;">
+          <div style="font-family:'Montserrat',sans-serif; font-weight:900; font-size:1.3em; text-transform:uppercase; letter-spacing:-0.01em;">
+            = Cafetal más resistente al cambio climático
+          </div>
+        </div>
+      </div>
+
+      <div class="fragment fade-up" style="margin-top:16px;">
+        <div style="background:#fff; border-radius:14px; padding:18px 22px; box-shadow:0 2px 10px rgba(0,0,0,0.06); font-size:0.82em; line-height:1.6;">
+          🎯 No es una solución mágica — es <strong>acumulación de ventajas que importan en el momento crítico</strong>: cuando llega El Niño, cuando falla la lluvia, cuando el suelo está al límite.
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 9 · EJERCICIO FINAL
+    ══════════════════════════════════════════ -->
+    <section
+      data-background-image="../Fotos/20251127/P1001779.JPG"
+      data-background-size="cover"
+      data-background-position="center"
+      data-background-opacity="0.25"
+      data-background-color="#134f47">
+
+      <div style="display:flex; flex-direction:column; justify-content:center; height:100%; min-height:700px;">
+        <div class="fragment fade-up">
+          <div class="exercise-box">
+            <div class="exercise-timer">⏱️ 3 minutos</div>
+            <h3>🎤 Ejercicio sin notas</h3>
+            <p>
+              Preparate un discurso de <strong>3 minutos</strong>: explicá por qué el biochar es tu aliado frente al cambio climático.
+            </p>
+            <p style="margin-top:16px; font-size:0.88em;">
+              <strong style="color:#7df0e4;">Sin notas. Sin mirar las diapositivas. Desde el corazón.</strong>
+            </p>
+            <div style="margin-top:20px; background:rgba(255,255,255,0.15); border-radius:12px; padding:14px 18px; font-size:0.78em; line-height:1.6;">
+              💡 Podés usar los 4 números clave: <strong>+15%</strong> agua · <strong>+39%</strong> SOC · <strong>biología activa</strong> · <strong>-29%</strong> metales
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 10 · CIERRE
+    ══════════════════════════════════════════ -->
+    <section style="background: #134f47;">
+      <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; min-height:700px; text-align:center; padding:40px;">
+        <div class="fragment fade-up" style="margin-bottom:24px;">
+          <div style="font-size:3.5rem;">💧</div>
+          <h2 style="font-family:'Montserrat',sans-serif; font-weight:900; color:#fff; font-size:1.6em; margin:12px 0 8px; text-transform:none;">S5.2 Completada</h2>
+          <p style="color:rgba(255,255,255,0.7); font-size:0.88em;">Agua, Microbiología y Resiliencia Climática</p>
+        </div>
+
+        <div class="fragment fade-up" style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin:20px 0;">
+          <div style="background:rgba(255,255,255,0.1); border-radius:14px; padding:14px 20px; text-align:center; min-width:130px;">
+            <div style="font-family:'Montserrat',sans-serif; font-weight:900; font-size:1.4em; color:#7df0e4;">+15%</div>
+            <div style="font-size:0.65em; color:rgba(255,255,255,0.7); text-transform:uppercase; margin-top:4px;">agua disp.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.1); border-radius:14px; padding:14px 20px; text-align:center; min-width:130px;">
+            <div style="font-family:'Montserrat',sans-serif; font-weight:900; font-size:1.4em; color:#a8f0b4;">+39%</div>
+            <div style="font-size:0.65em; color:rgba(255,255,255,0.7); text-transform:uppercase; margin-top:4px;">SOC</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.1); border-radius:14px; padding:14px 20px; text-align:center; min-width:130px;">
+            <div style="font-family:'Montserrat',sans-serif; font-weight:900; font-size:1.4em; color:var(--amber);">-29%</div>
+            <div style="font-size:0.65em; color:rgba(255,255,255,0.7); text-transform:uppercase; margin-top:4px;">metales</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.1); border-radius:14px; padding:14px 20px; text-align:center; min-width:130px;">
+            <div style="font-family:'Montserrat',sans-serif; font-weight:900; font-size:1.4em; color:#f0a87d;">×5</div>
+            <div style="font-size:0.65em; color:rgba(255,255,255,0.7); text-transform:uppercase; margin-top:4px;">microbiota</div>
+          </div>
+        </div>
+
+        <div class="fragment fade-up">
+          <div class="closing-card" style="max-width:560px;">
+            <h3>Próxima sesión →</h3>
+            <p><strong>S5.3: Aplicación Correcta del Biochar</strong><br/>
+            Dosis, métodos, el momento óptimo y la documentación para el crédito de carbono.</p>
+          </div>
+        </div>
+
+        <div class="fragment fade-up" style="margin-top:24px;">
+          <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:0.7em; color:rgba(255,255,255,0.4); letter-spacing:0.12em; text-transform:uppercase;">Coffee Biochar Academy × Biodiversal</div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    width: 1600,
+    height: 900,
+    margin: 0,
+    minScale: 0.2,
+    maxScale: 2.0,
+    controls: true,
+    progress: true,
+    slideNumber: true,
+    hash: true,
+    transition: 'fade',
+    transitionSpeed: 'default',
+    backgroundTransition: 'fade',
+    fragments: true,
+    fragmentInURL: false,
+    autoAnimateEasing: 'ease',
+    autoAnimateDuration: 0.6,
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>S4.1 — Física del Suelo | Coffee Biochar Academy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/theme/white.css" />
+  <style>
+    :root {
+      --green:   #3A7D44;
+      --dkgreen: #1F4D27;
+      --brown:   #6B3527;
+      --amber:   #D4881E;
+      --cream:   #F7F3EC;
+      --text:    #1C1C1C;
+      --teal:    #1B7A6E;
+    }
+
+    .reveal-viewport { background: var(--cream); }
+
+    .reveal {
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+    }
+
+    .reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+      font-family: 'Montserrat', sans-serif;
+      text-transform: none;
+      letter-spacing: -0.02em;
+    }
+
+    .reveal .progress { background: rgba(58,125,68,0.2); height: 5px; }
+    .reveal .progress span { background: var(--amber); }
+
+    .reveal .slide-number {
+      background: transparent;
+      color: var(--green);
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.7em;
+    }
+
+    /* ── COVER ── */
+    .slide-cover {
+      display: flex !important;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-end;
+      padding: 70px 90px !important;
+      height: 100%;
+      box-sizing: border-box;
+    }
+    .cover-badge {
+      background: var(--amber);
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 0.85em;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 7px 18px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      display: inline-block;
+    }
+    .cover-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 3.4em !important;
+      font-weight: 900;
+      color: #fff !important;
+      line-height: 1.1;
+      margin: 0 0 16px !important;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.4);
+    }
+    .cover-sub {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.1em;
+      color: rgba(255,255,255,0.85);
+      letter-spacing: 0.04em;
+    }
+    .cover-logo {
+      position: absolute;
+      top: 50px;
+      right: 70px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 1.1em;
+      color: rgba(255,255,255,0.9);
+      letter-spacing: 0.05em;
+    }
+
+    /* ── STANDARD SLIDE ── */
+    .slide-std {
+      padding: 55px 80px !important;
+      text-align: left;
+      overflow: hidden;
+    }
+    .slide-label {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.65em;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 8px;
+    }
+    .slide-std h2 {
+      font-size: 2em !important;
+      font-weight: 900;
+      color: var(--dkgreen);
+      margin: 0 0 16px !important;
+      line-height: 1.15;
+    }
+
+    /* ── AGENDA ── */
+    .agenda-grid {
+      display: flex;
+      gap: 18px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+    .agenda-item {
+      flex: 1;
+      min-width: 160px;
+      background: #fff;
+      border-radius: 14px;
+      padding: 14px 16px;
+      box-shadow: 0 3px 16px rgba(0,0,0,0.07);
+      border-top: 5px solid var(--green);
+      text-align: center;
+    }
+    .agenda-item .ag-num {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 1.3em;
+      color: var(--amber);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .agenda-item p {
+      font-size: 0.78em;
+      font-weight: 600;
+      color: var(--dkgreen);
+      margin: 0;
+      line-height: 1.4;
+    }
+
+    /* ── CARDS ── */
+    .cards-row {
+      display: flex;
+      gap: 16px;
+      margin-top: 6px;
+    }
+    .card {
+      flex: 1;
+      border-radius: 14px;
+      padding: 18px 18px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    }
+    .card-green { background: linear-gradient(135deg, #e8f4ea 0%, #d0e9d4 100%); border-top: 5px solid var(--green); }
+    .card-amber { background: linear-gradient(135deg, #fdf3e0 0%, #fae7bf 100%); border-top: 5px solid var(--amber); }
+    .card-brown { background: linear-gradient(135deg, #f5ebe7 0%, #ead5cd 100%); border-top: 5px solid var(--brown); }
+    .card-teal  { background: linear-gradient(135deg, #e0f4f2 0%, #c4eae7 100%); border-top: 5px solid var(--teal); }
+    .card h3 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.95em !important;
+      font-weight: 800;
+      color: var(--dkgreen);
+      margin: 0 0 10px !important;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .card p {
+      font-size: 0.8em;
+      line-height: 1.6;
+      color: var(--text);
+      margin: 0;
+    }
+    .card .card-icon { font-size: 1.8em; margin-bottom: 10px; display: block; }
+
+    /* ── BIG STAT ── */
+    .big-stat {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 4.5em;
+      font-weight: 900;
+      color: var(--amber);
+      line-height: 1;
+      margin: 10px 0 4px;
+    }
+    .stat-label {
+      font-size: 0.85em;
+      color: var(--teal);
+      font-weight: 600;
+    }
+
+    /* ── BULLET LIST ── */
+    .bullet-list { list-style: none; padding: 0; margin: 0; }
+    .bullet-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      margin-bottom: 7px;
+      font-size: 0.85em;
+      line-height: 1.55;
+      background: #fff;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      border-left: 5px solid var(--green);
+    }
+    .bullet-list li.warn { border-left-color: #d4341e; }
+    .bullet-list li.amber { border-left-color: var(--amber); }
+    .bullet-list li.teal { border-left-color: var(--teal); }
+    .bullet-list li .bi { font-size: 1.3em; min-width: 26px; }
+
+    /* ── DATA BOXES ── */
+    .data-row {
+      display: flex;
+      gap: 16px;
+      margin-top: 8px;
+    }
+    .data-box {
+      flex: 1;
+      background: #fff;
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 3px 16px rgba(0,0,0,0.06);
+      text-align: center;
+      border-top: 5px solid var(--green);
+    }
+    .data-box .num {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 2.2em;
+      color: var(--dkgreen);
+      line-height: 1;
+    }
+    .data-box .unit {
+      font-size: 0.75em;
+      color: var(--amber);
+      font-weight: 700;
+    }
+    .data-box .desc {
+      font-size: 0.72em;
+      color: #555;
+      margin-top: 6px;
+    }
+
+    /* ── SPLIT ── */
+    .split-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 6px;
+    }
+
+    /* ── PORE DIAGRAM ── */
+    .pore-row {
+      display: flex;
+      gap: 20px;
+      margin-top: 8px;
+    }
+    .pore-card {
+      flex: 1;
+      border-radius: 16px;
+      padding: 20px 18px;
+      text-align: center;
+    }
+    .pore-macro {
+      background: linear-gradient(135deg, #e0f4f2, #b8e8e4);
+      border: 3px solid var(--teal);
+    }
+    .pore-micro {
+      background: linear-gradient(135deg, #e8f4ea, #c8e6cc);
+      border: 3px solid var(--green);
+    }
+    .pore-biochar {
+      background: linear-gradient(135deg, #fdf3e0, #fae7bf);
+      border: 3px solid var(--amber);
+    }
+    .pore-card .pore-icon { font-size: 2.4em; margin-bottom: 12px; display: block; }
+    .pore-card h3 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 1em !important;
+      color: var(--dkgreen);
+      margin: 0 0 10px !important;
+    }
+    .pore-card p { font-size: 0.78em; line-height: 1.55; color: var(--text); margin: 0; }
+    .pore-size {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 1.3em;
+      color: var(--amber);
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    /* ── SOIL COMPOSITION VISUAL ── */
+    .soil-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 12px;
+    }
+    .soil-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .soil-bar-label {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.82em;
+      color: var(--dkgreen);
+      min-width: 120px;
+    }
+    .soil-bar-track {
+      flex: 1;
+      height: 28px;
+      background: #e8e4dc;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .soil-bar-fill {
+      height: 100%;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      padding-left: 14px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 0.82em;
+      color: #fff;
+      transition: width 0.6s ease;
+    }
+    .bar-mineral { background: linear-gradient(90deg, #7a9e82, #3A7D44); width: 45%; }
+    .bar-mo      { background: linear-gradient(90deg, #8B5E3C, #6B3527); width: 5%; min-width: 48px; }
+    .bar-water   { background: linear-gradient(90deg, #4aa3e0, #1B7A6E); width: 25%; }
+    .bar-air     { background: linear-gradient(90deg, #a8d5b5, #3A7D44); width: 25%; }
+    .soil-bar-pct {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 1.1em;
+      color: var(--amber);
+      min-width: 40px;
+    }
+
+    /* ── CLOSING SLIDE ── */
+    .slide-close {
+      display: flex !important;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px !important;
+    }
+    .slide-close h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 2.6em !important;
+      font-weight: 900;
+      color: #fff !important;
+      text-shadow: 0 2px 16px rgba(0,0,0,0.4);
+      margin-bottom: 20px !important;
+    }
+    .key-chips {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+    .key-chip {
+      background: rgba(255,255,255,0.92);
+      color: var(--dkgreen);
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.78em;
+      padding: 9px 18px;
+      border-radius: 50px;
+    }
+    .tarea-box {
+      background: rgba(212,136,30,0.9);
+      color: #fff;
+      border-radius: 14px;
+      padding: 18px 36px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.9em;
+      letter-spacing: 0.02em;
+    }
+
+    /* ── HIGHLIGHT BOX ── */
+    .highlight-box {
+      background: linear-gradient(90deg, #e8f4ea, #d0e9d4);
+      border-left: 6px solid var(--green);
+      border-radius: 10px;
+      padding: 16px 22px;
+      font-size: 0.85em;
+      color: var(--dkgreen);
+      font-weight: 600;
+      margin-top: 16px;
+    }
+    .highlight-box.amber {
+      background: linear-gradient(90deg, #fdf3e0, #fae7bf);
+      border-left-color: var(--amber);
+    }
+    .highlight-box.warn {
+      background: linear-gradient(90deg, #fde0dc, #f8c0b8);
+      border-left-color: #d4341e;
+      color: #8b1a0e;
+    }
+
+    /* ── INDICATOR GRID ── */
+    .indicator-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 10px;
+    }
+    .indicator-item {
+      background: #fff;
+      border-radius: 12px;
+      padding: 12px 16px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+    .indicator-item .ind-icon { font-size: 1.6em; min-width: 32px; }
+    .indicator-item h4 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 0.85em !important;
+      color: var(--dkgreen);
+      margin: 0 0 5px !important;
+    }
+    .indicator-item p { font-size: 0.75em; line-height: 1.5; color: #555; margin: 0; }
+
+    /* Reveal fragment */
+    .reveal .fragment.fade-up {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    .reveal .fragment.fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Accent line */
+    .accent-line {
+      width: 60px;
+      height: 5px;
+      background: var(--amber);
+      border-radius: 3px;
+      margin: 0 0 12px;
+    }
+
+    /* QUOTE */
+    .quote-block {
+      background: linear-gradient(135deg, var(--dkgreen), var(--green));
+      border-radius: 16px;
+      padding: 16px 24px;
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.9em;
+      line-height: 1.5;
+      font-style: italic;
+      text-align: center;
+      margin-top: 12px;
+    }
+    .quote-block::before { content: '"'; font-size: 2em; opacity: 0.4; line-height: 0; vertical-align: -0.3em; margin-right: 6px; }
+    .quote-block::after  { content: '"'; font-size: 2em; opacity: 0.4; line-height: 0; vertical-align: -0.3em; margin-left: 6px; }
+  </style>
+</head>
+<body>
+<div class="reveal">
+  <div class="slides">
+
+    <!-- ── SLIDE 1: COVER ── -->
+    <section
+      data-background-image="../Fotos/20250723/IMG_7173.jpg"
+      data-background-opacity="0.3"
+      data-background-color="#1F4D27"
+      data-transition="fade">
+      <div class="slide-cover">
+        <div class="cover-logo">☕ Coffee Biochar Academy × Biodiversal</div>
+        <span class="cover-badge">Módulo 4 · Sesión 1</span>
+        <h1 class="cover-title">Física<br>del Suelo</h1>
+        <p class="cover-sub">Textura, estructura, poros y compactación en cafetales</p>
+      </div>
+    </section>
+
+    <!-- ── SLIDE 2: AGENDA ── -->
+    <section class="slide-std" data-transition="slide">
+      <div class="slide-label">En esta sesión</div>
+      <h2>¿Qué exploramos hoy? 🗺️</h2>
+      <div class="accent-line"></div>
+      <div class="agenda-grid">
+        <div class="agenda-item fragment fade-up">
+          <div class="ag-num">01</div>
+          <p>¿Qué tiene el suelo además de tierra?</p>
+        </div>
+        <div class="agenda-item fragment fade-up" style="border-top-color:var(--amber)">
+          <div class="ag-num">02</div>
+          <p>Textura y estructura del suelo</p>
+        </div>
+        <div class="agenda-item fragment fade-up" style="border-top-color:var(--teal)">
+          <div class="ag-num">03</div>
+          <p>Macro y microporos</p>
+        </div>
+        <div class="agenda-item fragment fade-up" style="border-top-color:var(--brown)">
+          <div class="ag-num">04</div>
+          <p>Compactación en cafetales</p>
+        </div>
+        <div class="agenda-item fragment fade-up" style="border-top-color:var(--green)">
+          <div class="ag-num">05</div>
+          <p>Biochar y la física del suelo</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SLIDE 3: EL SUELO MÁS QUE TIERRA ── -->
+    <section class="slide-std" data-transition="slide">
+      <div class="slide-label">Composición del suelo</div>
+      <h2>El Suelo: Más Que Tierra 🌍</h2>
+      <div class="accent-line"></div>
+      <div class="soil-bars">
+        <div class="soil-bar-row fragment fade-up">
+          <span class="soil-bar-label">🪨 Minerales</span>
+          <div class="soil-bar-track">
+            <div class="soil-bar-fill bar-mineral">45%</div>
+          </div>
+          <span class="soil-bar-pct">45%</span>
+        </div>
+        <div class="soil-bar-row fragment fade-up">
+          <span class="soil-bar-label">🍂 Materia Org.</span>
+          <div class="soil-bar-track">
+            <div class="soil-bar-fill bar-mo">5%</div>
+          </div>
+          <span class="soil-bar-pct">5%</span>
+        </div>
+        <div class="soil-bar-row fragment fade-up">
+          <span class="soil-bar-label">💧 Agua</span>
+          <div class="soil-bar-track">
+            <div class="soil-bar-fill bar-water">25%</div>
+          </div>
+          <span class="soil-bar-pct">25%</span>
+        </div>
+        <div class="soil-bar-row fragment fade-up">
+          <span class="soil-bar-label">💨 Aire</span>
+          <div class="soil-bar-track">
+            <div class="soil-bar-fill bar-air">25%</div>
+          </div>
+          <span class="soil-bar-pct">25%</span>
+        </div>
+      </div>
+      <div class="highlight-box warn fragment fade-up" style="margin-top:20px">
+        ⚠️ Un suelo compactado pierde el espacio de aire y agua → raíces sin oxígeno → <strong>café estresado</strong>.
+      </div>
+    </section>
+
+    <!-- ── SLIDE 4: TEXTURA ── -->
+    <section class="slide-std" data-transition="slide">
+      <div class="slide-label">Propiedad permanente</div>
+      <h2>Textura: No Cambia con el Manejo</h2>
+      <div class="accent-line"></div>
+      <div class="cards-row">
+        <div class="card card-amber fragment fade-up">
+          <span class="card-icon">🏖️</span>
+          <h3>Arena</h3>
+          <p><strong>0.05 – 2 mm</strong><br><br>Drena rápido, poca retención de agua y nutrientes. Ventilada pero seca.</p>
+        </div>
+        <div class="card card-teal fragment fade-up">
+          <span class="card-icon">⚖️</span>
+          <h3>Limo</h3>
+          <p><strong>0.002 – 0.05 mm</strong><br><br>Equilibrado: buena retención de agua y nutrientes. Textura suave al tacto.</p>
+        </div>
+        <div class="card card-brown fragment fade-up">
+          <span class="card-icon">🏺</span>
+          <h3>Arcilla</h3>
+          <p><strong>&lt; 0.002 mm</strong><br><br>Alta retención de agua y nutrientes, pero se compacta y encharque fácilmente.</p>
+        </div>
+      </div>
+      <div class="quote-block fragment fade-up">
+        La textura es el ADN del suelo — naces con ella.
+      </div>
+    </section>
+
+    <!-- ── SLIDE 5: ESTRUCTURA ── -->
+    <section class="slide-std" data-transition="slide">
+      <div class="slide-label">Propiedad modificable</div>
+      <h2>Estructura: Sí Se Puede Mejorar 💪</h2>
+      <div class="accent-line"></div>
+      <div class="split-2">
+        <div>
+          <ul class="bullet-list">
+            <li class="fragment fade-up"><span class="bi">🧱</span><span>Los <strong>agregados</strong> son unidades de partículas sólidas unidas con poros entre ellas.</span></li>
+            <li class="fragment fade-up"><span class="bi">💨</span><span>Buena estructura = alta porosidad = más agua disponible + más aire + mejores raíces.</span></li>
+            <li class="fragment fade-up teal"><span class="bi">🌱</span><span><strong>Biochar + materia orgánica</strong> mejoran la estabilidad de los agregados del suelo.</span></li>
+            <li class="fragment fade-up amber"><span class="bi">🦠</span><span>Los microorganismos producen sustancias pegajosas (glomalina) que unen los agregados.</span></li>
+          </ul>
+        </div>
+        <div class="fragment fade-up" style="display:flex; flex-direction:column; gap:16px; justify-content:center;">
+          <div class="data-box" style="border-top-color:var(--green)">
+            <div class="num" style="color:var(--green)">↑ MO</div>
+            <div class="unit">materia orgánica</div>
+            <div class="desc">mejor estructura de agregados</div>
+          </div>
+          <div class="data-box" style="border-top-color:var(--amber)">
+            <div class="num" style="color:var(--amber)">+Bio</div>
+            <div class="unit">biochar aplicado</div>
+            <div class="desc">mejora el estado físico del suelo</div>
+          </div>
+        </div>
+      </div>
+      <div class="quote-block fragment fade-up">
+        La estructura es el estado físico que tú puedes cambiar.
+      </div>
+    </section>
+
+    <!-- ── SLIDE 6: POROS ── -->
+    <section class="slide-std" data-transition="slide">
+      <div class="slide-label">Sistema poroso</div>
+      <h2>Macroporos y Microporos</h2>
+      <div class="accent-line"></div>
+      <div class="pore-row">
+        <div class="pore-card pore-macro fragment fade-up">
+          <span class="pore-icon">🛣️</span>
+          <span class="pore-size">&gt; 50 μm</span>
+          <h3>Macroporos</h3>
+          <p>Autopistas del agua y el aire. Se drenan rápidamente por gravedad. Claves para la aireación radicular.</p>
+        </div>
+        <div class="pore-card pore-micro fragment fade-up">
+          <span class="pore-icon">🚿</span>
+          <span class="pore-size">&lt; 50 μm</span>
+          <h3>Microporos</h3>
+          <p>Reservorios de agua disponible para la planta. El agua se retiene por capilaridad. Claves en épocas secas.</p>
+        </div>
+        <div class="pore-card pore-biochar fragment fade-up">
+          <span class="pore-icon">✨</span>
+          <span class="pore-size" style="color:var(--amber)">Millones</span>
+          <h3>Biochar</h3>
+          <p>Un gramo de biochar puede agregar <strong>millones de microporos</strong>. Mayor retención de agua y nutrientes disponibles.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SLIDE 7: COMPACTACIÓN ── -->
+    <section class="slide-std" data-transition="slide">
+      <div class="slide-label">⚠️ Problema frecuente</div>
+      <h2>Compactación en Cafetales ⚠️</h2>
+      <div class="accent-line"></div>
+      <div class="split-2">
+        <div>
+          <p style="font-family:'Montserrat'; font-weight:800; font-size:0.8em; color:var(--brown); letter-spacing:0.05em; text-transform:uppercase; margin-bottom:10px;">Causas</p>
+          <ul class="bullet-list">
+            <li class="warn fragment fade-up"><span class="bi">🫏</span><span>Pisoteo de mulas y ganado en el cafetal</span></li>
+            <li class="warn fragment fade-up"><span class="bi">🚜</span><span>Maquinaria pesada en suelos húmedos</span></li>
+            <li class="warn fragment fade-up"><span class="bi">🌧️</span><span>Lluvias fuertes sobre suelo sin cobertura vegetal</span></li>
+          </ul>
+        </div>
+        <div>
+          <p style="font-family:'Montserrat'; font-weight:800; font-size:0.8em; color:var(--dkgreen); letter-spacing:0.05em; text-transform:uppercase; margin-bottom:10px;">Consecuencias</p>
+          <ul class="bullet-list">
+            <li class="fragment fade-up"><span class="bi">🌿</span><span>Raíces superficiales, sin profundidad</span></li>
+            <li class="fragment fade-up"><span class="bi">💦</span><span>Estrés hídrico en épocas secas</span></li>
+            <li class="fragment fade-up"><span class="bi">📉</span><span>Menor productividad del cafetal</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="highlight-box warn fragment fade-up">
+        🔍 <strong>Señales de alerta:</strong> charcos que duran más de 30 min después de la lluvia · varilla de acero que no entra fácilmente a 30 cm.
+      </div>
+    </section>
+
+    <!-- ── SLIDE 8: INDICADORES DE CAMPO ── -->
+    <section class="slide-std" data-transition="slide">
+      <div class="slide-label">Diagnóstico en campo</div>
+      <h2>Indicadores Físicos en Campo 🔍</h2>
+      <div class="accent-line"></div>
+      <div class="indicator-grid">
+        <div class="indicator-item fragment fade-up">
+          <span class="ind-icon">🔩</span>
+          <div>
+            <h4>Resistencia a la Penetración</h4>
+            <p>Clavar una varilla de acero a 30 cm con la mano. Si no entra = compactación moderada-severa.</p>
+          </div>
+        </div>
+        <div class="indicator-item fragment fade-up">
+          <span class="ind-icon">🎨</span>
+          <div>
+            <h4>Color del Suelo</h4>
+            <p>Oscuro (negro-marrón) = alta materia orgánica = excelente. Suelo grisáceo claro = poca MO.</p>
+          </div>
+        </div>
+        <div class="indicator-item fragment fade-up">
+          <span class="ind-icon">🧱</span>
+          <div>
+            <h4>Estructura de Terrones</h4>
+            <p>Los terrones que se deshacen fácil al estrujarse = buena estructura. Bloques duros = señal negativa.</p>
+          </div>
+        </div>
+        <div class="indicator-item fragment fade-up">
+          <span class="ind-icon">🪱</span>
+          <div>
+            <h4>Lombrices Visibles</h4>
+            <p>Más de 10 lombrices en un cubo de 30×30×20 cm = suelo biológicamente activo y sano.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SLIDE 9: BIOCHAR Y LA FÍSICA ── -->
+    <section class="slide-std" data-transition="slide">
+      <div class="slide-label">Solución con biochar</div>
+      <h2>Biochar y la Física del Suelo 🌱</h2>
+      <div class="accent-line"></div>
+      <div class="data-row" style="margin-bottom:16px">
+        <div class="data-box fragment fade-up" style="border-top-color:var(--teal)">
+          <div class="num" style="color:var(--teal)">+15%</div>
+          <div class="unit">retención de agua</div>
+          <div class="desc">por microporos adicionales del biochar</div>
+        </div>
+        <div class="data-box fragment fade-up" style="border-top-color:var(--green)">
+          <div class="num" style="color:var(--green)">↓ DA</div>
+          <div class="unit">densidad aparente</div>
+          <div class="desc">raíces penetran con menos resistencia</div>
+        </div>
+        <div class="data-box fragment fade-up" style="border-top-color:var(--amber)">
+          <div class="num" style="color:var(--amber)">↑ EAA</div>
+          <div class="unit">estabilidad de agregados</div>
+          <div class="desc">menor erosión del suelo</div>
+        </div>
+      </div>
+      <div class="highlight-box fragment fade-up">
+        💡 El biochar no reemplaza la labor agronómica — la <strong>potencia</strong>. Combinado con buenas prácticas de manejo, transforma el suelo.
+      </div>
+    </section>
+
+    <!-- ── SLIDE 10: ACTIVIDAD ── -->
+    <section
+      data-background-image="../Fotos/20251126/P1001827.JPG"
+      data-background-opacity="0.3"
+      data-background-color="#1F4D27"
+      data-transition="fade"
+      class="slide-close">
+      <h2>🌱 Salida a Campo</h2>
+      <div class="key-chips">
+        <span class="key-chip fragment fade-up">🔩 Prueba varilla de acero a 30 cm</span>
+        <span class="key-chip fragment fade-up">🎨 Evalúa el color del suelo</span>
+        <span class="key-chip fragment fade-up">🧱 Examina la estructura</span>
+        <span class="key-chip fragment fade-up">🪱 Cuenta lombrices en 30×30×20 cm</span>
+      </div>
+      <p style="color:rgba(255,255,255,0.9); font-size:0.95em; margin-bottom:28px; font-family:'Montserrat'; font-weight:600;">
+        Evalúa una parcela con los indicadores aprendidos.<br>¿Compactado? ¿Buena estructura? ¿Hay lombrices?
+      </p>
+      <div class="tarea-box fragment fade-up">
+        📚 Próxima sesión → S4.2: Química del Suelo — pH, CIC y nutrientes
+      </div>
+    </section>
+
+    <!-- ── SLIDE 11: CIERRE ── -->
+    <section class="slide-std" data-transition="slide" style="background:linear-gradient(135deg,var(--dkgreen),var(--green))">
+      <div style="text-align:center; padding-top:40px">
+        <span style="font-size:3em">🎯</span>
+        <h2 style="color:#fff !important; font-size:2em !important; margin:20px 0 30px !important;">Puntos Clave S4.1</h2>
+        <div style="display:flex; gap:18px; justify-content:center; flex-wrap:wrap; margin-bottom:36px">
+          <div class="fragment fade-up" style="background:rgba(255,255,255,0.15); border-radius:14px; padding:18px 24px; color:#fff; font-family:'Montserrat'; font-weight:700; font-size:0.82em; backdrop-filter:blur(4px);">🌍 Suelo = sólidos + agua + aire</div>
+          <div class="fragment fade-up" style="background:rgba(255,255,255,0.15); border-radius:14px; padding:18px 24px; color:#fff; font-family:'Montserrat'; font-weight:700; font-size:0.82em; backdrop-filter:blur(4px);">🧬 Textura = ADN del suelo</div>
+          <div class="fragment fade-up" style="background:rgba(255,255,255,0.15); border-radius:14px; padding:18px 24px; color:#fff; font-family:'Montserrat'; font-weight:700; font-size:0.82em; backdrop-filter:blur(4px);">💪 Estructura = la puedes mejorar</div>
+          <div class="fragment fade-up" style="background:rgba(255,255,255,0.15); border-radius:14px; padding:18px 24px; color:#fff; font-family:'Montserrat'; font-weight:700; font-size:0.82em; backdrop-filter:blur(4px);">✨ Biochar + microporos</div>
+          <div class="fragment fade-up" style="background:rgba(255,255,255,0.15); border-radius:14px; padding:18px 24px; color:#fff; font-family:'Montserrat'; font-weight:700; font-size:0.82em; backdrop-filter:blur(4px);">⚠️ Compactación = enemigo del café</div>
+        </div>
+        <p class="fragment fade-up" style="color:rgba(255,255,255,0.8); font-size:0.95em; font-family:'Montserrat'; font-weight:600;">
+          Próxima sesión → <strong style="color:var(--amber)">Química del Suelo: pH, CIC y nutrientes esenciales del café</strong>
+        </p>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    width: 1600,
+    height: 900,
+    margin: 0,
+    minScale: 0.2,
+    maxScale: 2.0,
+    controls: true,
+    progress: true,
+    slideNumber: 'c/t',
+    hash: true,
+    transition: 'slide',
+    transitionSpeed: 'default',
+    backgroundTransition: 'fade',
+    fragments: true,
+    fragmentInURL: false,
+    autoAnimateEasing: 'ease',
+    autoAnimateDuration: 0.6,
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>S2.3 — El Rol del Extensionista y la Integridad del Dato | Coffee Biochar Academy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/theme/white.css" />
+  <style>
+    :root {
+      --green:   #3A7D44;
+      --dkgreen: #1F4D27;
+      --brown:   #6B3527;
+      --amber:   #D4881E;
+      --cream:   #F7F3EC;
+      --text:    #1C1C1C;
+      --teal:    #1B7A6E;
+      --red:     #C0392B;
+    }
+
+    .reveal {
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background: var(--cream);
+    }
+
+    .reveal .slides section {
+      text-align: left;
+      padding: 48px 70px 32px;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .reveal h1, .reveal h2, .reveal h3 {
+      font-family: 'Montserrat', sans-serif;
+      text-transform: none;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      color: var(--dkgreen);
+    }
+    .reveal h2 { font-size: 1.85em; font-weight: 800; }
+    .reveal h3 { font-size: 1.45em; font-weight: 700; color: var(--green); }
+    .reveal p, .reveal li { font-size: 1.05em; line-height: 1.6; color: var(--text); }
+
+    .reveal .progress { height: 6px; color: var(--amber); }
+    .reveal .slide-number { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 0.85em; color: var(--green); background: transparent; }
+
+    .label-pill {
+      display: inline-block;
+      background: var(--amber);
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.72em;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 6px 18px;
+      border-radius: 40px;
+      margin-bottom: 10px;
+    }
+    .label-pill.green { background: var(--green); }
+    .label-pill.red   { background: var(--red); }
+    .label-pill.teal  { background: var(--teal); }
+    .label-pill.brown { background: var(--brown); }
+
+    /* ── COVER ── */
+    .cover-title {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 3.4em;
+      line-height: 1.0;
+      color: #fff;
+      margin: 0 0 20px;
+    }
+    .cover-line { width: 80px; height: 5px; background: var(--amber); border-radius: 3px; margin: 22px 0; }
+
+    /* ── CARDS ── */
+    .card-grid { display: grid; gap: 14px; }
+    .card-grid-2 { grid-template-columns: 1fr 1fr; }
+    .card-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 22px 24px;
+      border-left: 5px solid var(--green);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+    }
+    .card.amber  { border-left-color: var(--amber); }
+    .card.brown  { border-left-color: var(--brown); }
+    .card.teal   { border-left-color: var(--teal); }
+    .card.red    { border-left-color: var(--red); }
+    .card-icon { font-size: 2em; margin-bottom: 8px; display: block; }
+    .card h4 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 0.95em; color: var(--dkgreen); margin: 0 0 6px; }
+    .card p { font-size: 0.87em; margin: 0; color: #444; }
+
+    /* ── ROL DOBLE (productor vs extensionista) ── */
+    .dual-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 20px;
+    }
+    .dual-box {
+      border-radius: 18px;
+      padding: 30px 26px;
+    }
+    .dual-box.producer {
+      background: linear-gradient(145deg, #fff, #f0f9f1);
+      border: 3px solid var(--green);
+    }
+    .dual-box.extensionista {
+      background: linear-gradient(145deg, #fff, #fef6ec);
+      border: 3px solid var(--amber);
+    }
+    .dual-role-label {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 1.1em;
+      margin-bottom: 14px;
+    }
+    .dual-role-label.green { color: var(--green); }
+    .dual-role-label.amber { color: var(--amber); }
+    .dual-point {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin: 8px 0;
+    }
+    .dual-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-top: 7px;
+      flex-shrink: 0;
+    }
+    .dual-dot.green { background: var(--green); }
+    .dual-dot.amber { background: var(--amber); }
+    .dual-point-text { font-size: 0.9em; color: #444; line-height: 1.4; }
+
+    /* ── INTEGRIDAD CATEGORÍAS ── */
+    .integrity-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 20px;
+    }
+    .integrity-box {
+      border-radius: 20px;
+      padding: 30px 26px;
+    }
+    .integrity-box.error {
+      background: #fff8e1;
+      border: 3px solid var(--amber);
+    }
+    .integrity-box.fraude {
+      background: #fdf0ef;
+      border: 3px solid var(--red);
+    }
+    .integrity-title {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 1.2em;
+      margin-bottom: 12px;
+    }
+    .integrity-title.amber { color: var(--amber); }
+    .integrity-title.red   { color: var(--red); }
+    .integrity-tag {
+      display: inline-block;
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.72em;
+      margin-bottom: 10px;
+    }
+    .integrity-tag.fixable  { background: #e8f5e9; color: var(--green); }
+    .integrity-tag.critical { background: #ffebee; color: var(--red); }
+    .integrity-example { font-size: 0.85em; color: #666; margin: 5px 0; line-height: 1.4; }
+
+    /* ── CADENA DE CONSECUENCIAS ── */
+    .chain-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 16px;
+    }
+    .chain-step {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .chain-num {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 0.95em;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .chain-step:nth-child(1) .chain-num { background: var(--amber); }
+    .chain-step:nth-child(2) .chain-num { background: #e67e22; }
+    .chain-step:nth-child(3) .chain-num { background: #e74c3c; }
+    .chain-step:nth-child(4) .chain-num { background: #c0392b; }
+    .chain-step:nth-child(5) .chain-num { background: #96281b; }
+    .chain-step:nth-child(6) .chain-num { background: #7b241c; }
+    .chain-step:nth-child(7) .chain-num { background: #641e16; }
+
+    .chain-text {
+      background: #fff;
+      border-radius: 12px;
+      padding: 12px 18px;
+      flex: 1;
+      font-size: 0.88em;
+      color: var(--text);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      line-height: 1.4;
+    }
+
+    /* ── DECLARACIÓN DE HONOR ── */
+    .honor-box {
+      background: linear-gradient(135deg, var(--dkgreen), var(--teal));
+      border-radius: 20px;
+      padding: 36px 44px;
+      margin-top: 18px;
+    }
+    .honor-box h3 { color: var(--amber); margin-bottom: 16px; }
+    .honor-point {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin: 12px 0;
+    }
+    .honor-icon { font-size: 1.4em; flex-shrink: 0; margin-top: 2px; }
+    .honor-text { color: rgba(255,255,255,0.92); font-size: 0.95em; line-height: 1.5; }
+
+    /* ── AUDITORÍAS ── */
+    .audit-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .audit-box {
+      background: #fff;
+      border-radius: 18px;
+      padding: 28px 24px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+    }
+    .audit-box.announced { border-top: 5px solid var(--teal); }
+    .audit-box.surprise  { border-top: 5px solid var(--amber); }
+    .audit-type {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 0.95em;
+      margin-bottom: 10px;
+    }
+    .audit-type.teal  { color: var(--teal); }
+    .audit-type.amber { color: var(--amber); }
+    .audit-detail { font-size: 0.85em; color: #555; line-height: 1.5; }
+    .audit-tip {
+      margin-top: 10px;
+      background: var(--cream);
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 0.82em;
+      color: var(--dkgreen);
+      font-weight: 600;
+    }
+
+    /* ── ESTUDIO DE CASO ── */
+    .case-study {
+      background: rgba(31,77,39,0.85);
+      border-radius: 20px;
+      padding: 40px 50px;
+      backdrop-filter: blur(2px);
+    }
+    .case-study h2 { color: #fff; }
+    .case-alert {
+      background: rgba(192,57,43,0.3);
+      border: 2px solid #e74c3c;
+      border-radius: 14px;
+      padding: 20px 24px;
+      margin: 16px 0;
+    }
+    .case-alert p { color: #fff; font-size: 0.95em; margin: 0; line-height: 1.5; }
+    .case-question {
+      background: rgba(212,136,30,0.25);
+      border: 2px solid var(--amber);
+      border-radius: 14px;
+      padding: 16px 20px;
+      margin: 8px 0;
+    }
+    .case-question p { color: #fff; font-size: 0.9em; margin: 0; }
+
+    /* ── EVALUACIÓN / CIERRE ── */
+    .eval-box {
+      background: linear-gradient(135deg, var(--amber), var(--brown));
+      border-radius: 20px;
+      padding: 32px 40px;
+      margin-top: 16px;
+      text-align: center;
+    }
+    .eval-box h3 { color: #fff; font-size: 1.8em; margin-bottom: 10px; }
+    .eval-box p  { color: rgba(255,255,255,0.92); font-size: 1em; margin: 6px 0; }
+    .eval-meta { display: flex; justify-content: center; gap: 30px; margin-top: 16px; }
+    .eval-meta-item { text-align: center; }
+    .eval-meta-num { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 2.4em; color: #fff; }
+    .eval-meta-label { font-size: 0.78em; color: rgba(255,255,255,0.75); }
+
+    .next-box {
+      background: linear-gradient(135deg, var(--dkgreen), var(--teal));
+      border-radius: 20px;
+      padding: 24px 36px;
+      margin-top: 18px;
+      text-align: center;
+    }
+    .next-box p { color: rgba(255,255,255,0.9); font-size: 1em; margin: 4px 0; }
+    .next-box strong { color: var(--amber); }
+
+    /* Fragment animations */
+    .reveal .fragment { opacity: 0; transition: opacity 0.4s ease, transform 0.4s ease; transform: translateY(18px); }
+    .reveal .fragment.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+<div class="reveal">
+  <div class="slides">
+
+    <!-- ══════════ SLIDE 1 — COVER ══════════ -->
+    <section
+      data-background-image="../Fotos/20251126/P1001779.JPG"
+      data-background-opacity="0.38"
+      data-background-color="#1F4D27"
+      data-background-size="cover">
+      <div style="padding:60px 80px;">
+        <div style="font-family:'Montserrat',sans-serif;font-weight:800;font-size:1em;letter-spacing:0.22em;text-transform:uppercase;color:var(--amber);margin-bottom:14px;">☕ Coffee Biochar Academy × Biodiversal</div>
+        <div style="font-family:'Montserrat',sans-serif;font-weight:800;font-size:1.05em;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.6);margin-bottom:14px;">MÓDULO 2 · SESIÓN 3</div>
+        <div class="cover-title">El Rol del Extensionista<br>y la Integridad del Dato</div>
+        <div class="cover-line"></div>
+        <div style="font-family:'Inter',sans-serif;font-weight:400;font-size:1.25em;color:rgba(255,255,255,0.82);">El dato correcto, en el momento correcto, cambia todo</div>
+      </div>
+    </section>
+
+    <!-- ══════════ SLIDE 2 — OBJETIVO ══════════ -->
+    <section data-background-color="#F7F3EC">
+      <div class="label-pill teal">🎯 Objetivo</div>
+      <h2 style="margin-bottom:16px;">El extensionista NO es solo<br>un recolector de datos</h2>
+      <div style="background:linear-gradient(135deg,var(--dkgreen),var(--teal));border-radius:16px;padding:20px 28px;margin-bottom:22px;" class="fragment">
+        <p style="color:var(--amber);font-family:'Montserrat',sans-serif;font-weight:800;font-size:1.15em;margin:0;">🛡️ Es el guardián de la credibilidad del proyecto.</p>
+      </div>
+      <div class="card-grid card-grid-3">
+        <div class="card fragment">
+          <span class="card-icon">⚖️</span>
+          <h4>Error vs Fraude</h4>
+          <p>La diferencia entre un error involuntario y un fraude intencional</p>
+        </div>
+        <div class="card red fragment">
+          <span class="card-icon">🔗</span>
+          <h4>Consecuencias en cadena</h4>
+          <p>Cómo un dato falso puede destruir el ingreso del productor</p>
+        </div>
+        <div class="card amber fragment">
+          <span class="card-icon">📜</span>
+          <h4>Declaración de honor</h4>
+          <p>El compromiso formal que protege a todos los actores</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ SLIDE 3 — PRODUCTOR vs EXTENSIONISTA ══════════ -->
+    <section data-background-color="#F7F3EC">
+      <div class="label-pill green">👥 Dos roles, un sistema</div>
+      <h2>Productor vs Extensionista —<br>Dos Roles Distintos</h2>
+      <div class="dual-grid">
+        <div class="dual-box producer fragment">
+          <div class="dual-role-label green">🌱 Productor</div>
+          <p style="font-size:0.82em;color:var(--green);font-family:'Montserrat',sans-serif;font-weight:600;margin-bottom:12px;">Responsable del proceso físico</p>
+          <div class="dual-point">
+            <div class="dual-dot green"></div>
+            <div class="dual-point-text">Dueño de la biomasa (zoca)</div>
+          </div>
+          <div class="dual-point">
+            <div class="dual-dot green"></div>
+            <div class="dual-point-text">Realiza la pirólisis Kon-Tiki</div>
+          </div>
+          <div class="dual-point">
+            <div class="dual-dot green"></div>
+            <div class="dual-point-text">Aplica el biochar al suelo de su finca</div>
+          </div>
+          <div class="dual-point">
+            <div class="dual-dot green"></div>
+            <div class="dual-point-text">Firma la declaración de honor</div>
+          </div>
+        </div>
+        <div class="dual-box extensionista fragment">
+          <div class="dual-role-label amber">⭐ Extensionista</div>
+          <p style="font-size:0.82em;color:var(--amber);font-family:'Montserrat',sans-serif;font-weight:600;margin-bottom:12px;">Responsable del dato digital</p>
+          <div class="dual-point">
+            <div class="dual-dot amber"></div>
+            <div class="dual-point-text">Registra correctamente en Planboo</div>
+          </div>
+          <div class="dual-point">
+            <div class="dual-dot amber"></div>
+            <div class="dual-point-text">Captura fotos con GPS activo</div>
+          </div>
+          <div class="dual-point">
+            <div class="dual-dot amber"></div>
+            <div class="dual-point-text">Sube datos completos y a tiempo</div>
+          </div>
+          <div class="dual-point">
+            <div class="dual-dot amber"></div>
+            <div class="dual-point-text">Garantiza la integridad del registro</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ SLIDE 4 — INTEGRIDAD: DOS CATEGORÍAS ══════════ -->
+    <section data-background-color="#F7F3EC">
+      <div class="label-pill">🔍 Integridad del dato</div>
+      <h2>Integridad del Dato —<br>Dos Categorías</h2>
+      <div class="integrity-grid">
+        <div class="integrity-box error fragment">
+          <div class="integrity-title amber">⚠️ Error Involuntario</div>
+          <div class="integrity-tag fixable">✅ Corregible con capacitación</div>
+          <div class="integrity-example">📷 Foto borrosa o sin contexto</div>
+          <div class="integrity-example">📍 GPS apagado al capturar</div>
+          <div class="integrity-example">📅 Olvido de la fecha exacta</div>
+          <div class="integrity-example">⚖️ Error al digitar el peso</div>
+        </div>
+        <div class="integrity-box fraude fragment">
+          <div class="integrity-title red">🚨 Fraude Intencional</div>
+          <div class="integrity-tag critical">⛔ Consecuencias legales</div>
+          <div class="integrity-example">❌ Dato completamente falso</div>
+          <div class="integrity-example">❌ Foto de otra finca o fecha distinta</div>
+          <div class="integrity-example">❌ Peso inventado o alterado</div>
+          <div class="integrity-example">❌ Registro de evento que no ocurrió</div>
+        </div>
+      </div>
+      <div style="background:#fff;border-radius:14px;padding:16px 24px;margin-top:18px;border-left:5px solid var(--red);box-shadow:0 2px 12px rgba(0,0,0,0.06);" class="fragment">
+        <p style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:0.9em;color:var(--dkgreen);margin:0;">El error se capacita. El fraude se sanciona. La diferencia la hace la intención.</p>
+      </div>
+    </section>
+
+    <!-- ══════════ SLIDE 5 — CADENA DE CONSECUENCIAS ══════════ -->
+    <section data-background-color="#F7F3EC">
+      <div class="label-pill red">⛓️ Efecto dominó</div>
+      <h2>Cadena de Consecuencias —<br>Dato Falso</h2>
+      <div class="chain-container" style="margin-top:14px;">
+        <div class="chain-step fragment">
+          <div class="chain-num">1</div>
+          <div class="chain-text">🖊️ <strong>Dato falso</strong> ingresado en el registro Planboo</div>
+        </div>
+        <div class="chain-step fragment">
+          <div class="chain-num">2</div>
+          <div class="chain-text">🔍 <strong>Verificador CSI</strong> detecta inconsistencia en la auditoría</div>
+        </div>
+        <div class="chain-step fragment">
+          <div class="chain-num">3</div>
+          <div class="chain-text">🚫 <strong>Lote invalidado</strong> — el registro completo queda en cero</div>
+        </div>
+        <div class="chain-step fragment">
+          <div class="chain-num">4</div>
+          <div class="chain-text">💳 <strong>Crédito cancelado</strong> — no se emite ni se vende</div>
+        </div>
+        <div class="chain-step fragment">
+          <div class="chain-num">5</div>
+          <div class="chain-text">👨‍🌾 <strong>Productor pierde ingreso</strong> — el trabajo fue en vano</div>
+        </div>
+        <div class="chain-step fragment">
+          <div class="chain-num">6</div>
+          <div class="chain-text">📉 <strong>Proyecto pierde reputación</strong> ante el mercado global</div>
+        </div>
+        <div class="chain-step fragment">
+          <div class="chain-num">7</div>
+          <div class="chain-text">🌍 <strong>Mercado de carbono pierde confianza</strong> — todos perdemos</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ SLIDE 6 — DECLARACIÓN DE HONOR ══════════ -->
+    <section data-background-color="#F7F3EC">
+      <div class="label-pill brown">📜 Compromiso formal</div>
+      <h2>La Declaración de Honor</h2>
+      <div class="honor-box fragment">
+        <h3>Compromiso formal de cada ciclo</h3>
+        <div class="honor-point">
+          <div class="honor-icon">✍️</div>
+          <div class="honor-text"><strong>Firma al inicio del ciclo</strong> — tanto el productor como el extensionista</div>
+        </div>
+        <div class="honor-point">
+          <div class="honor-icon">⚖️</div>
+          <div class="honor-text"><strong>Responsabilidad legal</strong> — implica consecuencias reales por datos en Planboo</div>
+        </div>
+        <div class="honor-point">
+          <div class="honor-icon">🛡️</div>
+          <div class="honor-text"><strong>Protege al productor</strong> — establece quién es responsable de qué</div>
+        </div>
+        <div class="honor-point">
+          <div class="honor-icon">🌱</div>
+          <div class="honor-text"><strong>Protege al proyecto</strong> — es la base de la integridad del sistema</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ SLIDE 7 — AUDITORÍAS CSI ══════════ -->
+    <section data-background-color="#F7F3EC">
+      <div class="label-pill teal">🔍 Verificación externa</div>
+      <h2>Auditorías CSI —<br>Cómo Contribuye el Extensionista</h2>
+      <div class="audit-grid" style="margin-top:18px;">
+        <div class="audit-box announced fragment">
+          <div class="audit-type teal">📅 Auditorías Anunciadas</div>
+          <div class="audit-detail">El equipo CSI comunica su visita con anticipación. Revisión documental previa — registros, fotos, GPS.</div>
+          <div class="audit-tip">💡 El extensionista organizado prepara carpeta digital lista en horas</div>
+        </div>
+        <div class="audit-box surprise fragment">
+          <div class="audit-type amber">⚡ Auditorías Sorpresa</div>
+          <div class="audit-detail">Visita de campo sin previo aviso. Verificación en tiempo real del proceso y los registros.</div>
+          <div class="audit-tip">💡 Solo quien trabaja bien SIEMPRE pasa la auditoría sorpresa</div>
+        </div>
+      </div>
+      <div style="background:linear-gradient(135deg,var(--green),var(--teal));border-radius:16px;padding:20px 28px;margin-top:20px;" class="fragment">
+        <p style="color:#fff;font-family:'Montserrat',sans-serif;font-weight:700;font-size:1em;margin:0;text-align:center;">🏆 El extensionista organizado <strong style="color:var(--amber);">SIEMPRE</strong> pasa la auditoría — anunciada o sorpresa.</p>
+      </div>
+    </section>
+
+    <!-- ══════════ SLIDE 8 — ESTUDIO DE CASO ══════════ -->
+    <section
+      data-background-image="../Fotos/20251126/P1001795.JPG"
+      data-background-opacity="0.35"
+      data-background-color="#1F4D27"
+      data-background-size="cover">
+      <div style="padding:36px 60px;">
+        <div class="case-study">
+          <div style="font-family:'Montserrat',sans-serif;font-weight:800;font-size:0.85em;letter-spacing:0.15em;text-transform:uppercase;color:var(--amber);margin-bottom:12px;">⚠️ Estudio de caso real</div>
+          <h2 style="font-size:1.8em;margin-bottom:14px;color:#fff;">Situación problema</h2>
+          <div class="case-alert fragment">
+            <p>Un extensionista lleva registros de <strong style="color:var(--amber);">3 productores en un solo día</strong>. Las fotos <strong style="color:#ff6b6b;">no tienen GPS activo</strong> y las fechas de todos los registros son <strong style="color:#ff6b6b;">exactamente iguales</strong>.</p>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;">
+            <div class="case-question fragment">
+              <p>🤔 <strong style="color:var(--amber);">¿Qué pasará</strong> en la verificación CSI?</p>
+            </div>
+            <div class="case-question fragment">
+              <p>💡 <strong style="color:var(--amber);">¿Cómo se pudo evitar</strong> esta situación?</p>
+            </div>
+          </div>
+          <div style="background:rgba(58,125,68,0.3);border:2px solid #3A7D44;border-radius:14px;padding:14px 20px;margin-top:12px;" class="fragment">
+            <p style="color:#fff;font-size:0.88em;margin:0;">Discutan en grupos de 3 — 5 minutos.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ SLIDE 9 — EVALUACIÓN + CIERRE ══════════ -->
+    <section data-background-color="#F7F3EC">
+      <div style="text-align:center;margin-bottom:18px;">
+        <div style="font-size:3em;">🏆</div>
+        <h2 style="font-size:2em;">¡Lo has hecho increíble!</h2>
+        <p style="color:#666;font-size:0.95em;">El Módulo 2 es la base de todo lo que viene.</p>
+      </div>
+      <div class="eval-box fragment">
+        <h3>📝 Evaluación Módulo 2</h3>
+        <div class="eval-meta">
+          <div class="eval-meta-item">
+            <div class="eval-meta-num">10</div>
+            <div class="eval-meta-label">Preguntas</div>
+          </div>
+          <div class="eval-meta-item">
+            <div class="eval-meta-num">20</div>
+            <div class="eval-meta-label">Minutos</div>
+          </div>
+          <div class="eval-meta-item">
+            <div class="eval-meta-num">100%</div>
+            <div class="eval-meta-label">Tú puedes</div>
+          </div>
+        </div>
+      </div>
+      <div class="next-box fragment">
+        <p>🚀 Próximo: <strong>Módulo 3 — La Ciencia del Biochar</strong></p>
+        <p style="font-family:'Montserrat',sans-serif;font-weight:800;font-size:1.1em;margin-top:10px;color:var(--amber);">Coffee Biochar Academy × Biodiversal</p>
+        <p style="font-size:0.82em;color:rgba(255,255,255,0.65);">Módulo 2 · Sesión 3 — El Rol del Extensionista y la Integridad del Dato</p>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    width: 1600,
+    height: 900,
+    margin: 0.04,
+    minScale: 0.2,
+    maxScale: 2.0,
+    controls: true,
+    progress: true,
+    slideNumber: 'c/t',
+    hash: true,
+    center: false,
+    transition: 'fade',
+    transitionSpeed: 'default',
+    backgroundTransition: 'fade',
+  });
+</script>
+</body>
+</html>

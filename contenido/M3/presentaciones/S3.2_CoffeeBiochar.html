@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>S3.2 — Estabilidad del Carbono y el Índice H/Corg | Coffee Biochar Academy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/theme/white.css" />
+  <style>
+    :root {
+      --green:   #3A7D44;
+      --dkgreen: #1F4D27;
+      --brown:   #6B3527;
+      --amber:   #D4881E;
+      --cream:   #F7F3EC;
+      --text:    #1C1C1C;
+      --teal:    #1B7A6E;
+    }
+
+    .reveal-viewport { background: var(--cream); }
+    .reveal { font-family: 'Inter', sans-serif; color: var(--text); }
+    .reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+      font-family: 'Montserrat', sans-serif;
+      text-transform: none;
+      letter-spacing: -0.02em;
+    }
+
+    .reveal .progress { background: rgba(27,122,110,0.2); height: 5px; }
+    .reveal .progress span { background: var(--teal); }
+    .reveal .slide-number {
+      background: transparent;
+      color: var(--teal);
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.7em;
+    }
+
+    /* COVER */
+    .slide-cover {
+      display: flex !important;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-end;
+      padding: 70px 90px !important;
+      height: 100%;
+      box-sizing: border-box;
+    }
+    .cover-badge {
+      background: var(--teal);
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 0.85em;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 7px 18px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      display: inline-block;
+    }
+    .cover-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 3.2em !important;
+      font-weight: 900;
+      color: #fff !important;
+      line-height: 1.1;
+      margin: 0 0 16px !important;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.4);
+    }
+    .cover-sub {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.1em;
+      color: rgba(255,255,255,0.85);
+      letter-spacing: 0.04em;
+    }
+    .cover-logo {
+      position: absolute;
+      top: 50px;
+      right: 70px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 1.1em;
+      color: rgba(255,255,255,0.9);
+      letter-spacing: 0.05em;
+    }
+
+    /* STANDARD SLIDE */
+    .slide-std {
+      padding: 55px 80px !important;
+      text-align: left;
+      overflow: hidden;
+    }
+    .slide-label {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.65em;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 8px;
+    }
+    .slide-std h2 {
+      font-size: 2em !important;
+      font-weight: 900;
+      color: var(--dkgreen);
+      margin: 0 0 16px !important;
+      line-height: 1.15;
+    }
+    .accent-line {
+      width: 60px;
+      height: 5px;
+      background: var(--teal);
+      border-radius: 3px;
+      margin: 0 0 12px;
+    }
+
+    /* BIG QUESTION */
+    .slide-question {
+      display: flex !important;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px !important;
+      background: linear-gradient(135deg, #0e4d45 0%, var(--teal) 100%);
+    }
+    .question-emoji { font-size: 3.5em; margin-bottom: 24px; display: block; }
+    .question-text {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 2em;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.35;
+      max-width: 850px;
+    }
+
+    /* CARDS */
+    .cards-row { display: flex; gap: 16px; margin-top: 6px; }
+    .card {
+      flex: 1;
+      border-radius: 14px;
+      padding: 18px 18px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+    }
+    .card-green  { background: linear-gradient(135deg, #e8f4ea, #d0e9d4); border-top: 5px solid var(--green); }
+    .card-amber  { background: linear-gradient(135deg, #fdf3e0, #fae7bf); border-top: 5px solid var(--amber); }
+    .card-teal   { background: linear-gradient(135deg, #e0f4f2, #c4eae7); border-top: 5px solid var(--teal); }
+    .card-brown  { background: linear-gradient(135deg, #f5ebe7, #ead5cd); border-top: 5px solid var(--brown); }
+    .card-red    { background: linear-gradient(135deg, #fde8e6, #f8ccc8); border-top: 5px solid #c0392b; }
+    .card h3 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.9em !important;
+      font-weight: 800;
+      color: var(--dkgreen);
+      margin: 0 0 10px !important;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .card p { font-size: 0.8em; line-height: 1.6; color: var(--text); margin: 0; }
+    .card .card-icon { font-size: 1.8em; margin-bottom: 10px; display: block; }
+
+    /* H/Corg HERO */
+    .hcorg-hero {
+      background: linear-gradient(135deg, var(--dkgreen) 0%, #2a6635 100%);
+      border-radius: 20px;
+      padding: 40px 48px;
+      text-align: center;
+      color: #fff;
+    }
+    .hcorg-num {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 5.5em;
+      line-height: 1;
+      color: var(--amber);
+    }
+    .hcorg-label {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 1.1em;
+      color: rgba(255,255,255,0.9);
+      margin-top: 8px;
+    }
+    .hcorg-sub {
+      font-size: 0.8em;
+      color: rgba(255,255,255,0.7);
+      margin-top: 6px;
+    }
+
+    /* VERDICT BOXES */
+    .verdict-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 14px; }
+    .verdict {
+      border-radius: 14px;
+      padding: 22px 24px;
+      text-align: center;
+    }
+    .verdict.pass {
+      background: linear-gradient(135deg, #d0edda, #b6e2c0);
+      border: 2px solid var(--green);
+    }
+    .verdict.fail {
+      background: linear-gradient(135deg, #fde0dc, #f8c0b8);
+      border: 2px solid #c0392b;
+    }
+    .verdict .v-num {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 2.6em;
+      line-height: 1;
+    }
+    .verdict.pass .v-num { color: var(--dkgreen); }
+    .verdict.fail .v-num { color: #8b1a0e; }
+    .verdict .v-label { font-size: 0.78em; font-weight: 700; margin-top: 8px; }
+
+    /* BULLET LIST */
+    .bullet-list { list-style: none; padding: 0; margin: 0; }
+    .bullet-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      margin-bottom: 7px;
+      font-size: 0.85em;
+      line-height: 1.55;
+      background: #fff;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      border-left: 5px solid var(--teal);
+    }
+    .bullet-list li.warn { border-left-color: var(--amber); }
+    .bullet-list li.bad  { border-left-color: #c0392b; }
+    .bullet-list li .bi { font-size: 1.25em; min-width: 24px; }
+
+    /* SPLIT */
+    .split-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 6px; }
+    .split-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-top: 8px; }
+
+    /* DATA BOX */
+    .data-row { display: flex; gap: 16px; margin-top: 8px; }
+    .data-box {
+      flex: 1;
+      background: #fff;
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 3px 16px rgba(0,0,0,0.06);
+      text-align: center;
+      border-top: 5px solid var(--teal);
+    }
+    .data-box .num {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 2.2em;
+      color: var(--teal);
+      line-height: 1;
+    }
+    .data-box .unit { font-size: 0.72em; color: var(--amber); font-weight: 700; }
+    .data-box .desc { font-size: 0.7em; color: #555; margin-top: 5px; }
+
+    /* CLOSING */
+    .slide-close {
+      display: flex !important;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px !important;
+    }
+    .slide-close h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 2.5em !important;
+      font-weight: 900;
+      color: #fff !important;
+      text-shadow: 0 2px 16px rgba(0,0,0,0.4);
+      margin-bottom: 20px !important;
+    }
+    .key-chips { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 28px; }
+    .key-chip {
+      background: rgba(255,255,255,0.92);
+      color: var(--dkgreen);
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.78em;
+      padding: 9px 18px;
+      border-radius: 50px;
+    }
+
+    /* CASE STUDY SLIDE */
+    .slide-case {
+      display: flex !important;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px !important;
+    }
+    .case-badge {
+      background: var(--amber);
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 0.8em;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 6px 18px;
+      border-radius: 4px;
+      margin-bottom: 16px;
+    }
+    .case-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 2.2em !important;
+      font-weight: 900;
+      color: #fff !important;
+      text-shadow: 0 2px 16px rgba(0,0,0,0.4);
+      margin-bottom: 24px !important;
+    }
+    .case-questions {
+      display: flex;
+      gap: 18px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .cq {
+      background: rgba(255,255,255,0.9);
+      color: var(--dkgreen);
+      border-radius: 12px;
+      padding: 16px 22px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.82em;
+      max-width: 280px;
+    }
+
+    /* TIMELINE / STEPS */
+    .steps-row {
+      display: flex;
+      gap: 0;
+      margin-top: 14px;
+      align-items: stretch;
+    }
+    .step {
+      flex: 1;
+      padding: 22px 18px;
+      text-align: center;
+      position: relative;
+    }
+    .step:not(:last-child)::after {
+      content: '→';
+      position: absolute;
+      right: -12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.4em;
+      color: var(--amber);
+      font-weight: 900;
+      z-index: 2;
+    }
+    .step-green { background: linear-gradient(135deg, #e8f4ea, #d0e9d4); border-radius: 12px; }
+    .step-amber { background: linear-gradient(135deg, #fdf3e0, #fae7bf); border-radius: 12px; }
+    .step-brown { background: linear-gradient(135deg, #f5ebe7, #ead5cd); border-radius: 12px; }
+    .step-teal  { background: linear-gradient(135deg, #e0f4f2, #c4eae7); border-radius: 12px; }
+    .step .step-num {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 1.6em;
+      color: var(--dkgreen);
+    }
+    .step h4 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.78em !important;
+      font-weight: 800;
+      margin: 6px 0 4px !important;
+      color: var(--dkgreen);
+    }
+    .step p { font-size: 0.7em; margin: 0; line-height: 1.4; }
+
+    /* CREDIT SLIDE */
+    .credit-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 8px;
+    }
+    .credit-box {
+      border-radius: 14px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .credit-box.good { background: linear-gradient(135deg, #d0edda, #b6e2c0); border: 2px solid var(--green); }
+    .credit-box.warn { background: linear-gradient(135deg, #fdf3e0, #fae7bf); border: 2px solid var(--amber); }
+    .credit-box .cb-label {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 0.9em;
+      color: var(--dkgreen);
+    }
+    .credit-box .cb-val {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 2.2em;
+      line-height: 1;
+    }
+    .credit-box.good .cb-val { color: var(--dkgreen); }
+    .credit-box.warn .cb-val { color: #8b4200; }
+    .credit-box .cb-desc { font-size: 0.76em; }
+
+    /* Fragment animations */
+    .reveal .fragment.fade-up {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    .reveal .fragment.fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+<div class="reveal">
+  <div class="slides">
+
+    <!-- ── SLIDE 1: COVER ── -->
+    <section
+      data-background-image="../Fotos/drone-aereo/DJI_0846.JPG"
+      data-background-opacity="0.35"
+      data-background-color="#0e4d45"
+      data-transition="fade">
+      <div class="slide-cover">
+        <div class="cover-logo">☕ Coffee Biochar Academy × Biodiversal</div>
+        <span class="cover-badge">Módulo 3 · Sesión 2</span>
+        <h1 class="cover-title">Estabilidad<br>del Carbono<br>y el Índice H/C<sub style="font-size:0.7em">org</sub></h1>
+        <p class="cover-sub">El número que hace o rompe el crédito de carbono</p>
+      </div>
+    </section>
+
+    <!-- ── SLIDE 2: PREGUNTA ── -->
+    <section class="slide-question" data-transition="slide">
+      <span class="question-emoji">🧪</span>
+      <p class="question-text">Si el biochar "dura 1.000 años",<br>¿cómo sabemos que ES<br>el que dura tanto<br>y no uno de mala calidad?</p>
+    </section>
+
+    <!-- ── SLIDE 3: ¿POR QUÉ DURA TANTO? ── -->
+    <section class="slide-std" data-transition="slide">
+      <div class="slide-label">Química del carbono</div>
+      <h2>¿Por Qué el Biochar Dura Tanto?</h2>
+      <div class="accent-line"></div>
+      <div class="split-2">
+        <div>
+          <div class="card card-brown fragment fade-up" style="margin-bottom:18px">
+            <span class="card-icon">🌳</span>
+            <h3>Madera fresca</h3>
+            <p>Cadenas de carbono <strong>débiles y lineales</strong> → los microorganismos las degradan fácilmente → el carbono vuelve a la atmósfera como CO₂ en años o décadas.</p>
+          </div>
+          <div class="card card-teal fragment fade-up">
+            <span class="card-icon">💎</span>
+            <h3>Biochar de calidad</h3>
+            <p>Anillos <strong>aromáticos policíclicos</strong> (PAC) extremadamente estables → resistentes a la biodegradación → el carbono queda secuestrado por siglos.</p>
+          </div>
+        </div>
+        <div class="fragment fade-up" style="display:flex; align-items:center; justify-content:center;">
+          <div style="background: linear-gradient(135deg, var(--dkgreen), #2a6635); border-radius:20px; padding:36px 28px; text-align:center; color:#fff;">
+            <div style="font-size:3em; margin-bottom:16px">⏳</div>
+            <div style="font-family:'Montserrat'; font-weight:900; font-size:3em; color:var(--amber); line-height:1">1.000</div>
+            <div style="font-family:'Montserrat'; font-weight:800; font-size:1em; color:rgba(255,255,255,0.9); margin-top:6px">años en el suelo</div>
+            <div style="font-size:0.72em; color:rgba(255,255,255,0.65); margin-top:8px">con PAC ≥75% y H/Corg ≤0.7</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SLIDE 4: FRACCIÓN PAC ── -->
+    <section class="slide-std" data-transition="slide">
+      <div class="slide-label">Carbono aromático persistente</div>
+      <h2>Fracción PAC — El Carbono que Dura ♾️</h2>
+      <div class="accent-line"></div>
+      <div class="cards-row">
+        <div class="card card-teal fragment fade-up">
+          <span class="card-icon">🔬</span>
+          <h3>Estructura</h3>
+          <p><strong>Anillos benzénicos fusionados</strong> en capas apiladas. La estructura más estable del carbono orgánico — casi imposible de degradar biológicamente.</p>
+        </div>
+        <div class="card card-green fragment fade-up">
+          <span class="card-icon">⏳</span>
+          <h3>Estabilidad</h3>
+          <p><strong>+1.000 años</strong> en el suelo.<br>Resiste la oxidación, la acidez, y los microbios descomponedores. Es el carbono "diamante" del biochar.</p>
+        </div>
+        <div class="card card-amber fragment fade-up">
+          <span class="card-icon">📏</span>
+          <h3>Requisito mínimo</h3>
+          <p>El estándar Artisan C-Sink exige<br><strong style="font-size:1.4em; font-family:'Montserrat'; color:var(--amber)">PAC ≥ 75%</strong><br>del C total para calificar el crédito.</p>
+        </div>
+      </div>
+      <div class="fragment fade-up" style="margin-top:16px; background:linear-gradient(90deg,#e0f4f2,#c4eae7); padding:12px 22px; border-radius:10px; border-left:5px solid var(--teal); font-size:0.8em;">
+        ⚡ <strong>Cómo se forma:</strong> Temperatura &gt;600°C con tiempo de residencia suficiente. La pirólisis completa crea la estructura aromática que dura milenios.
+      </div>
+    </section>
+
+    <!-- ── SLIDE 5: FRACCIÓN SPC ── -->
+    <section class="slide-std" data-transition="slide">
+      <div class="slide-label">Carbono semi-persistente</div>
+      <h2>Fracción SPC — El Carbono "Casi Bueno"</h2>
+      <div class="accent-line"></div>
+      <div class="split-2">
+        <div>
+          <ul class="bullet-list">
+            <li class="fragment fade-up"><span class="bi">🧩</span><span>Estructura <strong>aromática menos condensada</strong> — anillos más sueltos, sin apilar.</span></li>
+            <li class="warn fragment fade-up"><span class="bi">📅</span><span>Estabilidad: <strong>décadas</strong>, no siglos. Se degrada en 10–100 años con las condiciones correctas.</span></li>
+            <li class="warn fragment fade-up"><span class="bi">⚖️</span><span>Tolerable en proporciones bajas — un poco de SPC es inevitable y aceptable.</span></li>
+            <li class="bad fragment fade-up"><span class="bi">🚨</span><span>Si la fracción SPC es <strong>muy alta</strong> → crédito de menor duración → valor reducido o invalidado.</span></li>
+          </ul>
+        </div>
+        <div class="fragment fade-up" style="display:flex; flex-direction:column; gap:14px; justify-content:center;">
+          <div style="background:linear-gradient(135deg,#d0edda,#b6e2c0); border-radius:14px; padding:24px; text-align:center; border:2px solid var(--green);">
+            <div style="font-family:'Montserrat'; font-weight:900; font-size:1.6em; color:var(--dkgreen)">PAC dominante</div>
+            <div style="font-size:0.75em; color:var(--green); margin-top:6px; font-weight:600">✅ Crédito completo + permanente</div>
+          </div>
+          <div style="background:linear-gradient(135deg,#fde8e6,#f8ccc8); border-radius:14px; padding:24px; text-align:center; border:2px solid #c0392b;">
+            <div style="font-family:'Montserrat'; font-weight:900; font-size:1.6em; color:#8b1a0e">SPC dominante</div>
+            <div style="font-size:0.75em; color:#c0392b; margin-top:6px; font-weight:600">❌ Crédito en riesgo</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SLIDE 6: EL ÍNDICE H/Corg ── -->
+    <section class="slide-std" data-transition="slide">
+      <div class="slide-label">El indicador clave</div>
+      <h2>El Índice H/C<sub>org</sub> — La Prueba de Calidad 🪪</h2>
+      <div class="accent-line"></div>
+      <div class="split-2">
+        <div class="hcorg-hero fragment fade-up">
+          <div style="font-size:0.85em; font-weight:600; color:rgba(255,255,255,0.7); margin-bottom:8px; letter-spacing:0.05em;">EL UMBRAL CRÍTICO</div>
+          <div class="hcorg-num">≤ 0.7</div>
+          <div class="hcorg-label">H/C<sub>org</sub> = BIOCHAR DE CALIDAD ✅</div>
+          <div class="hcorg-sub">PAC dominante → permanencia &gt;1.000 años</div>
+          <div style="margin-top:20px; padding-top:20px; border-top:1px solid rgba(255,255,255,0.2);">
+            <div style="font-family:'Montserrat'; font-weight:900; font-size:1.8em; color:#f8c0b8">&gt; 0.7</div>
+            <div style="font-size:0.8em; color:rgba(255,255,255,0.7); margin-top:4px;">Biochar incompleto ❌ — SPC alta</div>
+          </div>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:14px; justify-content:center;">
+          <div class="card card-amber fragment fade-up">
+            <span class="card-icon">🪪</span>
+            <h3>¿Por qué importa?</h3>
+            <p>"Es como el <strong>DNI del biochar</strong> — sin este número verificado, no hay crédito de carbono. El laboratorio lo mide en cada lote."</p>
+          </div>
+          <div class="card card-green fragment fade-up">
+            <span class="card-icon">💡</span>
+            <h3>¿Qué mide?</h3>
+            <p>La relación entre hidrógeno y carbono orgánico. Más hidrógeno = más cadenas incompletas = menos PAC = menos permanencia.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SLIDE 7: ¿QUÉ HACE QUE H/Corg SEA ALTO? ── -->
+    <section class="slide-std" data-transition="slide">
+      <div class="slide-label">Causas raíz</div>
+      <h2>¿Qué Hace que H/C<sub>org</sub> Sea Alto? ⚠️</h2>
+      <div class="accent-line"></div>
+      <div class="split-2">
+        <div>
+          <p style="font-size:0.82em; color:#555; margin:0 0 16px; font-weight:600;">Causas del problema:</p>
+          <ul class="bullet-list">
+            <li class="bad fragment fade-up"><span class="bi">🌡️</span><span>Temperatura insuficiente <strong>(&lt;600°C)</strong> → los anillos PAC no se forman.</span></li>
+            <li class="bad fragment fade-up"><span class="bi">⏱️</span><span>Tiempo de residencia corto → proceso incompleto → quedan precursores no aromatizados.</span></li>
+            <li class="bad fragment fade-up"><span class="bi">💧</span><span>Biomasa húmeda <strong>(&gt;30%)</strong> → temperatura real baja → proceso ineficiente.</span></li>
+            <li class="bad fragment fade-up"><span class="bi">🪣</span><span>Quench prematuro → apaga el proceso antes de completar la aromatización.</span></li>
+          </ul>
+        </div>
+        <div class="fragment fade-up" style="display:flex; flex-direction:column; gap:14px; justify-content:center;">
+          <div style="background:linear-gradient(135deg,#e8f4ea,#d0e9d4); border-radius:16px; padding:28px; text-align:center; border:2px solid var(--green);">
+            <div style="font-size:2.5em; margin-bottom:10px">🎯</div>
+            <div style="font-family:'Montserrat'; font-weight:900; font-size:1.2em; color:var(--dkgreen)">La Solución</div>
+            <p style="font-size:0.8em; margin:10px 0 0; color:var(--text)"><strong>Disciplina operativa</strong> en cada quema:<br>temperatura correcta,<br>biomasa seca,<br>tiempo completo,<br>quench oportuno.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SLIDE 8: EL CRÉDITO A 10 AÑOS ── -->
+    <section class="slide-std" data-transition="slide">
+      <div class="slide-label">Impacto económico</div>
+      <h2>El Crédito a 10 Años 💰</h2>
+      <div class="accent-line"></div>
+      <div class="credit-grid">
+        <div class="credit-box good fragment fade-up">
+          <div class="cb-label">✅ H/Corg ≤ 0.7</div>
+          <div class="cb-val">100%</div>
+          <div class="cb-desc">del crédito Artisan C-Sink.<br>Permanencia verificada &gt;1.000 años.</div>
+        </div>
+        <div class="credit-box warn fragment fade-up">
+          <div class="cb-label">⚠️ H/Corg 0.7 – 1.0</div>
+          <div class="cb-val" style="color:#8b4200">Reducido</div>
+          <div class="cb-desc">Crédito reducido o invalidado.<br>La permanencia no está garantizada.</div>
+        </div>
+      </div>
+      <div class="fragment fade-up" style="margin-top:18px;">
+        <div style="background:linear-gradient(90deg, var(--dkgreen), var(--teal)); color:#fff; border-radius:14px; padding:20px 28px; display:flex; align-items:center; gap:20px;">
+          <div style="font-size:2.5em">💡</div>
+          <div>
+            <div style="font-family:'Montserrat'; font-weight:900; font-size:0.95em;">El H/Corg no es un número técnico abstracto</div>
+            <div style="font-size:0.78em; color:rgba(255,255,255,0.85); margin-top:4px;">Es la diferencia entre un lote que genera ingresos y uno que no sirve. Cada quema es una decisión económica.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SLIDE 9: BIOMASA ELEGIBLE ── -->
+    <section class="slide-std" data-transition="slide">
+      <div class="slide-label">Materia prima</div>
+      <h2>Biomasa Elegible 🌿</h2>
+      <div class="accent-line"></div>
+      <div class="cards-row">
+        <div class="card card-green fragment fade-up">
+          <span class="card-icon">✅</span>
+          <h3>Humedad</h3>
+          <p>Máximo <strong>30% de humedad</strong> al momento de la quema.<br><br>Secado al sol o bajo techo — fundamental para el rendimiento y la calidad del H/Corg.</p>
+        </div>
+        <div class="card card-amber fragment fade-up">
+          <span class="card-icon">☕</span>
+          <h3>Origen</h3>
+          <p><strong>Zoca de café</strong> — residuo del proceso productivo normal del caficultor.<br><br>Biomasa que ya existía como residuo → adicionalidad garantizada.</p>
+        </div>
+        <div class="card card-red fragment fade-up">
+          <span class="card-icon">❌</span>
+          <h3>Prohibido mezclar</h3>
+          <p>Plásticos, residuos contaminados, maderas tratadas con químicos, o materiales ajenos al proceso de café.</p>
+        </div>
+      </div>
+      <div class="fragment fade-up" style="margin-top:16px; background:linear-gradient(90deg,#fdf3e0,#fae7bf); padding:12px 22px; border-radius:10px; border-left:5px solid var(--amber); font-size:0.8em;">
+        🧪 <strong>Trazabilidad:</strong> La biomasa debe poder rastrearse hasta la finca y el lote de café — parte del protocolo de verificación del crédito.
+      </div>
+    </section>
+
+    <!-- ── SLIDE 10: CASO DE ANÁLISIS ── -->
+    <section
+      data-background-image="../Fotos/20251126/P1001803.JPG"
+      data-background-opacity="0.3"
+      data-background-color="#1F4D27"
+      data-transition="fade"
+      class="slide-case">
+      <span class="case-badge">📊 Caso de Análisis</span>
+      <h2 class="case-title">Lote con H/C<sub>org</sub> = 0.85<br>¿Qué pasó?</h2>
+      <div class="case-questions">
+        <div class="cq fragment fade-up">
+          🔍 <strong>Diagnóstico:</strong><br>¿Qué variable falló?<br>¿Temperatura, tiempo, o humedad?
+        </div>
+        <div class="cq fragment fade-up">
+          🔧 <strong>Corrección:</strong><br>¿Cómo ajustar el proceso<br>para el próximo lote?
+        </div>
+        <div class="cq fragment fade-up">
+          💭 <strong>Recuperación:</strong><br>¿Se puede mezclar con<br>un lote bueno? ¿O se pierde?
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SLIDE 11: PUNTOS CLAVE ── -->
+    <section class="slide-std" data-transition="slide">
+      <div class="slide-label">Resumen S3.2</div>
+      <h2>Puntos Clave 🎯</h2>
+      <div class="accent-line"></div>
+      <div class="steps-row">
+        <div class="step step-teal fragment fade-up">
+          <div class="step-num">PAC</div>
+          <h4>Permanencia</h4>
+          <p>Los anillos aromáticos policíclicos = carbono que dura &gt;1.000 años</p>
+        </div>
+        <div class="step step-amber fragment fade-up">
+          <div class="step-num">H/Corg</div>
+          <h4>Calidad</h4>
+          <p>≤0.7 = biochar válido. El índice que certifica la permanencia.</p>
+        </div>
+        <div class="step step-green fragment fade-up">
+          <div class="step-num">≤ 0.7</div>
+          <h4>El Umbral</h4>
+          <p>Número que hace o rompe el crédito. No hay excepciones.</p>
+        </div>
+        <div class="step step-brown fragment fade-up">
+          <div class="step-num">💰</div>
+          <h4>Dinero Real</h4>
+          <p>H/Corg alto = crédito perdido. Cada quema importa económicamente.</p>
+        </div>
+      </div>
+      <div class="fragment fade-up" style="margin-top:22px; background:linear-gradient(90deg,var(--teal),var(--dkgreen)); color:#fff; border-radius:14px; padding:18px 28px; text-align:center; font-family:'Montserrat'; font-weight:800; font-size:0.9em;">
+        🚀 Próxima sesión: S3.3 — Los 5 Parámetros de Caracterización del Biochar
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    width: 1600,
+    height: 900,
+    margin: 0,
+    minScale: 0.2,
+    maxScale: 2.0,
+    controls: true,
+    progress: true,
+    slideNumber: 'c/t',
+    hash: true,
+    transition: 'slide',
+    transitionSpeed: 'default',
+    backgroundTransition: 'fade',
+    fragments: true,
+    fragmentInURL: false,
+  });
+</script>
+</body>
+</html>

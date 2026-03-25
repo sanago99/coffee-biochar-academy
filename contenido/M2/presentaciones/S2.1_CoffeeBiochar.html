@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>S2.1 — Cambio Climático y el Rol del Suelo | Coffee Biochar Academy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/theme/white.css" />
+  <style>
+    :root {
+      --green:   #3A7D44;
+      --dkgreen: #1F4D27;
+      --brown:   #6B3527;
+      --amber:   #D4881E;
+      --cream:   #F7F3EC;
+      --text:    #1C1C1C;
+      --teal:    #1B7A6E;
+    }
+
+    .reveal {
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background: var(--cream);
+    }
+
+    .reveal .slides section {
+      text-align: left;
+      padding: 48px 70px 32px;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    /* ── TYPOGRAPHY ── */
+    .reveal h1, .reveal h2, .reveal h3 {
+      font-family: 'Montserrat', sans-serif;
+      text-transform: none;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      color: var(--dkgreen);
+    }
+    .reveal h1 { font-size: 3.2em; font-weight: 900; }
+    .reveal h2 { font-size: 1.85em; font-weight: 800; }
+    .reveal h3 { font-size: 1.45em; font-weight: 700; color: var(--green); }
+
+    .reveal p, .reveal li { font-size: 1.05em; line-height: 1.6; color: var(--text); }
+
+    /* ── PROGRESS BAR ── */
+    .reveal .progress { height: 6px; color: var(--amber); }
+
+    /* ── SLIDE NUMBER ── */
+    .reveal .slide-number { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 0.85em; color: var(--green); background: transparent; }
+
+    /* ── LABEL PILL ── */
+    .label-pill {
+      display: inline-block;
+      background: var(--amber);
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.72em;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 6px 18px;
+      border-radius: 40px;
+      margin-bottom: 10px;
+    }
+
+    /* ── COVER SLIDE ── */
+    .cover-content {
+      position: relative;
+      z-index: 2;
+      padding: 0 80px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 100%;
+    }
+    .cover-tag {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 1em;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 16px;
+    }
+    .cover-title {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 3.8em;
+      line-height: 1.0;
+      color: #fff;
+      margin: 0 0 20px;
+    }
+    .cover-sub {
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      font-size: 1.3em;
+      color: rgba(255,255,255,0.82);
+      margin: 0;
+    }
+    .cover-line {
+      width: 80px;
+      height: 5px;
+      background: var(--amber);
+      border-radius: 3px;
+      margin: 22px 0;
+    }
+
+    /* ── CARD GRID ── */
+    .card-grid {
+      display: grid;
+      gap: 14px;
+    }
+    .card-grid-2 { grid-template-columns: 1fr 1fr; }
+    .card-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+    .card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 18px 20px;
+      border-left: 5px solid var(--green);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+    }
+    .card.amber  { border-left-color: var(--amber); }
+    .card.brown  { border-left-color: var(--brown); }
+    .card.teal   { border-left-color: var(--teal); }
+    .card.dkgreen { border-left-color: var(--dkgreen); }
+
+    .card-icon { font-size: 2em; margin-bottom: 8px; display: block; }
+    .card h4 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 1em;
+      color: var(--dkgreen);
+      margin: 0 0 8px;
+    }
+    .card p { font-size: 0.9em; margin: 0; color: #444; }
+
+    /* ── BIG NUMBER SLIDES ── */
+    .stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-top: 10px;
+    }
+    .stat-box {
+      background: #fff;
+      border-radius: 16px;
+      padding: 20px 22px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      border-top: 4px solid var(--green);
+    }
+    .stat-box.amber { border-top-color: var(--amber); }
+    .stat-box.brown { border-top-color: var(--brown); }
+    .stat-box.teal  { border-top-color: var(--teal); }
+
+    .stat-num {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 2.2em;
+      line-height: 1;
+      color: var(--green);
+      display: block;
+    }
+    .stat-box.amber .stat-num { color: var(--amber); }
+    .stat-box.brown .stat-num { color: var(--brown); }
+    .stat-box.teal  .stat-num { color: var(--teal); }
+
+    .stat-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.88em;
+      color: #666;
+      margin-top: 6px;
+      line-height: 1.4;
+    }
+
+    /* ── HIGHLIGHT BOX ── */
+    .highlight-box {
+      background: linear-gradient(135deg, var(--green), var(--teal));
+      color: #fff;
+      border-radius: 18px;
+      padding: 28px 34px;
+      margin-top: 18px;
+    }
+    .highlight-box.amber-box {
+      background: linear-gradient(135deg, var(--amber), var(--brown));
+    }
+    .highlight-box p { color: #fff; font-size: 1.1em; margin: 0; }
+    .highlight-box h3 { color: #fff; margin: 0 0 8px; font-size: 1.3em; }
+
+    /* ── CHIP LIST ── */
+    .chip-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .chip {
+      background: var(--cream);
+      border: 2px solid var(--green);
+      color: var(--dkgreen);
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      font-size: 0.85em;
+      padding: 8px 18px;
+      border-radius: 30px;
+    }
+    .chip.amber { border-color: var(--amber); color: var(--brown); }
+
+    /* ── FLOW STEPS ── */
+    .flow-row {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+    .flow-step {
+      background: var(--green);
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.82em;
+      padding: 12px 16px;
+      border-radius: 12px;
+      text-align: center;
+      flex: 1;
+      min-width: 90px;
+    }
+    .flow-step.alt { background: var(--amber); }
+    .flow-arrow {
+      font-size: 1.4em;
+      color: var(--amber);
+      padding: 0 4px;
+      flex-shrink: 0;
+    }
+
+    /* ── DINÁMICA SLIDE (dark overlay) ── */
+    .dinamica-content {
+      background: rgba(31,77,39,0.82);
+      border-radius: 20px;
+      padding: 40px 50px;
+      backdrop-filter: blur(2px);
+    }
+    .dinamica-content h2 { color: #fff; }
+    .dinamica-content p  { color: rgba(255,255,255,0.9); }
+    .dinamica-content .chip { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.4); color: #fff; }
+
+    /* ── CIERRE SLIDE ── */
+    .cierre-box {
+      background: linear-gradient(135deg, var(--dkgreen), var(--teal));
+      border-radius: 22px;
+      padding: 40px 48px;
+      margin-top: 10px;
+    }
+    .cierre-box h3 { color: var(--amber); margin-bottom: 14px; }
+    .cierre-box p  { color: rgba(255,255,255,0.9); font-size: 1em; margin: 6px 0; }
+
+    /* ── VERSUS LAYOUT ── */
+    .versus-grid {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 20px;
+      align-items: center;
+      margin-top: 16px;
+    }
+    .vs-box {
+      background: #fff;
+      border-radius: 18px;
+      padding: 28px 24px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    .vs-box.bad  { border-top: 5px solid var(--brown); }
+    .vs-box.good { border-top: 5px solid var(--green); }
+    .vs-label {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 1em;
+      margin-bottom: 10px;
+    }
+    .vs-label.bad  { color: var(--brown); }
+    .vs-label.good { color: var(--green); }
+    .vs-sep {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 2.2em;
+      color: var(--amber);
+      text-align: center;
+    }
+
+    /* Fragment animations */
+    .reveal .fragment { opacity: 0; transition: opacity 0.4s ease, transform 0.4s ease; transform: translateY(18px); }
+    .reveal .fragment.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+<div class="reveal">
+  <div class="slides">
+
+    <!-- ══════════ SLIDE 1 — COVER ══════════ -->
+    <section
+      data-background-image="../Fotos/drone-aereo/DJI_0824.JPG"
+      data-background-opacity="0.38"
+      data-background-color="#1F4D27"
+      data-background-size="cover">
+      <div class="cover-content" style="padding:60px 80px;">
+        <div class="cover-tag">☕ Coffee Biochar Academy × Biodiversal</div>
+        <div style="font-family:'Montserrat',sans-serif;font-weight:800;font-size:1.05em;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.6);margin-bottom:14px;">MÓDULO 2 · SESIÓN 1</div>
+        <div class="cover-title">Cambio Climático<br>y el Rol del Suelo</div>
+        <div class="cover-line"></div>
+        <div class="cover-sub">¿Por qué el suelo y el biochar son clave para el clima?</div>
+      </div>
+    </section>
+
+    <!-- ══════════ SLIDE 2 — OBJETIVO ══════════ -->
+    <section data-background-color="#F7F3EC">
+      <div class="label-pill">🎯 Objetivo de la sesión</div>
+      <h2>¿Qué vas a poder<br>explicar hoy?</h2>
+      <div class="card-grid card-grid-3" style="margin-top:18px;">
+        <div class="card fragment">
+          <span class="card-icon">🌡️</span>
+          <h4>El CO₂ importa</h4>
+          <p>Por qué el dióxido de carbono importa y qué dice el IPCC al respecto</p>
+        </div>
+        <div class="card amber fragment">
+          <span class="card-icon">🌍</span>
+          <h4>Suelo + Biochar</h4>
+          <p>Cómo el suelo y el biochar secuestran carbono de forma permanente</p>
+        </div>
+        <div class="card teal fragment">
+          <span class="card-icon">☕</span>
+          <h4>Solución real</h4>
+          <p>Por qué el proyecto Coffee Biochar es una solución concreta y medible</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ SLIDE 3 — DATA: EL PROBLEMA ══════════ -->
+    <section data-background-color="#F7F3EC">
+      <div class="label-pill">📊 El problema en números</div>
+      <h2>El Problema</h2>
+      <div class="stat-grid">
+        <div class="stat-box fragment">
+          <span class="stat-num">424 ppm</span>
+          <div class="stat-label">CO₂ atmosférico en 2024 —<br>máximo en <strong>3 millones de años</strong></div>
+        </div>
+        <div class="stat-box amber fragment">
+          <span class="stat-num">+1.2°C</span>
+          <div class="stat-label">Calentamiento global vs era<br>preindustrial</div>
+        </div>
+        <div class="stat-box brown fragment">
+          <span class="stat-num">~33%</span>
+          <div class="stat-label">De las emisiones globales<br>vienen de la agricultura</div>
+        </div>
+        <div class="stat-box teal fragment">
+          <span class="stat-num">1.5°C</span>
+          <div class="stat-label">Límite crítico IPCC —<br>queda menos de 1 década</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ SLIDE 4 — SUMIDERO vs FUENTE ══════════ -->
+    <section data-background-color="#F7F3EC">
+      <div class="label-pill">♻️ Ciclo del carbono</div>
+      <h2>Sumidero vs Fuente</h2>
+      <div class="versus-grid">
+        <div class="vs-box bad fragment">
+          <div class="vs-label bad">🔴 SIN Biochar</div>
+          <p style="font-size:0.9em;color:#444;">El cafetal libera carbono al descomponer la biomasa (zoca). <strong>Fuente neta de CO₂.</strong></p>
+        </div>
+        <div class="vs-sep">→</div>
+        <div class="vs-box good fragment">
+          <div class="vs-label good">🟢 CON Biochar</div>
+          <p style="font-size:0.9em;color:#444;">La planta fija CO₂ → biomasa (zoca) acumula carbono → Pirólisis Kon-Tiki → biochar estable <strong>1.000+ años</strong> en el suelo.</p>
+        </div>
+      </div>
+      <div class="highlight-box fragment" style="margin-top:20px;padding:18px 28px;">
+        <p>☀️ <strong>El cafetal CON biochar = sumidero de carbono certificable</strong></p>
+      </div>
+    </section>
+
+    <!-- ══════════ SLIDE 5 — DATA: EL SUELO COMO ACTIVO CLIMÁTICO ══════════ -->
+    <section data-background-color="#F7F3EC">
+      <div class="label-pill">🌱 El suelo en cifras</div>
+      <h2>El Suelo como<br>Activo Climático</h2>
+      <div class="stat-grid">
+        <div class="stat-box fragment">
+          <span class="stat-num">1.500 Gt</span>
+          <div class="stat-label">Carbono almacenado<br>en el suelo global</div>
+        </div>
+        <div class="stat-box amber fragment">
+          <span class="stat-num">800 Gt</span>
+          <div class="stat-label">Carbono actualmente<br>en la atmósfera</div>
+        </div>
+        <div class="stat-box teal fragment">
+          <span class="stat-num">560 Gt</span>
+          <div class="stat-label">Carbono en<br>vegetación terrestre</div>
+        </div>
+        <div class="stat-box brown fragment">
+          <span class="stat-num">≈2.5 t</span>
+          <div class="stat-label">C/ha perdidas en suelos<br>degradados (promedio)</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ SLIDE 6 — ¿QUÉ HACE EL BIOCHAR? ══════════ -->
+    <section data-background-color="#F7F3EC">
+      <div class="label-pill">🔬 Mecanismos del biochar</div>
+      <h2>¿Qué hace el Biochar<br>al Suelo?</h2>
+      <div class="card-grid card-grid-2" style="margin-top:16px;">
+        <div class="card fragment">
+          <span class="card-icon">🏛️</span>
+          <h4>Inmoviliza carbono por siglos</h4>
+          <p>Fracción PAC ≥75% — el carbono queda atrapado en estructuras aromáticas estables</p>
+        </div>
+        <div class="card amber fragment">
+          <span class="card-icon">💧</span>
+          <h4>Retención de humedad</h4>
+          <p>Microporos del biochar retienen agua disponible para las raíces del café</p>
+        </div>
+        <div class="card teal fragment">
+          <span class="card-icon">⚡</span>
+          <h4>Aumenta CIC</h4>
+          <p>Mayor Capacidad de Intercambio Catiónico = más nutrientes disponibles para el café</p>
+        </div>
+        <div class="card brown fragment">
+          <span class="card-icon">🦠</span>
+          <h4>Activa la biología</h4>
+          <p>Hábitat ideal para microorganismos benéficos del suelo</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ SLIDE 7 — AGRICULTURA REGENERATIVA ══════════ -->
+    <section data-background-color="#F7F3EC">
+      <div class="label-pill">🔄 Más que sostenible</div>
+      <h2>De Problema a Solución:<br>Agricultura Regenerativa</h2>
+      <div class="highlight-box fragment" style="margin-top:20px;">
+        <h3>🌿 No es solo "no degradar" — es RESTAURAR activamente</h3>
+        <p>La agricultura regenerativa recupera el suelo, la biodiversidad y el clima al mismo tiempo.</p>
+      </div>
+      <div style="margin-top:24px;">
+        <p style="font-family:'Montserrat',sans-serif;font-weight:700;color:var(--dkgreen);font-size:1em;margin-bottom:12px;">Prácticas Coffee Biochar:</p>
+        <div class="chip-list">
+          <div class="chip fragment">🔥 Pirólisis Kon-Tiki</div>
+          <div class="chip fragment">🌱 Aplicación al suelo</div>
+          <div class="chip fragment amber">📍 Documentación dMRV</div>
+          <div class="chip fragment">☕ Biomasa de café (zoca)</div>
+          <div class="chip fragment amber">✅ Verificación CSI</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ SLIDE 8 — MERCADO VOLUNTARIO DE CARBONO ══════════ -->
+    <section data-background-color="#F7F3EC">
+      <div class="label-pill">💰 El mercado de carbono</div>
+      <h2>El Mercado Voluntario<br>de Carbono</h2>
+      <div class="flow-row fragment" style="margin-top:28px;flex-wrap:wrap;gap:6px;">
+        <div class="flow-step">🏭 Empresa<br>emite CO₂</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step alt">🎯 Meta<br>Net Zero</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">💳 Compra<br>créditos</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step alt">☕ Proyecto<br>Coffee Biochar</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">👨‍🌾 Productor<br>recibe pago</div>
+      </div>
+      <div class="highlight-box amber-box fragment" style="margin-top:28px;padding:20px 28px;">
+        <p>💡 <strong>Los productores de café colombianos reciben ingresos adicionales por ser parte de la solución climática global</strong></p>
+      </div>
+    </section>
+
+    <!-- ══════════ SLIDE 9 — NÚMEROS DEL PROYECTO ══════════ -->
+    <section data-background-color="#F7F3EC">
+      <div class="label-pill">📈 Escala del proyecto</div>
+      <h2>Los Números del Proyecto</h2>
+      <div class="stat-grid">
+        <div class="stat-box fragment">
+          <span class="stat-num">110 ha</span>
+          <div class="stat-label">Mínimo por clúster</div>
+        </div>
+        <div class="stat-box amber fragment">
+          <span class="stat-num">688 t</span>
+          <div class="stat-label">Biochar producido<br>por año por clúster</div>
+        </div>
+        <div class="stat-box teal fragment">
+          <span class="stat-num">2.1</span>
+          <div class="stat-label">tCO₂e removidas<br>por tonelada de biochar</div>
+        </div>
+        <div class="stat-box brown fragment">
+          <span class="stat-num">1.362</span>
+          <div class="stat-label">Créditos de carbono<br>por clúster por año</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ SLIDE 10 — DINÁMICA ══════════ -->
+    <section
+      data-background-image="../Fotos/20250723/IMG_7108.jpg"
+      data-background-opacity="0.35"
+      data-background-color="#1F4D27"
+      data-background-size="cover">
+      <div style="padding:40px 60px;">
+        <div class="dinamica-content">
+          <div style="font-family:'Montserrat',sans-serif;font-weight:800;font-size:0.85em;letter-spacing:0.15em;text-transform:uppercase;color:var(--amber);margin-bottom:16px;">🎮 Dinámica grupal</div>
+          <h2 style="font-size:2em;margin-bottom:16px;">🗺️ Mapa Mental Colectivo</h2>
+          <p style="font-size:1.1em;margin-bottom:24px;">Abre la pizarra virtual <strong style="color:var(--amber);">(Jamboard / Miro)</strong> y escribe:</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px;">
+            <div style="background:rgba(212,136,30,0.25);border:2px solid var(--amber);border-radius:14px;padding:20px 22px;" class="fragment">
+              <div style="font-family:'Montserrat',sans-serif;font-weight:800;font-size:1.5em;color:var(--amber);">1</div>
+              <p style="color:#fff;margin:6px 0 0;font-size:0.95em;"><strong>Una causa</strong> del calentamiento global</p>
+            </div>
+            <div style="background:rgba(58,125,68,0.25);border:2px solid #3A7D44;border-radius:14px;padding:20px 22px;" class="fragment">
+              <div style="font-family:'Montserrat',sans-serif;font-weight:800;font-size:1.5em;color:#6edd7e;">2</div>
+              <p style="color:#fff;margin:6px 0 0;font-size:0.95em;"><strong>Una solución</strong> que hace el biochar</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ SLIDE 11 — CIERRE ══════════ -->
+    <section data-background-color="#F7F3EC">
+      <div style="text-align:center;margin-bottom:24px;">
+        <div style="font-size:3em;">🌱</div>
+        <h2 style="font-size:2.2em;">¡Excelente sesión!</h2>
+        <p style="color:#666;font-size:1em;">Llevas la base del módulo 2 en tu mente</p>
+      </div>
+      <div class="cierre-box">
+        <h3>📚 Para la próxima sesión:</h3>
+        <p>📄 <strong>Guía de Lectura S2.1</strong> — Cambio climático y el rol del suelo</p>
+        <p>📋 <strong>PDD Coffee Biochar</strong> — Secciones 1 y 2</p>
+      </div>
+      <div style="text-align:center;margin-top:28px;">
+        <div style="font-family:'Montserrat',sans-serif;font-weight:800;font-size:1.1em;color:var(--green);">Coffee Biochar Academy × Biodiversal</div>
+        <div style="font-family:'Inter',sans-serif;font-size:0.85em;color:#999;margin-top:4px;">Módulo 2 · Sesión 1 — Cambio Climático y el Rol del Suelo</div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    width: 1600,
+    height: 900,
+    margin: 0.04,
+    minScale: 0.2,
+    maxScale: 2.0,
+    controls: true,
+    progress: true,
+    slideNumber: 'c/t',
+    hash: true,
+    center: false,
+    transition: 'fade',
+    transitionSpeed: 'default',
+    backgroundTransition: 'fade',
+  });
+</script>
+</body>
+</html>

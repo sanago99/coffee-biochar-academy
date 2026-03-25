@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>S6.1 — Disciplina Operativa y dMRV | Coffee Biochar Academy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/theme/white.css" />
+  <style>
+    :root {
+      --green:   #3A7D44;
+      --dkgreen: #1F4D27;
+      --brown:   #6B3527;
+      --amber:   #D4881E;
+      --cream:   #F7F3EC;
+      --text:    #1C1C1C;
+      --teal:    #1B7A6E;
+      --red:     #c0392b;
+    }
+
+    .reveal-viewport { background: var(--cream); }
+
+    .reveal {
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+    }
+
+    .reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+      font-family: 'Montserrat', sans-serif;
+      text-transform: none;
+      letter-spacing: -0.02em;
+    }
+
+    .reveal .progress { background: rgba(58,125,68,0.2); height: 5px; }
+    .reveal .progress span { background: var(--amber); }
+
+    .reveal .slide-number {
+      background: transparent;
+      color: var(--green);
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.7em;
+    }
+
+    /* ── COVER ── */
+    .slide-cover {
+      display: flex !important;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-end;
+      padding: 70px 90px !important;
+      height: 100%;
+      box-sizing: border-box;
+    }
+    .cover-badge {
+      background: var(--amber);
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 0.85em;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 7px 18px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      display: inline-block;
+    }
+    .cover-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 3.4em !important;
+      font-weight: 900;
+      color: #fff !important;
+      line-height: 1.1;
+      margin: 0 0 16px !important;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+    }
+    .cover-sub {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.1em;
+      color: rgba(255,255,255,0.85);
+      letter-spacing: 0.04em;
+    }
+    .cover-logo {
+      position: absolute;
+      top: 50px;
+      right: 70px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 1.1em;
+      color: rgba(255,255,255,0.9);
+      letter-spacing: 0.05em;
+    }
+
+    /* ── STANDARD SLIDE ── */
+    /* Fix 6: overflow hidden added */
+    .slide-std {
+      padding: 55px 80px !important;
+      text-align: left;
+      overflow: hidden;
+    }
+    .slide-label {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.65em;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 8px;
+    }
+    /* Fix 1: h2 margin reduced from 28px to 14px */
+    .slide-std h2 {
+      font-size: 2em !important;
+      font-weight: 900;
+      color: var(--dkgreen);
+      margin: 0 0 14px !important;
+      line-height: 1.15;
+    }
+    /* Fix 2: accent-line margin reduced from 24px to 10px */
+    .accent-line {
+      width: 60px;
+      height: 5px;
+      background: var(--amber);
+      border-radius: 3px;
+      margin: 0 0 10px;
+    }
+
+    /* ── CARDS ── */
+    /* Fix 4: cards-row gap reduced from 20px to 14px, margin-top from 8px to 6px */
+    .cards-row {
+      display: flex;
+      gap: 14px;
+      margin-top: 6px;
+    }
+    /* Fix 3: card padding reduced from 24px 20px to 16px 16px */
+    .card {
+      flex: 1;
+      border-radius: 14px;
+      padding: 16px 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    }
+    .card-green { background: linear-gradient(135deg, #e8f4ea 0%, #d0e9d4 100%); border-top: 5px solid var(--green); }
+    .card-amber { background: linear-gradient(135deg, #fdf3e0 0%, #fae7bf 100%); border-top: 5px solid var(--amber); }
+    .card-brown { background: linear-gradient(135deg, #f5ebe7 0%, #ead5cd 100%); border-top: 5px solid var(--brown); }
+    .card-teal  { background: linear-gradient(135deg, #e0f4f2 0%, #c4eae7 100%); border-top: 5px solid var(--teal); }
+    .card-red   { background: linear-gradient(135deg, #fde8e6 0%, #f8cdc9 100%); border-top: 5px solid var(--red); }
+    .card h3 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.9em !important;
+      font-weight: 800;
+      color: var(--dkgreen);
+      margin: 0 0 8px !important;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .card p { font-size: 0.78em; line-height: 1.5; color: var(--text); margin: 0; }
+    .card .card-icon { font-size: 1.6em; margin-bottom: 8px; display: block; }
+
+    /* ── BULLET LIST ── */
+    /* Fix 5: padding, margin-bottom, and font-size reduced */
+    .bullet-list { list-style: none; padding: 0; margin: 0; }
+    .bullet-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 9px 14px;
+      border-radius: 10px;
+      margin-bottom: 7px;
+      font-size: 0.84em;
+      line-height: 1.5;
+      background: #fff;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      border-left: 5px solid var(--green);
+    }
+    .bullet-list li.warn  { border-left-color: var(--red); }
+    .bullet-list li.amber { border-left-color: var(--amber); }
+    .bullet-list li.teal  { border-left-color: var(--teal); }
+    .bullet-list li .bi { font-size: 1.3em; min-width: 26px; }
+
+    /* ── FLOW STAGES ── */
+    .flow-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 6px;
+    }
+    .flow-card {
+      border-radius: 12px;
+      padding: 13px 12px;
+      background: #fff;
+      box-shadow: 0 3px 14px rgba(0,0,0,0.07);
+      border-top: 5px solid var(--green);
+      text-align: center;
+      position: relative;
+    }
+    .flow-card.zona {
+      border-top-color: var(--amber);
+      background: linear-gradient(135deg, #fdf3e0, #fae7bf);
+    }
+    .flow-card.final {
+      border-top-color: var(--teal);
+      background: linear-gradient(135deg, #e0f4f2, #c4eae7);
+    }
+    .flow-num {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 1.3em;
+      color: var(--amber);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .flow-card.zona .flow-num { color: var(--brown); }
+    .flow-label {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.68em;
+      color: var(--dkgreen);
+      line-height: 1.3;
+    }
+    .flow-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--green);
+      font-size: 1.2em;
+      font-weight: 900;
+    }
+
+    /* ── ZONA EXTENSIONISTA HIGHLIGHT ── */
+    .zona-banner {
+      background: linear-gradient(135deg, var(--amber), #b8721a);
+      border-radius: 12px;
+      padding: 14px 24px;
+      margin-bottom: 14px;
+      text-align: center;
+    }
+    .zona-banner p {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      color: #fff;
+      font-size: 0.9em;
+      margin: 0;
+      line-height: 1.4;
+      letter-spacing: 0.02em;
+    }
+
+    /* ── DATA BOX ── */
+    .data-row {
+      display: flex;
+      gap: 16px;
+      margin-top: 8px;
+    }
+    .data-box {
+      flex: 1;
+      background: #fff;
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 3px 16px rgba(0,0,0,0.06);
+      text-align: center;
+      border-top: 5px solid var(--green);
+    }
+    .data-box .num {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 2.4em;
+      color: var(--dkgreen);
+      line-height: 1;
+    }
+    .data-box .unit { font-size: 0.70em; color: var(--amber); font-weight: 700; }
+    .data-box .desc { font-size: 0.65em; color: #555; margin-top: 4px; }
+
+    /* ── SPLIT ── */
+    .split-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 6px;
+    }
+
+    /* ── LEGAL HIGHLIGHT ── */
+    .legal-box {
+      background: linear-gradient(135deg, var(--dkgreen), #0f2a14);
+      border-radius: 14px;
+      padding: 18px 28px;
+      margin-top: 14px;
+      text-align: center;
+    }
+    .legal-box p {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      color: #fff;
+      font-size: 1.05em;
+      margin: 0;
+      line-height: 1.4;
+    }
+    .legal-box span { color: var(--amber); }
+
+    /* ── ERROR CARDS ── */
+    .error-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 6px;
+    }
+    .error-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 11px 14px;
+      border-left: 5px solid var(--red);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .error-card .eco { font-size: 1.3em; min-width: 26px; }
+    .error-card .etxt {
+      font-size: 0.74em;
+      line-height: 1.45;
+      color: var(--text);
+    }
+    .error-card .etxt strong {
+      color: var(--red);
+      font-family: 'Montserrat', sans-serif;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    /* ── DINÁMICA / CLOSE SLIDE ── */
+    .slide-dyn {
+      display: flex !important;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px 80px !important;
+    }
+    .slide-dyn h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 2.2em !important;
+      font-weight: 900;
+      color: #fff !important;
+      text-shadow: 0 2px 16px rgba(0,0,0,0.45);
+      margin-bottom: 24px !important;
+    }
+    .dyn-box {
+      background: rgba(255,255,255,0.92);
+      border-radius: 16px;
+      padding: 24px 40px;
+      max-width: 780px;
+    }
+    .dyn-box p {
+      font-size: 0.9em;
+      line-height: 1.65;
+      color: var(--text);
+      margin: 0;
+    }
+
+    /* ── CIERRE ── */
+    .slide-close {
+      display: flex !important;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px !important;
+      background: linear-gradient(135deg, var(--dkgreen), #0f2a14);
+    }
+    .slide-close h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 2.4em !important;
+      font-weight: 900;
+      color: #fff !important;
+      margin-bottom: 20px !important;
+    }
+    .next-chip {
+      background: var(--amber);
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 0.9em;
+      padding: 12px 28px;
+      border-radius: 50px;
+      display: inline-block;
+      margin-bottom: 20px;
+    }
+    .slide-close p {
+      color: rgba(255,255,255,0.8);
+      font-size: 0.95em;
+      max-width: 600px;
+      line-height: 1.65;
+      margin: 0 auto;
+    }
+
+    /* ── BIG QUOTE ── */
+    .quote-block {
+      background: linear-gradient(135deg, var(--dkgreen), #0f2a14);
+      border-radius: 14px;
+      padding: 20px 30px;
+      margin-top: 14px;
+      position: relative;
+    }
+    .quote-block::before {
+      content: '"';
+      font-family: 'Montserrat', sans-serif;
+      font-size: 5em;
+      color: var(--amber);
+      opacity: 0.3;
+      position: absolute;
+      top: -10px;
+      left: 20px;
+      line-height: 1;
+    }
+    .quote-block p {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.92em;
+      color: #fff;
+      margin: 0;
+      line-height: 1.55;
+      padding-left: 10px;
+    }
+    .quote-block span { color: var(--amber); }
+
+    /* Reveal fragments */
+    .reveal .fragment.fade-up {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    .reveal .fragment.fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+<div class="reveal">
+  <div class="slides">
+
+    <!-- ── SLIDE 1: COVER ── -->
+    <section
+      data-background-image="../Fotos/20251127/P1001803.JPG"
+      data-background-opacity="0.3"
+      data-background-color="#1F4D27"
+      data-transition="fade">
+      <div class="slide-cover">
+        <div class="cover-logo">☕ Coffee Biochar Academy × Biodiversal</div>
+        <span class="cover-badge">Módulo 6 · Sesión 1</span>
+        <h1 class="cover-title">Disciplina<br>Operativa<br>y dMRV</h1>
+        <p class="cover-sub">Flujo Completo del Proyecto y la App Planboo</p>
+      </div>
+    </section>
+
+    <!-- ── SLIDE 2: EL DATO COMO ACTIVO ── -->
+    <section class="slide-std" data-transition="slide">
+      <div class="slide-label">El fundamento</div>
+      <h2>El Dato como Activo del Proyecto 💎</h2>
+      <div class="accent-line"></div>
+      <div class="cards-row">
+        <div class="card card-amber fragment fade-up">
+          <span class="card-icon">💰</span>
+          <h3>El crédito vale lo que valen sus datos</h3>
+          <p><strong>Datos limpios = crédito real = pago real.</strong><br><br>No hay precio del carbono sin trazabilidad. Sin dato, no existe la tonelada.</p>
+        </div>
+        <div class="card card-teal fragment fade-up">
+          <span class="card-icon">🔗</span>
+          <h3>El clúster como unidad</h3>
+          <p>Un solo dato corrupto puede <strong>invalidar un lote entero</strong> y afectar a todos los productores del clúster.<br><br>La disciplina es colectiva.</p>
+        </div>
+        <div class="card card-green fragment fade-up">
+          <span class="card-icon">🌍</span>
+          <h3>dMRV — Monitoreo Digital</h3>
+          <p><strong>d</strong>igital <strong>M</strong>easurement, <strong>R</strong>eporting & <strong>V</strong>erification.<br><br>El estándar internacional que convierte tu registro en un activo financiero de carbono.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SLIDE 3: LAS 8 ETAPAS ── -->
+    <section class="slide-std" data-transition="slide">
+      <div class="slide-label">El proceso completo</div>
+      <h2>Las 8 Etapas del Proyecto</h2>
+      <div class="accent-line"></div>
+      <div class="flow-grid">
+        <div class="flow-card fragment fade-up">
+          <div class="flow-num">1</div>
+          <div class="flow-label">Enrolamiento del productor</div>
+        </div>
+        <div class="flow-card fragment fade-up">
+          <div class="flow-num">2</div>
+          <div class="flow-label">Identificación de biomasa (zoca)</div>
+        </div>
+        <div class="flow-card zona fragment fade-up">
+          <div class="flow-num">3</div>
+          <div class="flow-label">Pirólisis Kon-Tiki 🔥</div>
+        </div>
+        <div class="flow-card zona fragment fade-up">
+          <div class="flow-num">4</div>
+          <div class="flow-label">Pesaje en seco del biochar ⚖️</div>
+        </div>
+        <div class="flow-card zona fragment fade-up">
+          <div class="flow-num">5</div>
+          <div class="flow-label">Registro en App Planboo 📱</div>
+        </div>
+        <div class="flow-card zona fragment fade-up">
+          <div class="flow-num">6</div>
+          <div class="flow-label">Aplicación al suelo 🌱</div>
+        </div>
+        <div class="flow-card zona fragment fade-up">
+          <div class="flow-num">7</div>
+          <div class="flow-label">Registro de aplicación en App 📱</div>
+        </div>
+        <div class="flow-card final fragment fade-up">
+          <div class="flow-num" style="color:var(--teal)">✓</div>
+          <div class="flow-label">Verificación CSI → Pago 💳</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SLIDE 4: TU ZONA DE RESPONSABILIDAD ── -->
+    <section class="slide-std" data-transition="slide">
+      <div class="slide-label">El rol del extensionista</div>
+      <h2>El Extensionista en el Flujo 🎯</h2>
+      <div class="accent-line"></div>
+      <div class="zona-banner fragment fade-up">
+        <p>⚡ ZONA EXTENSIONISTA — Etapas 3 a 7 son TU responsabilidad directa ⚡</p>
+      </div>
+      <div class="quote-block fragment fade-up">
+        <p>Eres el eslabón que convierte el <span>trabajo físico del productor</span> en <span>datos verificables para el crédito</span>.<br><br>
+        Sin ti, la quema perfecta no existe en el sistema. El productor hace el trabajo de campo — tú lo conviertes en valor financiero.</p>
+      </div>
+      <div class="data-row fragment fade-up" style="margin-top:14px">
+        <div class="data-box" style="border-top-color:var(--amber)">
+          <div class="num" style="color:var(--amber)">5</div>
+          <div class="unit">etapas bajo tu cargo</div>
+          <div class="desc">de las 8 totales del ciclo</div>
+        </div>
+        <div class="data-box" style="border-top-color:var(--teal)">
+          <div class="num" style="color:var(--teal)">100%</div>
+          <div class="unit">trazabilidad requerida</div>
+          <div class="desc">cada dato debe ser verificable</div>
+        </div>
+        <div class="data-box" style="border-top-color:var(--green)">
+          <div class="num" style="color:var(--green)">0</div>
+          <div class="unit">margen de error</div>
+          <div class="desc">en pesos, fechas y GPS</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SLIDE 5: APP PLANBOO — PRODUCCIÓN ── -->
+    <section class="slide-std" data-transition="slide">
+      <div class="slide-label">La herramienta digital</div>
+      <h2>La App Planboo — Producción 📱</h2>
+      <div class="accent-line"></div>
+      <div class="split-2">
+        <div>
+          <p style="font-family:'Montserrat'; font-weight:700; font-size:0.82em; color:var(--dkgreen); margin-bottom:10px; text-transform:uppercase; letter-spacing:0.05em;">Campos Obligatorios ✅</p>
+          <ul class="bullet-list">
+            <li class="fragment fade-up"><span class="bi">📅</span><span><strong>Fecha exacta de quema</strong> — el mismo día, nunca retroactivo</span></li>
+            <li class="fragment fade-up"><span class="bi">⚖️</span><span><strong>Peso en seco del biochar</strong> — con balanza calibrada, nunca estimado</span></li>
+            <li class="fragment fade-up"><span class="bi">📍</span><span><strong>Coordenadas GPS del sitio</strong> — con ubicación activa en el teléfono</span></li>
+            <li class="fragment fade-up"><span class="bi">📸</span><span><strong>Foto del proceso</strong> — con metadatos GPS activos en la cámara</span></li>
+            <li class="fragment fade-up"><span class="bi">🔢</span><span><strong>Código del productor y lote</strong> — verificado antes de registrar</span></li>
+          </ul>
+        </div>
+        <div class="fragment fade-up" style="display:flex; align-items:center; justify-content:center;">
+          <div style="background:linear-gradient(135deg,var(--dkgreen),#0f2a14); border-radius:20px; padding:28px 24px; text-align:center; width:100%;">
+            <div style="font-size:3em; margin-bottom:12px;">📱</div>
+            <p style="font-family:'Montserrat'; font-weight:800; color:var(--amber); font-size:1em; margin:0 0 10px;">REGISTRO EN EL MOMENTO</p>
+            <p style="color:rgba(255,255,255,0.8); font-size:0.76em; line-height:1.55; margin:0;">Cada campo tiene un campo validador automático. Un dato incompleto bloquea el envío.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SLIDE 6: APP PLANBOO — APLICACIÓN ── -->
+    <section class="slide-std" data-transition="slide">
+      <div class="slide-label">La herramienta digital</div>
+      <h2>La App Planboo — Aplicación 📱</h2>
+      <div class="accent-line"></div>
+      <div class="split-2">
+        <div>
+          <p style="font-family:'Montserrat'; font-weight:700; font-size:0.82em; color:var(--dkgreen); margin-bottom:10px; text-transform:uppercase; letter-spacing:0.05em;">Campos Obligatorios ✅</p>
+          <ul class="bullet-list">
+            <li class="fragment fade-up"><span class="bi">📅</span><span><strong>Fecha exacta de aplicación</strong> — debe ser posterior a la producción</span></li>
+            <li class="fragment fade-up"><span class="bi">⚖️</span><span><strong>Peso del biochar aplicado</strong> — debe ≤ peso producido y registrado</span></li>
+            <li class="fragment fade-up"><span class="bi">📍</span><span><strong>Coordenadas GPS del lote</strong> — del lugar de aplicación, no de producción</span></li>
+            <li class="fragment fade-up"><span class="bi">📸</span><span><strong>Foto de aplicación</strong> — biochar visible en suelo, con GPS activo</span></li>
+            <li class="fragment fade-up"><span class="bi">🔧</span><span><strong>Confirmación de incorporación</strong> — método usado (manual, maquinaria, etc.)</span></li>
+          </ul>
+        </div>
+        <div class="fragment fade-up" style="display:flex; flex-direction:column; gap:12px; justify-content:center;">
+          <div class="data-box" style="border-top-color:var(--teal)">
+            <div class="num" style="color:var(--teal); font-size:1.8em;">Prod → Aplic</div>
+            <div class="unit">secuencia obligatoria</div>
+            <div class="desc">la aplicación no puede ser anterior a la producción</div>
+          </div>
+          <div class="data-box" style="border-top-color:var(--green)">
+            <div class="num" style="color:var(--green); font-size:1.5em;">GPS ≠ GPS</div>
+            <div class="unit">dos ubicaciones distintas</div>
+            <div class="desc">sitio quema ≠ lote aplicación</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SLIDE 7: RESPONSABILIDAD LEGAL ── -->
+    <section class="slide-std" data-transition="slide">
+      <div class="slide-label">Marco legal y contractual</div>
+      <h2>Responsabilidad Legal del Dato ⚖️</h2>
+      <div class="accent-line"></div>
+      <div class="cards-row">
+        <div class="card card-amber fragment fade-up">
+          <span class="card-icon">📜</span>
+          <h3>Fuerza legal</h3>
+          <p>El dato en Planboo tiene <strong>fuerza legal</strong>. Es evidencia digital con sello de tiempo, GPS y firma electrónica del registrador.</p>
+        </div>
+        <div class="card card-teal fragment fade-up">
+          <span class="card-icon">✍️</span>
+          <h3>Firma digital</h3>
+          <p>El extensionista <strong>firma digitalmente</strong> cada registro. Tu usuario y contraseña son tu firma notarial en el sistema.</p>
+        </div>
+        <div class="card card-red fragment fade-up">
+          <span class="card-icon">⚠️</span>
+          <h3>Datos falsos</h3>
+          <p>Datos falsos = <strong>responsabilidad civil y contractual</strong>. No es un error — es un incumplimiento que puede implicar consecuencias legales.</p>
+        </div>
+      </div>
+      <div class="legal-box fragment fade-up">
+        <p>"Cuando registras en Planboo, estás <span>firmando tu nombre</span>."</p>
+      </div>
+    </section>
+
+    <!-- ── SLIDE 8: TIPOS DE AUDITORÍA ── -->
+    <section class="slide-std" data-transition="slide">
+      <div class="slide-label">Verificación CSI</div>
+      <h2>Tipos de Auditoría CSI 🔍</h2>
+      <div class="accent-line"></div>
+      <div class="cards-row">
+        <div class="card card-green fragment fade-up" style="flex:1.2">
+          <span class="card-icon">📋</span>
+          <h3>Auditoría Anunciada</h3>
+          <p><strong>Revisión documental previa.</strong><br><br>
+          Se revisan todos los registros del ciclo completo. El extensionista recibe aviso con anticipación.<br><br>
+          ✅ El extensionista <strong>organizado</strong> siempre la pasa.<br><br>
+          Documentación en orden = auditoría tranquila.</p>
+        </div>
+        <div class="card card-amber fragment fade-up" style="flex:1.2">
+          <span class="card-icon">🚨</span>
+          <h3>Auditoría Sorpresa</h3>
+          <p><strong>Visita de campo sin aviso previo.</strong><br><br>
+          Se verifica que la <strong>realidad del campo coincida exactamente con los registros</strong> en sistema.<br><br>
+          ⚡ El biochar que dices que está, tiene que estar.<br><br>
+          La única preparación válida es el registro diario.</p>
+        </div>
+      </div>
+      <div class="fragment fade-up" style="margin-top:14px; background:#f7f3ec; border-radius:12px; padding:12px 20px; border-left:5px solid var(--teal);">
+        <p style="font-size:0.80em; font-family:'Montserrat'; font-weight:700; color:var(--teal); margin:0;">💡 Tip: La auditoría sorpresa no sorprende a quien registra en tiempo real.</p>
+      </div>
+    </section>
+
+    <!-- ── SLIDE 9: ERRORES MÁS COMUNES ── -->
+    <section class="slide-std" data-transition="slide">
+      <div class="slide-label">Control de calidad</div>
+      <h2>Errores Más Comunes ❌</h2>
+      <div class="accent-line"></div>
+      <div class="error-grid">
+        <div class="error-card fragment fade-up">
+          <span class="eco">⚖️</span>
+          <div class="etxt">
+            <strong>Peso estimado (no pesado)</strong>
+            Registrar un número "aproximado" sin balanza. → Lote invalidado automáticamente.
+          </div>
+        </div>
+        <div class="error-card fragment fade-up">
+          <span class="eco">📸</span>
+          <div class="etxt">
+            <strong>Foto sin GPS activo</strong>
+            La cámara estaba con ubicación desactivada. → Dato no verificable, foto inválida.
+          </div>
+        </div>
+        <div class="error-card fragment fade-up">
+          <span class="eco">📅</span>
+          <div class="etxt">
+            <strong>Fecha incorrecta o retroactiva</strong>
+            Registrar al día siguiente con fecha anterior. → Inconsistencia detectada en auditoría.
+          </div>
+        </div>
+        <div class="error-card fragment fade-up">
+          <span class="eco">🌱</span>
+          <div class="etxt">
+            <strong>Aplicación no registrada</strong>
+            Se aplicó el biochar pero nunca se registró. → Crédito no generado. Trabajo perdido.
+          </div>
+        </div>
+        <div class="error-card fragment fade-up">
+          <span class="eco">🔢</span>
+          <div class="etxt">
+            <strong>Código de lote equivocado</strong>
+            Se asignó el registro al productor incorrecto. → Datos huérfanos. Imposible corregir después.
+          </div>
+        </div>
+        <div class="error-card fragment fade-up">
+          <span class="eco">📶</span>
+          <div class="etxt">
+            <strong>"No tenía señal"</strong>
+            Registrar offline y olvidar sincronizar. → Datos se pierden si el teléfono se daña o reinicia.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SLIDE 10: DINÁMICA ── -->
+    <section
+      data-background-image="../Fotos/20250723/IMG_7212.jpg"
+      data-background-opacity="0.3"
+      data-background-color="#1F4D27"
+      data-transition="fade"
+      class="slide-dyn">
+      <h2>📋 Ejercicio Práctico</h2>
+      <div class="dyn-box fragment fade-up">
+        <p><strong>Rellena un registro completo de producción</strong> para un productor ficticio usando la App Planboo (o el formulario de papel).</p>
+        <br>
+        <p>Preguntas guía para reflexionar en grupo:</p>
+        <br>
+        <p>🤔 <strong>¿Tienes todos los datos disponibles?</strong> ¿O hay algún campo que normalmente no capturas?</p>
+        <br>
+        <p>⚖️ <strong>¿Qué harías si no tienes el peso exacto</strong> en el momento de la quema? ¿Cuáles son tus opciones?</p>
+        <br>
+        <p>📍 <strong>¿Cómo verificas que el GPS está activo</strong> antes de tomar la foto?</p>
+      </div>
+    </section>
+
+    <!-- ── SLIDE 11: CIERRE ── -->
+    <section class="slide-close" data-transition="fade">
+      <div class="next-chip fragment fade-up">Próxima Sesión →</div>
+      <h2 class="fragment fade-up">S6.2 — Simulacro<br>de Auditoría 🎯</h2>
+      <p class="fragment fade-up">Pondremos a prueba todo lo que aprendiste en el programa.<br>Defenderás tus registros frente a un auditor CSI.<br><br>¿Estás listo? 🎯</p>
+      <div class="fragment fade-up" style="margin-top:36px; font-family:'Montserrat'; font-weight:700; color:var(--amber); font-size:0.85em; letter-spacing:0.08em;">☕ Coffee Biochar Academy × Biodiversal</div>
+    </section>
+
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    width: 1600,
+    height: 900,
+    margin: 0.04,
+    hash: true,
+    progress: true,
+    slideNumber: 'c/t',
+    transition: 'slide',
+    transitionSpeed: 'default',
+    backgroundTransition: 'fade',
+    plugins: []
+  });
+</script>
+</body>
+</html>

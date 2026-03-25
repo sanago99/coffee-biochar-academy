@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>S5.1 · Mejora de Nutrientes y Productividad · Coffee Biochar Academy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/theme/white.css" />
+  <style>
+    :root {
+      --green: #3A7D44;
+      --dark-green: #1F4D27;
+      --brown: #6B3527;
+      --amber: #D4881E;
+      --cream: #F7F3EC;
+      --text: #1C1C1C;
+      --teal: #1B7A6E;
+    }
+
+    .reveal {
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background: var(--cream);
+    }
+
+    .reveal .slides section {
+      text-align: left;
+      padding: 40px 60px;
+      box-sizing: border-box;
+    }
+
+    /* Headings */
+    .reveal h1, .reveal h2, .reveal h3 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      text-transform: none;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 0.3em;
+    }
+
+    /* ── SLIDE: COVER ── */
+    .slide-cover {
+      display: flex !important;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: flex-start;
+      padding: 60px 80px !important;
+      min-height: 100%;
+    }
+    .cover-badge {
+      background: var(--amber);
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 0.75em;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 8px 18px;
+      border-radius: 40px;
+      margin-bottom: 20px;
+      display: inline-block;
+    }
+    .cover-title {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 3.2em !important;
+      line-height: 1.05;
+      color: #fff;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+      text-transform: none;
+      margin: 0 0 16px !important;
+    }
+    .cover-sub {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95em;
+      color: rgba(255,255,255,0.88);
+      letter-spacing: 0.04em;
+      margin: 0;
+    }
+    .cover-divider {
+      width: 80px;
+      height: 5px;
+      background: var(--amber);
+      border-radius: 3px;
+      margin: 18px 0;
+    }
+
+    /* ── SECTION LABEL ── */
+    .section-label {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.65em;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 8px;
+    }
+
+    /* ── SLIDE TITLE ── */
+    .slide-title {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 1.85em !important;
+      color: var(--dark-green);
+      text-transform: none;
+      line-height: 1.1;
+      margin: 0 0 18px !important;
+    }
+    .slide-title.brown { color: var(--brown); }
+    .slide-title.amber { color: var(--amber); }
+    .slide-title.teal  { color: var(--teal);  }
+
+    /* ── HERO NUMBER ── */
+    .hero-number {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 4.5em;
+      line-height: 1;
+      color: var(--green);
+      letter-spacing: -0.04em;
+    }
+    .hero-number.amber { color: var(--amber); }
+    .hero-number.brown { color: var(--brown); }
+    .hero-label {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.82em;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text);
+      opacity: 0.7;
+      margin-top: 4px;
+    }
+
+    /* ── CARDS ── */
+    .cards {
+      display: grid;
+      gap: 16px;
+    }
+    .cards-2 { grid-template-columns: 1fr 1fr; }
+    .cards-3 { grid-template-columns: 1fr 1fr 1fr; }
+    .cards-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 16px 18px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      border-left: 5px solid var(--green);
+    }
+    .card.amber-border { border-left-color: var(--amber); }
+    .card.brown-border { border-left-color: var(--brown); }
+    .card.teal-border  { border-left-color: var(--teal);  }
+    .card.green-bg {
+      background: var(--green);
+      color: #fff;
+      border-left-color: var(--dark-green);
+    }
+    .card.amber-bg {
+      background: var(--amber);
+      color: #fff;
+      border-left-color: #a8660e;
+    }
+    .card.cream-bg {
+      background: var(--cream);
+      border-left-color: var(--teal);
+    }
+
+    .card-icon {
+      font-size: 2rem;
+      margin-bottom: 8px;
+      display: block;
+    }
+    .card-title {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 0.82em;
+      text-transform: none;
+      letter-spacing: 0.03em;
+      margin-bottom: 5px;
+    }
+    .card-body {
+      font-size: 0.78em;
+      line-height: 1.55;
+      opacity: 0.9;
+    }
+
+    /* ── CHIPS ── */
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .chip {
+      background: var(--green);
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.72em;
+      padding: 8px 16px;
+      border-radius: 40px;
+      letter-spacing: 0.04em;
+    }
+    .chip.amber { background: var(--amber); }
+    .chip.brown { background: var(--brown); }
+    .chip.teal  { background: var(--teal);  }
+    .chip.outline {
+      background: transparent;
+      border: 2px solid var(--green);
+      color: var(--green);
+    }
+
+    /* ── BIG STATEMENT ── */
+    .big-statement {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 1.5em;
+      line-height: 1.2;
+      color: var(--dark-green);
+      margin: 16px 0;
+    }
+    .highlight {
+      color: var(--amber);
+    }
+    .highlight-green {
+      color: var(--green);
+    }
+
+    /* ── CALLOUT BOX ── */
+    .callout {
+      background: linear-gradient(135deg, var(--dark-green), var(--green));
+      color: #fff;
+      border-radius: 16px;
+      padding: 24px 28px;
+      margin-top: 16px;
+      font-size: 0.9em;
+      line-height: 1.55;
+    }
+    .callout strong { color: var(--amber); }
+    .callout.amber-grad {
+      background: linear-gradient(135deg, #a8660e, var(--amber));
+    }
+    .callout.brown-grad {
+      background: linear-gradient(135deg, var(--brown), #9b4e38);
+    }
+
+    /* ── LAYOUT HELPERS ── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+    .three-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+    .flex-center {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .stat-row {
+      display: flex;
+      gap: 32px;
+      align-items: flex-end;
+      margin: 16px 0;
+    }
+
+    /* ── EXERCISE SLIDE ── */
+    .exercise-box {
+      background: linear-gradient(135deg, var(--teal), #1B7A6E);
+      color: #fff;
+      border-radius: 20px;
+      padding: 32px 36px;
+      max-width: 700px;
+    }
+    .exercise-box h3 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 1.1em;
+      color: #fff;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .exercise-box p {
+      font-size: 0.88em;
+      line-height: 1.65;
+      color: rgba(255,255,255,0.9);
+    }
+    .exercise-timer {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      border-radius: 40px;
+      padding: 6px 18px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 0.75em;
+      letter-spacing: 0.08em;
+      margin-bottom: 16px;
+    }
+
+    /* ── CLOSING SLIDE ── */
+    .closing-card {
+      background: linear-gradient(135deg, var(--green), var(--dark-green));
+      color: #fff;
+      border-radius: 20px;
+      padding: 32px 36px;
+    }
+    .closing-card h3 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 1em;
+      color: var(--amber);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .closing-card p {
+      font-size: 0.88em;
+      line-height: 1.6;
+    }
+
+    /* ── REVEAL OVERRIDES ── */
+    .reveal .progress {
+      color: var(--amber);
+      height: 5px;
+    }
+    .reveal .slide-number {
+      background: var(--dark-green);
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.65em;
+      padding: 4px 10px;
+      border-radius: 8px 0 0 0;
+    }
+    .reveal .controls button {
+      color: var(--green);
+    }
+
+    /* Photo background overlay */
+    .reveal section[data-background-image] h1,
+    .reveal section[data-background-image] h2,
+    .reveal section[data-background-image] p {
+      text-shadow: 0 1px 8px rgba(0,0,0,0.4);
+    }
+
+    /* Fragment animations */
+    .reveal .fragment {
+      transition: all 0.4s ease;
+    }
+    .reveal .fragment.fade-up {
+      transform: translateY(20px);
+    }
+    .reveal .fragment.fade-up.visible {
+      transform: translateY(0);
+    }
+
+    /* Versus visual */
+    .versus {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 16px;
+      align-items: center;
+      margin-top: 12px;
+    }
+    .versus-divider {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 1.4em;
+      color: var(--amber);
+      text-align: center;
+    }
+
+    /* Sponge visual */
+    .sponge-visual {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .sponge-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #fff;
+      border-radius: 12px;
+      padding: 14px 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .sponge-emoji { font-size: 1.5em; flex-shrink: 0; }
+    .sponge-text { font-size: 0.82em; line-height: 1.4; }
+    .sponge-text strong {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      color: var(--green);
+      display: block;
+      font-size: 0.9em;
+      text-transform: uppercase;
+    }
+
+    /* Badge pill */
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.65em;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .badge.green { background: #e8f5eb; color: var(--dark-green); }
+    .badge.amber { background: #fdf0d8; color: #a8660e; }
+    .badge.brown { background: #f5ece9; color: var(--brown); }
+  </style>
+</head>
+<body>
+<div class="reveal">
+  <div class="slides">
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 1 · COVER
+    ══════════════════════════════════════════ -->
+    <section
+      class="slide-cover"
+      data-background-image="../Fotos/20250724/IMG_7557.jpg"
+      data-background-size="cover"
+      data-background-position="center"
+      data-background-opacity="0.35"
+      data-background-color="#1F4D27">
+
+      <div class="cover-badge fragment fade-up">☕ Coffee Biochar Academy × Biodiversal</div>
+      <h1 class="cover-title fragment fade-up">Mejora de<br />Nutrientes y<br />Productividad</h1>
+      <div class="cover-divider fragment fade-up"></div>
+      <p class="cover-sub fragment fade-up">📗 Módulo 5 · Sesión 1 &nbsp;·&nbsp; Beneficios Agronómicos del Biochar</p>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 2 · ¿ES FERTILIZANTE?
+    ══════════════════════════════════════════ -->
+    <section style="background: var(--cream);">
+      <div class="section-label">Módulo 5 · Sesión 1</div>
+      <h2 class="slide-title">¿Es el biochar un fertilizante? 🤔</h2>
+
+      <div class="fragment fade-up">
+        <div class="callout amber-grad" style="font-size:1.1em; font-family:'Montserrat',sans-serif; font-weight:900; letter-spacing:-0.01em;">
+          NO — el biochar <strong style="color:#fff3cc;">no aporta nutrientes directamente</strong>
+        </div>
+      </div>
+
+      <div class="cards cards-3" style="margin-top:20px;">
+        <div class="card fragment fade-up">
+          <span class="card-icon">🔋</span>
+          <div class="card-title">Potenciador</div>
+          <div class="card-body">Hace que los nutrientes que <em>ya existen</em> en el suelo sean más disponibles.</div>
+        </div>
+        <div class="card amber-border fragment fade-up">
+          <span class="card-icon">⏳</span>
+          <div class="card-title">Duración</div>
+          <div class="card-body">Prolonga la vida útil de los fertilizantes que aplicás — se lixivian menos.</div>
+        </div>
+        <div class="card teal-border fragment fade-up">
+          <span class="card-icon">🌱</span>
+          <div class="card-title">Disponibilidad</div>
+          <div class="card-body">Libera nutrientes cuando la planta los necesita, no cuando llega la lluvia.</div>
+        </div>
+      </div>
+
+      <div class="fragment fade-up" style="margin-top:20px;">
+        <div class="callout" style="font-size:0.88em;">
+          💡 Piénsalo así: el biochar <strong>no es comida para el café</strong> — es el <strong>plato que mantiene la comida caliente</strong> por más tiempo.
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 3 · +45% NUTRIENTES
+    ══════════════════════════════════════════ -->
+    <section style="background: #fff;">
+      <div class="section-label">Módulo 5 · Sesión 1</div>
+      <h2 class="slide-title">+45% nutrientes disponibles</h2>
+
+      <div class="two-col">
+        <div>
+          <div class="fragment fade-up">
+            <div class="hero-number">+45%</div>
+            <div class="hero-label">Nutrientes disponibles para el café</div>
+          </div>
+
+          <div class="fragment fade-up" style="margin-top:20px;">
+            <div class="card cream-bg" style="margin-bottom:12px;">
+              <div class="card-title" style="color:var(--dark-green);">CEC del Biochar</div>
+              <div class="hero-number" style="font-size:2.2em; color:var(--teal);">40–200</div>
+              <div class="hero-label">meq/100g</div>
+              <div class="card-body" style="margin-top:6px;">Capacidad de intercambio catiónico — mide cuántos nutrientes puede retener.</div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="fragment fade-up" style="margin-bottom:16px;">
+            <div class="section-label" style="margin-bottom:8px;">⚙️ Mecanismo</div>
+            <div class="card brown-border">
+              <div class="card-icon">⚡</div>
+              <div class="card-title">Carga Negativa</div>
+              <div class="card-body">El biochar posee carga eléctrica negativa que actúa como imán para los cationes positivos.</div>
+            </div>
+          </div>
+          <div class="cards-3" style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;" >
+            <div class="fragment fade-up">
+              <div class="chip amber" style="border-radius:12px; padding:12px; text-align:center; font-size:0.88em;">Ca²⁺</div>
+            </div>
+            <div class="fragment fade-up">
+              <div class="chip" style="border-radius:12px; padding:12px; text-align:center; font-size:0.88em;">Mg²⁺</div>
+            </div>
+            <div class="fragment fade-up">
+              <div class="chip brown" style="border-radius:12px; padding:12px; text-align:center; font-size:0.88em;">K⁺</div>
+            </div>
+          </div>
+          <div class="fragment fade-up" style="margin-top:10px;">
+            <div class="chip teal" style="border-radius:12px; padding:12px; text-align:center; font-size:0.88em; width:100%; box-sizing:border-box;">NH₄⁺ (nitrógeno)</div>
+          </div>
+          <div class="fragment fade-up" style="margin-top:14px;">
+            <div class="callout" style="font-size:0.82em; padding:16px 20px;">
+              ✅ Los fertilizantes <strong>duran más</strong> y se lixivian menos con cada lluvia.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 4 · ANALOGÍA ESPONJA
+    ══════════════════════════════════════════ -->
+    <section style="background: var(--cream);">
+      <div class="section-label">Módulo 5 · Sesión 1</div>
+      <h2 class="slide-title">La analogía de la esponja 🧽</h2>
+
+      <div class="fragment fade-up">
+        <div class="big-statement">
+          El biochar en el suelo es como una <span class="highlight">esponja</span> que retiene agua y nutrientes entre lluvias.
+        </div>
+      </div>
+
+      <div class="two-col" style="margin-top:24px; gap:20px;">
+        <div class="fragment fade-up">
+          <div class="section-label" style="color:var(--green);">✅ Suelo CON biochar</div>
+          <div class="sponge-visual">
+            <div class="sponge-row">
+              <span class="sponge-emoji">🌧️</span>
+              <div class="sponge-text"><strong>Lluvia</strong> El biochar absorbe el exceso de agua y nutrientes.</div>
+            </div>
+            <div class="sponge-row">
+              <span class="sponge-emoji">☀️</span>
+              <div class="sponge-text"><strong>Sequía</strong> Los libera gradualmente → café con acceso constante.</div>
+            </div>
+            <div class="sponge-row" style="background: #e8f5eb; border-left: 4px solid var(--green);">
+              <span class="sponge-emoji">🌿</span>
+              <div class="sponge-text"><strong>Resultado</strong> Producción estable, menos estrés, menos fertilizante.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="fragment fade-up">
+          <div class="section-label" style="color:var(--brown);">❌ Suelo SIN biochar</div>
+          <div class="sponge-visual">
+            <div class="sponge-row" style="opacity:0.75;">
+              <span class="sponge-emoji">🌧️</span>
+              <div class="sponge-text"><strong>Lluvia</strong> El agua escurre con los nutrientes hacia las quebradas.</div>
+            </div>
+            <div class="sponge-row" style="opacity:0.75;">
+              <span class="sponge-emoji">☀️</span>
+              <div class="sponge-text"><strong>Sequía</strong> El suelo seco no tiene reserva → estrés hídrico.</div>
+            </div>
+            <div class="sponge-row" style="background: #fdf0d8; border-left: 4px solid var(--amber); opacity:0.75;">
+              <span class="sponge-emoji">📉</span>
+              <div class="sponge-text"><strong>Resultado</strong> Café irregular, mayor costo en insumos, pérdidas.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 5 · REDUCCIÓN LIXIVIACIÓN
+    ══════════════════════════════════════════ -->
+    <section style="background: #fff;">
+      <div class="section-label">Módulo 5 · Sesión 1</div>
+      <h2 class="slide-title">Reducción de lixiviación 💧</h2>
+
+      <div class="three-col">
+        <div class="fragment fade-up">
+          <div class="card brown-border">
+            <span class="card-icon">🌦️</span>
+            <div class="card-title">El contexto colombiano</div>
+            <div class="card-body">Tolima y Huila reciben hasta <strong>1.800 mm lluvia/año</strong>. Eso es mucha agua llevándose tus nutrientes.</div>
+          </div>
+        </div>
+
+        <div class="fragment fade-up">
+          <div class="card amber-border">
+            <span class="card-icon">💸</span>
+            <div class="card-title">Sin biochar</div>
+            <div class="card-body">El K y N se lixivian <strong>antes de que el café los use</strong>. Pagas fertilizante para abonar las quebradas.</div>
+          </div>
+        </div>
+
+        <div class="fragment fade-up">
+          <div class="card teal-border">
+            <span class="card-icon">🔒</span>
+            <div class="card-title">Con biochar</div>
+            <div class="card-body">Los microporos retienen los nutrientes hasta que la raíz los absorbe. La planta decide cuándo tomar.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fragment fade-up" style="margin-top:22px;">
+        <div style="display:flex; align-items:center; gap:28px; background:linear-gradient(135deg,var(--dark-green),var(--green)); border-radius:16px; padding:22px 28px; color:#fff;">
+          <div style="flex:0 0 auto;">
+            <div style="font-family:'Montserrat',sans-serif; font-weight:900; font-size:3.2em; line-height:1; color:var(--amber);">-30%</div>
+            <div style="font-size:0.65em; text-transform:uppercase; letter-spacing:0.1em; opacity:0.8;">necesidad de refertilización</div>
+          </div>
+          <div style="flex:1; font-size:0.82em; line-height:1.6;">
+            Resultado documentado en estudios comparativos en suelos tropicales similares a los del Eje Cafetero. <strong style="color:var(--amber);">Menos insumos. Mismo café. Más margen.</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 6 · EVIDENCIA PRODUCTIVIDAD
+    ══════════════════════════════════════════ -->
+    <section style="background: var(--cream);">
+      <div class="section-label">Módulo 5 · Sesión 1</div>
+      <h2 class="slide-title">Evidencia de productividad 📈</h2>
+
+      <div class="two-col">
+        <div>
+          <div class="fragment fade-up">
+            <div style="text-align:center; background:#fff; border-radius:20px; padding:32px; box-shadow:0 4px 20px rgba(0,0,0,0.08);">
+              <div class="hero-number amber" style="font-size:5.5em;">+16%</div>
+              <div class="hero-label" style="text-align:center; font-size:0.82em;">productividad individual del café</div>
+              <div class="badge amber" style="margin-top:12px;">estudios en suelos tropicales</div>
+            </div>
+          </div>
+
+          <div class="fragment fade-up" style="margin-top:16px;">
+            <div class="card teal-border">
+              <div class="card-title">Tipo de evidencia</div>
+              <div class="card-body">Estudios comparativos con parcelas control en condiciones edafoclimáticas similares a Tolima, Huila y Nariño.</div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="fragment fade-up">
+            <div class="callout" style="margin-bottom:16px;">
+              🔬 <strong>No es promesa</strong> — es evidencia medida en suelos similares al tuyo.
+            </div>
+          </div>
+          <div class="fragment fade-up">
+            <div class="card fragment fade-up">
+              <span class="card-icon">📊</span>
+              <div class="card-title">Mecanismo de la mejora</div>
+              <div class="card-body">Mayor disponibilidad de nutrientes + mejor retención hídrica + activación microbiana → más flores cuajadas, más granos maduros.</div>
+            </div>
+          </div>
+          <div class="fragment fade-up" style="margin-top:14px;">
+            <div class="card amber-border">
+              <span class="card-icon">🏔️</span>
+              <div class="card-title">Contexto clave</div>
+              <div class="card-body">El efecto es mayor en suelos <strong>degradados o con baja materia orgánica</strong> — exactamente donde más se necesita en Colombia.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 7 · SINERGIA BIOCHAR + FERTILIZANTE
+    ══════════════════════════════════════════ -->
+    <section style="background: #fff;">
+      <div class="section-label">Módulo 5 · Sesión 1</div>
+      <h2 class="slide-title">Biochar + Fertilizante = Sinergia 🤝</h2>
+
+      <div class="cards cards-3" style="margin-bottom:20px;">
+        <div class="fragment fade-up">
+          <div class="card" style="text-align:center; border-top: 5px solid var(--green); border-left: none;">
+            <span class="card-icon">🟢</span>
+            <div class="card-title">Biochar solo</div>
+            <div class="card-body">Mejora la base. Aumenta CEC. Activa microbiología. Pero no alimenta directamente.</div>
+            <div style="margin-top:12px;"><span class="badge green">base sólida</span></div>
+          </div>
+        </div>
+        <div class="fragment fade-up">
+          <div class="card" style="text-align:center; border-top: 5px solid var(--amber); border-left: none;">
+            <span class="card-icon">🟡</span>
+            <div class="card-title">Fertilizante solo</div>
+            <div class="card-body">Efecto rápido y visible. Pero los nutrientes se lixivian pronto. Hay que reaplicar más seguido.</div>
+            <div style="margin-top:12px;"><span class="badge amber">efecto corto</span></div>
+          </div>
+        </div>
+        <div class="fragment fade-up">
+          <div class="card green-bg" style="text-align:center; border-top: 5px solid var(--amber); border-left: none;">
+            <span class="card-icon">⭐</span>
+            <div class="card-title" style="color:#fff;">Biochar + Fertilizante</div>
+            <div class="card-body" style="color:rgba(255,255,255,0.9);">Máximo efecto y máxima duración. Los nutrientes se retienen hasta que la planta los necesita.</div>
+            <div style="margin-top:12px;"><span class="chip amber" style="font-size:0.65em;">máximo impacto</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fragment fade-up">
+        <div class="callout amber-grad">
+          🌿 <strong>Recomendación práctica:</strong> Aplicá el biochar <strong style="color:#fff3cc;">mezclado con compost + abono</strong> en la zoca. El momento de la renovación es ideal para incorporarlo a profundidad.
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 8 · ARGUMENTO ECONÓMICO
+    ══════════════════════════════════════════ -->
+    <section style="background: var(--cream);">
+      <div class="section-label">Módulo 5 · Sesión 1</div>
+      <h2 class="slide-title">El argumento económico 💰</h2>
+
+      <div class="fragment fade-up">
+        <div style="display:flex; flex-direction:column; gap:14px; max-width:900px;">
+          <div style="display:flex; align-items:center; gap:16px; background:#fff; border-radius:14px; padding:18px 22px; box-shadow:0 2px 10px rgba(0,0,0,0.06);">
+            <div style="font-size:2.2rem; flex-shrink:0;">🌿</div>
+            <div>
+              <div style="font-family:'Montserrat',sans-serif; font-weight:800; font-size:0.82em; color:var(--brown); text-transform:uppercase;">Lo que antes quemabas o botabas al borde del camino</div>
+              <div style="font-size:0.82em; color:#555; margin-top:4px;">La zoca de café — residuo del ciclo productivo</div>
+            </div>
+          </div>
+          <div style="text-align:center; font-size:1.5rem; color:var(--amber);">↓</div>
+          <div style="display:flex; align-items:center; gap:16px; background:linear-gradient(135deg,#1F4D27,var(--green)); border-radius:14px; padding:18px 22px;" class="fragment fade-up">
+            <div style="font-size:2.2rem; flex-shrink:0;">🔥</div>
+            <div>
+              <div style="font-family:'Montserrat',sans-serif; font-weight:800; font-size:0.82em; color:var(--amber); text-transform:uppercase;">Ahora es biochar</div>
+              <div style="font-size:0.82em; color:rgba(255,255,255,0.85); margin-top:4px;">Producido en el mismo predio, certificado, trazable</div>
+            </div>
+          </div>
+          <div style="text-align:center; font-size:1.5rem; color:var(--amber);">↓</div>
+          <div class="two-col fragment fade-up" style="gap:14px;">
+            <div style="display:flex; align-items:center; gap:14px; background:var(--green); border-radius:14px; padding:16px 20px; color:#fff;">
+              <div style="font-size:1.8rem;">📈</div>
+              <div>
+                <div style="font-family:'Montserrat',sans-serif; font-weight:800; font-size:0.78em; text-transform:uppercase; color:var(--amber);">Mejora tu suelo</div>
+                <div style="font-size:0.78em; opacity:0.9;">+16% productividad, -30% fertilizante</div>
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:14px; background:var(--amber); border-radius:14px; padding:16px 20px; color:#fff;">
+              <div style="font-size:1.8rem;">💳</div>
+              <div>
+                <div style="font-family:'Montserrat',sans-serif; font-weight:800; font-size:0.78em; text-transform:uppercase; color:#fff3cc;">Crédito de carbono</div>
+                <div style="font-size:0.78em; opacity:0.9;">Ingresos adicionales por sequestro de CO₂</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fragment fade-up" style="margin-top:16px;">
+        <div class="callout brown-grad" style="font-size:0.88em;">
+          🏆 <strong style="color:#ffd4b0;">Doble beneficio:</strong> más producción + nuevo ingreso por carbono. La misma práctica, dos fuentes de valor.
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 9 · EJERCICIO
+    ══════════════════════════════════════════ -->
+    <section
+      data-background-image="../Fotos/20250724/IMG_7561.jpg"
+      data-background-size="cover"
+      data-background-position="center"
+      data-background-opacity="0.25"
+      data-background-color="#1B7A6E">
+
+      <div style="display:flex; flex-direction:column; justify-content:center; height:100%; min-height:700px;">
+        <div class="fragment fade-up">
+          <div class="exercise-box">
+            <div class="exercise-timer">⏱️ 2 minutos</div>
+            <h3>💬 Ejercicio de discurso</h3>
+            <p>
+              Prepará un discurso de <strong>2 minutos</strong> para explicarle a un productor por qué debe aplicar el biochar en su cafetal.
+            </p>
+            <p style="margin-top:14px;">
+              🤔 <strong>¿Qué argumento usás primero?</strong>
+            </p>
+            <div style="display:flex; gap:12px; margin-top:18px; flex-wrap:wrap;">
+              <span style="background:rgba(255,255,255,0.2); border-radius:40px; padding:8px 18px; font-family:'Montserrat',sans-serif; font-weight:700; font-size:0.75em;">💰 El económico</span>
+              <span style="background:rgba(255,255,255,0.2); border-radius:40px; padding:8px 18px; font-family:'Montserrat',sans-serif; font-weight:700; font-size:0.75em;">🌿 El agronómico</span>
+            </div>
+            <p style="margin-top:16px; font-size:0.78em; opacity:0.85;">Sin leer las diapositivas. Desde tu propio entendimiento. En voz alta.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 10 · CIERRE
+    ══════════════════════════════════════════ -->
+    <section style="background: var(--dark-green);">
+      <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; min-height:700px; text-align:center; padding:40px;">
+        <div class="fragment fade-up" style="margin-bottom:24px;">
+          <div style="font-size:3.5rem;">✅</div>
+          <h2 style="font-family:'Montserrat',sans-serif; font-weight:900; color:#fff; font-size:1.6em; margin:12px 0 8px; text-transform:none;">S5.1 Completada</h2>
+          <p style="color:rgba(255,255,255,0.7); font-size:0.88em;">Mejora de Nutrientes y Productividad</p>
+        </div>
+
+        <div class="fragment fade-up" style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin:20px 0;">
+          <div style="background:rgba(255,255,255,0.1); border-radius:14px; padding:14px 20px; text-align:center; min-width:150px;">
+            <div style="font-family:'Montserrat',sans-serif; font-weight:900; font-size:1.4em; color:var(--amber);">+45%</div>
+            <div style="font-size:0.65em; color:rgba(255,255,255,0.7); text-transform:uppercase; margin-top:4px;">nutrientes disp.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.1); border-radius:14px; padding:14px 20px; text-align:center; min-width:150px;">
+            <div style="font-family:'Montserrat',sans-serif; font-weight:900; font-size:1.4em; color:var(--amber);">-30%</div>
+            <div style="font-size:0.65em; color:rgba(255,255,255,0.7); text-transform:uppercase; margin-top:4px;">refertilización</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.1); border-radius:14px; padding:14px 20px; text-align:center; min-width:150px;">
+            <div style="font-family:'Montserrat',sans-serif; font-weight:900; font-size:1.4em; color:var(--amber);">+16%</div>
+            <div style="font-size:0.65em; color:rgba(255,255,255,0.7); text-transform:uppercase; margin-top:4px;">productividad</div>
+          </div>
+        </div>
+
+        <div class="fragment fade-up">
+          <div class="closing-card" style="max-width:560px;">
+            <h3>Próxima sesión →</h3>
+            <p><strong>S5.2: Agua, Microbiología y Resiliencia Climática</strong><br/>
+            Cómo el biochar protege tu cafetal del cambio climático.</p>
+          </div>
+        </div>
+
+        <div class="fragment fade-up" style="margin-top:24px;">
+          <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:0.7em; color:rgba(255,255,255,0.4); letter-spacing:0.12em; text-transform:uppercase;">Coffee Biochar Academy × Biodiversal</div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    width: 1600,
+    height: 900,
+    margin: 0,
+    minScale: 0.2,
+    maxScale: 2.0,
+    controls: true,
+    progress: true,
+    slideNumber: true,
+    hash: true,
+    transition: 'fade',
+    transitionSpeed: 'default',
+    backgroundTransition: 'fade',
+    fragments: true,
+    fragmentInURL: false,
+    autoAnimateEasing: 'ease',
+    autoAnimateDuration: 0.6,
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>S2.2 — El Modelo Coffee Biochar | Coffee Biochar Academy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/theme/white.css" />
+  <style>
+    :root {
+      --green:   #3A7D44;
+      --dkgreen: #1F4D27;
+      --brown:   #6B3527;
+      --amber:   #D4881E;
+      --cream:   #F7F3EC;
+      --text:    #1C1C1C;
+      --teal:    #1B7A6E;
+    }
+
+    .reveal {
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background: var(--cream);
+    }
+
+    .reveal .slides section {
+      text-align: left;
+      padding: 48px 70px 32px;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .reveal h1, .reveal h2, .reveal h3 {
+      font-family: 'Montserrat', sans-serif;
+      text-transform: none;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      color: var(--dkgreen);
+    }
+    .reveal h1 { font-size: 3.2em; font-weight: 900; }
+    .reveal h2 { font-size: 1.85em; font-weight: 800; }
+    .reveal h3 { font-size: 1.45em; font-weight: 700; color: var(--green); }
+
+    .reveal p, .reveal li { font-size: 1.05em; line-height: 1.6; color: var(--text); }
+
+    .reveal .progress { height: 6px; color: var(--amber); }
+    .reveal .slide-number { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 0.85em; color: var(--green); background: transparent; }
+
+    .label-pill {
+      display: inline-block;
+      background: var(--amber);
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.72em;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 6px 18px;
+      border-radius: 40px;
+      margin-bottom: 10px;
+    }
+    .label-pill.green { background: var(--green); }
+    .label-pill.teal  { background: var(--teal); }
+
+    /* Cover */
+    .cover-title {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 3.8em;
+      line-height: 1.0;
+      color: #fff;
+      margin: 0 0 20px;
+    }
+    .cover-line { width: 80px; height: 5px; background: var(--amber); border-radius: 3px; margin: 22px 0; }
+
+    /* Cards */
+    .card-grid { display: grid; gap: 14px; }
+    .card-grid-2 { grid-template-columns: 1fr 1fr; }
+    .card-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 22px 24px;
+      border-left: 5px solid var(--green);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+    }
+    .card.amber  { border-left-color: var(--amber); }
+    .card.brown  { border-left-color: var(--brown); }
+    .card.teal   { border-left-color: var(--teal); }
+    .card.dkgreen { border-left-color: var(--dkgreen); background: var(--dkgreen); }
+    .card.dkgreen h4, .card.dkgreen p { color: #fff; }
+
+    .card-icon { font-size: 2em; margin-bottom: 8px; display: block; }
+    .card h4 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 0.95em; color: var(--dkgreen); margin: 0 0 6px; }
+    .card p { font-size: 0.87em; margin: 0; color: #444; }
+
+    /* 8 pasos numbered flow */
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-top: 18px;
+    }
+    .step-box {
+      background: #fff;
+      border-radius: 12px;
+      padding: 14px 14px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+      position: relative;
+      border-bottom: 4px solid var(--green);
+    }
+    .step-box:nth-child(2n) { border-bottom-color: var(--amber); }
+    .step-num {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 1.6em;
+      color: var(--green);
+      line-height: 1;
+      display: block;
+    }
+    .step-box:nth-child(2n) .step-num { color: var(--amber); }
+    .step-label {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.82em;
+      color: var(--dkgreen);
+      margin-top: 4px;
+      display: block;
+    }
+    .step-sub { font-size: 0.78em; color: #777; margin-top: 4px; }
+
+    /* Actors table */
+    .actor-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .actor-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 14px 14px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.07);
+      text-align: center;
+    }
+    .actor-icon { font-size: 2.2em; display: block; margin-bottom: 8px; }
+    .actor-name {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 0.82em;
+      color: var(--dkgreen);
+      margin-bottom: 6px;
+      line-height: 1.3;
+    }
+    .actor-role { font-size: 0.78em; color: #666; line-height: 1.4; }
+    .actor-card.highlight { background: var(--dkgreen); }
+    .actor-card.highlight .actor-name, .actor-card.highlight .actor-role { color: #fff; }
+
+    /* Highlight boxes */
+    .highlight-box {
+      background: linear-gradient(135deg, var(--green), var(--teal));
+      color: #fff;
+      border-radius: 18px;
+      padding: 28px 34px;
+      margin-top: 18px;
+    }
+    .highlight-box.amber-box { background: linear-gradient(135deg, var(--amber), var(--brown)); }
+    .highlight-box p { color: #fff; font-size: 1.05em; margin: 0; }
+    .highlight-box h3 { color: #fff; margin: 0 0 8px; }
+
+    /* Stats */
+    .stat-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 22px;
+      margin-top: 20px;
+    }
+    .stat-box {
+      background: #fff;
+      border-radius: 16px;
+      padding: 20px 22px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      border-top: 4px solid var(--green);
+    }
+    .stat-box.amber { border-top-color: var(--amber); }
+    .stat-box.teal  { border-top-color: var(--teal); }
+    .stat-num {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 2em;
+      line-height: 1;
+      color: var(--green);
+      display: block;
+    }
+    .stat-box.amber .stat-num { color: var(--amber); }
+    .stat-box.teal  .stat-num { color: var(--teal); }
+    .stat-label { font-size: 0.88em; color: #666; margin-top: 6px; line-height: 1.4; }
+
+    /* Estándar slide */
+    .standard-box {
+      background: linear-gradient(135deg, var(--dkgreen), #2a6338);
+      border-radius: 20px;
+      padding: 36px 44px;
+      margin-top: 18px;
+    }
+    .standard-box h3 { color: var(--amber); margin-bottom: 16px; }
+    .standard-point {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin: 12px 0;
+    }
+    .standard-num {
+      background: var(--amber);
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 0.85em;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .standard-text { color: rgba(255,255,255,0.9); font-size: 0.95em; line-height: 1.5; }
+
+    /* Dinámica */
+    .dinamica-content {
+      background: rgba(31,77,39,0.85);
+      border-radius: 20px;
+      padding: 40px 50px;
+      backdrop-filter: blur(2px);
+    }
+    .dinamica-content h2 { color: #fff; }
+    .dinamica-content p  { color: rgba(255,255,255,0.9); }
+
+    /* Cierre */
+    .cierre-box {
+      background: linear-gradient(135deg, var(--dkgreen), var(--teal));
+      border-radius: 22px;
+      padding: 36px 44px;
+      margin-top: 10px;
+    }
+    .cierre-box h3 { color: var(--amber); margin-bottom: 14px; }
+    .cierre-box p  { color: rgba(255,255,255,0.9); font-size: 1em; margin: 8px 0; }
+
+    /* Extensionista quote */
+    .quote-box {
+      background: var(--cream);
+      border: none;
+      border-left: 8px solid var(--amber);
+      border-radius: 0 16px 16px 0;
+      padding: 24px 28px;
+      margin-top: 18px;
+    }
+    .quote-text {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 1.25em;
+      color: var(--dkgreen);
+      line-height: 1.4;
+      font-style: italic;
+    }
+
+    /* Fragment animations */
+    .reveal .fragment { opacity: 0; transition: opacity 0.4s ease, transform 0.4s ease; transform: translateY(18px); }
+    .reveal .fragment.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+<div class="reveal">
+  <div class="slides">
+
+    <!-- ══════════ SLIDE 1 — COVER ══════════ -->
+    <section
+      data-background-image="../Fotos/drone-aereo/DJI_0826.JPG"
+      data-background-opacity="0.38"
+      data-background-color="#1F4D27"
+      data-background-size="cover">
+      <div style="padding:60px 80px;">
+        <div style="font-family:'Montserrat',sans-serif;font-weight:800;font-size:1em;letter-spacing:0.22em;text-transform:uppercase;color:var(--amber);margin-bottom:14px;">☕ Coffee Biochar Academy × Biodiversal</div>
+        <div style="font-family:'Montserrat',sans-serif;font-weight:800;font-size:1.05em;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.6);margin-bottom:14px;">MÓDULO 2 · SESIÓN 2</div>
+        <div class="cover-title">El Modelo<br>Coffee Biochar</div>
+        <div class="cover-line"></div>
+        <div style="font-family:'Inter',sans-serif;font-weight:400;font-size:1.3em;color:rgba(255,255,255,0.82);">Actores, flujos y el rol del extensionista</div>
+      </div>
+    </section>
+
+    <!-- ══════════ SLIDE 2 — OBJETIVO ══════════ -->
+    <section data-background-color="#F7F3EC">
+      <div class="label-pill">🎯 Objetivo</div>
+      <h2>¿Qué vas a conocer hoy?</h2>
+      <div class="card-grid card-grid-3" style="margin-top:18px;">
+        <div class="card fragment">
+          <span class="card-icon">👥</span>
+          <h4>Los actores</h4>
+          <p>Cada actor del modelo y cuál es su rol específico en el sistema</p>
+        </div>
+        <div class="card amber fragment">
+          <span class="card-icon">🔢</span>
+          <h4>Los 8 pasos</h4>
+          <p>De la zoca al pago: el flujo completo del proyecto</p>
+        </div>
+        <div class="card teal fragment">
+          <span class="card-icon">🌟</span>
+          <h4>Rol CLAVE</h4>
+          <p>El rol fundamental del extensionista en todo el proceso</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ SLIDE 3 — LOS 8 PASOS ══════════ -->
+    <section data-background-color="#F7F3EC">
+      <div class="label-pill">🔢 Flujo completo</div>
+      <h2>Los 8 Pasos: De la Zoca al Pago</h2>
+      <div class="steps-grid" style="margin-top:20px;">
+        <div class="step-box fragment">
+          <span class="step-num">1</span>
+          <span class="step-label">Enrolamiento</span>
+          <div class="step-sub">Productor ingresa al programa</div>
+        </div>
+        <div class="step-box fragment">
+          <span class="step-num">2</span>
+          <span class="step-label">Recolección Zoca</span>
+          <div class="step-sub">Biomasa del cafetal</div>
+        </div>
+        <div class="step-box fragment">
+          <span class="step-num">3</span>
+          <span class="step-label">Pirólisis Kon-Tiki</span>
+          <div class="step-sub">Conversión a biochar</div>
+        </div>
+        <div class="step-box fragment">
+          <span class="step-num">4</span>
+          <span class="step-label">Pesaje y Registro</span>
+          <div class="step-sub">Documentación del biochar</div>
+        </div>
+        <div class="step-box fragment">
+          <span class="step-num">5</span>
+          <span class="step-label">Aplicación al Suelo</span>
+          <div class="step-sub">Incorporación en el cafetal</div>
+        </div>
+        <div class="step-box fragment">
+          <span class="step-num">6</span>
+          <span class="step-label">Documentación</span>
+          <div class="step-sub">Foto + GPS + Planboo</div>
+        </div>
+        <div class="step-box fragment">
+          <span class="step-num">7</span>
+          <span class="step-label">Verificación CSI</span>
+          <div class="step-sub">Auditoría independiente</div>
+        </div>
+        <div class="step-box fragment">
+          <span class="step-num">8</span>
+          <span class="step-label">Pago al Productor</span>
+          <div class="step-sub">Ingreso adicional certificado</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ SLIDE 4 — LOS ACTORES ══════════ -->
+    <section data-background-color="#F7F3EC">
+      <div class="label-pill green">👥 Los actores</div>
+      <h2>Los Actores y Sus Roles</h2>
+      <div class="actor-grid" style="margin-top:18px;">
+        <div class="actor-card fragment">
+          <span class="actor-icon">🏢</span>
+          <div class="actor-name">Biodiversal SAS BIC</div>
+          <div class="actor-role">Coordinación del proyecto + estándar de calidad</div>
+        </div>
+        <div class="actor-card fragment">
+          <span class="actor-icon">💰</span>
+          <div class="actor-name">Cirkular Agro</div>
+          <div class="actor-role">Financiamiento + acceso al mercado de carbono</div>
+        </div>
+        <div class="actor-card highlight fragment">
+          <span class="actor-icon">🌱</span>
+          <div class="actor-name">Productor</div>
+          <div class="actor-role">Biomasa + suelo — el dueño del proceso físico</div>
+        </div>
+        <div class="actor-card highlight fragment" style="background:var(--amber);">
+          <span class="actor-icon">⭐</span>
+          <div class="actor-name">Extensionista</div>
+          <div class="actor-role">Campo + datos — el guardián del sistema</div>
+        </div>
+        <div class="actor-card fragment">
+          <span class="actor-icon">🔍</span>
+          <div class="actor-name">CSI</div>
+          <div class="actor-role">Verificación independiente y auditorías</div>
+        </div>
+        <div class="actor-card fragment">
+          <span class="actor-icon">🌍</span>
+          <div class="actor-name">Cliente Carbono</div>
+          <div class="actor-role">Compra los créditos — financia el ciclo</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ SLIDE 5 — EL EXTENSIONISTA ══════════ -->
+    <section data-background-color="#F7F3EC">
+      <div class="label-pill teal">⭐ Rol clave</div>
+      <h2>El Extensionista<br>en el Modelo</h2>
+      <div class="quote-box fragment">
+        <div class="quote-text">"El extensionista conecta al productor con el sistema."</div>
+      </div>
+      <div class="highlight-box amber-box fragment" style="margin-top:20px;">
+        <p style="font-size:1.2em;text-align:center;"><strong>Sin datos correctos → sin crédito → sin pago</strong></p>
+      </div>
+      <div class="card-grid card-grid-2" style="margin-top:16px;">
+        <div class="card teal fragment">
+          <span class="card-icon">📱</span>
+          <h4>Registra en campo</h4>
+          <p>Fotos, GPS, pesos — toda la evidencia que da vida al crédito</p>
+        </div>
+        <div class="card amber fragment">
+          <span class="card-icon">🤝</span>
+          <h4>Tu trabajo importa</h4>
+          <p>Más de lo que crees — eres el puente entre el productor y el mercado global</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ SLIDE 6 — ESTÁNDAR ARTISAN C-SINK ══════════ -->
+    <section data-background-color="#F7F3EC">
+      <div class="label-pill">📋 Marco técnico</div>
+      <h2>El Estándar Global<br>Artisan C-Sink</h2>
+      <div class="standard-box fragment">
+        <h3>🛂 El pasaporte del crédito de carbono</h3>
+        <div class="standard-point">
+          <div class="standard-num">1</div>
+          <div class="standard-text"><strong>Elegibilidad</strong> — Define exactamente qué biomasa es elegible para pirólisis</div>
+        </div>
+        <div class="standard-point">
+          <div class="standard-num">2</div>
+          <div class="standard-text"><strong>Proceso</strong> — Cómo se produce, se pesa y se aplica el biochar</div>
+        </div>
+        <div class="standard-point">
+          <div class="standard-num">3</div>
+          <div class="standard-text"><strong>Documentación</strong> — Qué datos y evidencias se requieren en Planboo</div>
+        </div>
+        <div class="standard-point">
+          <div class="standard-num">4</div>
+          <div class="standard-text"><strong>Verificación</strong> — Cómo CSI audita y valida el crédito</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ SLIDE 7 — EL CRÉDITO: LOS NÚMEROS ══════════ -->
+    <section data-background-color="#F7F3EC">
+      <div class="label-pill">💰 El valor económico</div>
+      <h2>El Crédito de Carbono —<br>Los Números</h2>
+      <div class="stat-row" style="margin-top:24px;">
+        <div class="stat-box fragment">
+          <span class="stat-num">1 t</span>
+          <div class="stat-label">Biochar aplicado<br>correctamente</div>
+        </div>
+        <div class="stat-box amber fragment">
+          <span class="stat-num">~2.1</span>
+          <div class="stat-label">tCO₂e secuestradas<br>permanentemente</div>
+        </div>
+        <div class="stat-box teal fragment">
+          <span class="stat-num">💲</span>
+          <div class="stat-label">Ingreso adicional<br>para el productor</div>
+        </div>
+      </div>
+      <div class="highlight-box fragment" style="margin-top:24px;padding:20px 28px;">
+        <p style="text-align:center;font-size:1.05em;">📊 <strong>Productividad × Precio × Documentación = Ingreso adicional real para el productor</strong></p>
+      </div>
+    </section>
+
+    <!-- ══════════ SLIDE 8 — DINÁMICA ══════════ -->
+    <section
+      data-background-image="../Fotos/20250723/IMG_7124.jpg"
+      data-background-opacity="0.35"
+      data-background-color="#1F4D27"
+      data-background-size="cover">
+      <div style="padding:40px 60px;">
+        <div class="dinamica-content">
+          <div style="font-family:'Montserrat',sans-serif;font-weight:800;font-size:0.85em;letter-spacing:0.15em;text-transform:uppercase;color:var(--amber);margin-bottom:16px;">🎮 Dinámica de cierre</div>
+          <h2 style="font-size:2em;margin-bottom:16px;">🎭 ¿Quién Soy Yo en Este Modelo?</h2>
+          <p style="font-size:1.05em;margin-bottom:20px;">Cada participante <strong style="color:var(--amber);">elige un actor</strong> y explica su rol con sus propias palabras:</p>
+          <div style="background:rgba(255,255,255,0.1);border:2px solid rgba(255,255,255,0.3);border-radius:14px;padding:20px 24px;" class="fragment">
+            <p style="color:#fff;font-size:1em;margin:0;"><strong style="color:var(--amber);">Pregunta clave:</strong> ¿Qué pasa si ese actor falla? ¿Cómo afecta a los demás? ¿Quién pierde?</p>
+          </div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:18px;">
+            <div class="fragment" style="background:rgba(212,136,30,0.3);border:2px solid var(--amber);border-radius:10px;padding:8px 16px;font-family:'Montserrat',sans-serif;font-weight:700;color:#fff;font-size:0.82em;">🏢 Biodiversal</div>
+            <div class="fragment" style="background:rgba(58,125,68,0.3);border:2px solid #3A7D44;border-radius:10px;padding:8px 16px;font-family:'Montserrat',sans-serif;font-weight:700;color:#fff;font-size:0.82em;">👨‍🌾 Productor</div>
+            <div class="fragment" style="background:rgba(212,136,30,0.3);border:2px solid var(--amber);border-radius:10px;padding:8px 16px;font-family:'Montserrat',sans-serif;font-weight:700;color:#fff;font-size:0.82em;">⭐ Extensionista</div>
+            <div class="fragment" style="background:rgba(27,122,110,0.3);border:2px solid #1B7A6E;border-radius:10px;padding:8px 16px;font-family:'Montserrat',sans-serif;font-weight:700;color:#fff;font-size:0.82em;">🔍 CSI</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ SLIDE 9 — CIERRE + TAREA ══════════ -->
+    <section data-background-color="#F7F3EC">
+      <div style="text-align:center;margin-bottom:20px;">
+        <div style="font-size:3em;">🤔</div>
+        <h2 style="font-size:2em;">Pregunta para reflexionar</h2>
+      </div>
+      <div style="background:#fff;border-radius:18px;padding:28px 36px;border-left:8px solid var(--brown);box-shadow:0 4px 24px rgba(0,0,0,0.08);margin-bottom:20px;" class="fragment">
+        <p style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:1.15em;color:var(--brown);margin:0;">Si un registro está incompleto…<br><span style="color:var(--dkgreen);">¿El productor pierde? ¿El proyecto pierde? ¿Los dos?</span></p>
+      </div>
+      <div class="cierre-box fragment">
+        <h3>📚 Antes de la próxima sesión:</h3>
+        <p>📄 <strong>Lectura S2.2</strong> — El modelo Coffee Biochar</p>
+        <p>💭 Trae tu respuesta a la pregunta de reflexión</p>
+      </div>
+      <div style="text-align:center;margin-top:22px;">
+        <div style="font-family:'Montserrat',sans-serif;font-weight:800;font-size:1.1em;color:var(--green);">Coffee Biochar Academy × Biodiversal</div>
+        <div style="font-family:'Inter',sans-serif;font-size:0.85em;color:#999;margin-top:4px;">Módulo 2 · Sesión 2 — El Modelo Coffee Biochar</div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    width: 1600,
+    height: 900,
+    margin: 0.04,
+    minScale: 0.2,
+    maxScale: 2.0,
+    controls: true,
+    progress: true,
+    slideNumber: 'c/t',
+    hash: true,
+    center: false,
+    transition: 'fade',
+    transitionSpeed: 'default',
+    backgroundTransition: 'fade',
+  });
+</script>
+</body>
+</html>

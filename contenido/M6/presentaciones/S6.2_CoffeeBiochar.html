@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>S6.2 — Simulacro de Auditoría y Cierre del Programa | Coffee Biochar Academy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/theme/white.css" />
+  <style>
+    :root {
+      --green:   #3A7D44;
+      --dkgreen: #1F4D27;
+      --brown:   #6B3527;
+      --amber:   #D4881E;
+      --cream:   #F7F3EC;
+      --text:    #1C1C1C;
+      --teal:    #1B7A6E;
+      --red:     #c0392b;
+      --gold:    #F0B429;
+    }
+
+    .reveal-viewport { background: var(--cream); }
+    .reveal { font-family: 'Inter', sans-serif; color: var(--text); }
+
+    .reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+      font-family: 'Montserrat', sans-serif;
+      text-transform: none;
+      letter-spacing: -0.02em;
+    }
+
+    .reveal .progress { background: rgba(58,125,68,0.2); height: 5px; }
+    .reveal .progress span { background: var(--gold); }
+
+    .reveal .slide-number {
+      background: transparent;
+      color: var(--green);
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.7em;
+    }
+
+    /* ── COVER ── */
+    .slide-cover {
+      display: flex !important;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-end;
+      padding: 70px 90px !important;
+      height: 100%;
+      box-sizing: border-box;
+    }
+    .cover-badge {
+      background: var(--gold);
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 0.85em;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 7px 18px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      display: inline-block;
+    }
+    .cover-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 3.2em !important;
+      font-weight: 900;
+      color: #fff !important;
+      line-height: 1.1;
+      margin: 0 0 16px !important;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+    }
+    .cover-sub {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.1em;
+      color: rgba(255,255,255,0.85);
+      letter-spacing: 0.04em;
+    }
+    .cover-final-badge {
+      background: var(--gold);
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 0.75em;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 5px 16px;
+      border-radius: 4px;
+      margin-bottom: 14px;
+      display: inline-block;
+    }
+    .cover-logo {
+      position: absolute;
+      top: 50px;
+      right: 70px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 1.1em;
+      color: rgba(255,255,255,0.9);
+      letter-spacing: 0.05em;
+    }
+
+    /* ── STANDARD SLIDE ── */
+    /* Fix 6: overflow hidden added */
+    .slide-std {
+      padding: 50px 80px !important;
+      text-align: left;
+      overflow: hidden;
+    }
+    .slide-label {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.65em;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 8px;
+    }
+    /* Fix 1: h2 margin reduced from 24px to 14px */
+    .slide-std h2 {
+      font-size: 2em !important;
+      font-weight: 900;
+      color: var(--dkgreen);
+      margin: 0 0 14px !important;
+      line-height: 1.15;
+    }
+    /* Fix 2: accent-line margin reduced from 22px to 10px */
+    .accent-line {
+      width: 60px;
+      height: 5px;
+      background: var(--amber);
+      border-radius: 3px;
+      margin: 0 0 10px;
+    }
+
+    /* ── CARDS ── */
+    /* Fix 4: cards-row gap and margin-top reduced */
+    .cards-row { display: flex; gap: 14px; margin-top: 6px; }
+    /* Fix 3: card padding reduced */
+    .card {
+      flex: 1;
+      border-radius: 14px;
+      padding: 16px 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    }
+    .card-green { background: linear-gradient(135deg, #e8f4ea 0%, #d0e9d4 100%); border-top: 5px solid var(--green); }
+    .card-amber { background: linear-gradient(135deg, #fdf3e0 0%, #fae7bf 100%); border-top: 5px solid var(--amber); }
+    .card-brown { background: linear-gradient(135deg, #f5ebe7 0%, #ead5cd 100%); border-top: 5px solid var(--brown); }
+    .card-teal  { background: linear-gradient(135deg, #e0f4f2 0%, #c4eae7 100%); border-top: 5px solid var(--teal); }
+    .card-red   { background: linear-gradient(135deg, #fde8e6 0%, #f8cdc9 100%); border-top: 5px solid var(--red); }
+    .card h3 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.9em !important;
+      font-weight: 800;
+      color: var(--dkgreen);
+      margin: 0 0 8px !important;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .card p { font-size: 0.80em; line-height: 1.55; color: var(--text); margin: 0; }
+    .card .card-icon { font-size: 1.6em; margin-bottom: 8px; display: block; }
+
+    /* ── BULLET LIST ── */
+    /* Fix 5: padding, margin-bottom, and font-size reduced */
+    .bullet-list { list-style: none; padding: 0; margin: 0; }
+    .bullet-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 9px 14px;
+      border-radius: 10px;
+      margin-bottom: 7px;
+      font-size: 0.84em;
+      line-height: 1.5;
+      background: #fff;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      border-left: 5px solid var(--green);
+    }
+    .bullet-list li.warn  { border-left-color: var(--red); }
+    .bullet-list li.amber { border-left-color: var(--amber); }
+    .bullet-list li.teal  { border-left-color: var(--teal); }
+    .bullet-list li .bi { font-size: 1.3em; min-width: 26px; }
+
+    /* ── SCENARIO SLIDE ── */
+    .scenario-header {
+      background: linear-gradient(135deg, var(--brown), #4a2118);
+      border-radius: 12px;
+      padding: 14px 22px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .scenario-header .sc-num {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 2em;
+      color: var(--amber);
+      line-height: 1;
+      min-width: 56px;
+    }
+    .scenario-header .sc-title {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      color: #fff;
+      font-size: 1.0em;
+      line-height: 1.3;
+    }
+    .scenario-header .sc-emoji {
+      font-size: 2.2em;
+      margin-left: auto;
+    }
+
+    .facts-row {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    .fact-box {
+      flex: 1;
+      background: #fff;
+      border-radius: 12px;
+      padding: 13px 16px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      border-top: 4px solid var(--teal);
+    }
+    .fact-box.warn { border-top-color: var(--red); }
+    .fact-box .fb-label {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.66em;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--teal);
+      margin-bottom: 5px;
+    }
+    .fact-box.warn .fb-label { color: var(--red); }
+    .fact-box .fb-val {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 1.1em;
+      color: var(--dkgreen);
+      line-height: 1.2;
+    }
+    .fact-box.warn .fb-val { color: var(--red); }
+
+    .questions-box {
+      background: linear-gradient(135deg, #fdf3e0, #fae7bf);
+      border-radius: 12px;
+      padding: 15px 20px;
+      border-left: 5px solid var(--amber);
+    }
+    .questions-box p {
+      font-size: 0.79em;
+      line-height: 1.6;
+      margin: 0;
+      color: var(--text);
+    }
+    .questions-box strong { color: var(--brown); }
+
+    /* ── QUOTE BLOCK ── */
+    .quote-block {
+      background: linear-gradient(135deg, var(--dkgreen), #0f2a14);
+      border-radius: 14px;
+      padding: 18px 28px;
+      margin-top: 14px;
+      position: relative;
+    }
+    .quote-block::before {
+      content: '"';
+      font-family: 'Montserrat', sans-serif;
+      font-size: 5em;
+      color: var(--amber);
+      opacity: 0.3;
+      position: absolute;
+      top: -10px;
+      left: 20px;
+      line-height: 1;
+    }
+    .quote-block p {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.92em;
+      color: #fff;
+      margin: 0;
+      line-height: 1.55;
+      padding-left: 10px;
+    }
+    .quote-block span { color: var(--amber); }
+
+    /* ── RETRO SLIDE ── */
+    .retro-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 6px;
+    }
+    .retro-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 15px 18px;
+      box-shadow: 0 3px 14px rgba(0,0,0,0.07);
+      border-top: 5px solid var(--green);
+    }
+    .retro-card.amber-t { border-top-color: var(--amber); }
+    .retro-card h4 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 0.82em !important;
+      color: var(--dkgreen);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin: 0 0 8px !important;
+    }
+    .retro-card p { font-size: 0.77em; line-height: 1.55; margin: 0; color: var(--text); }
+
+    /* ── GRADUATION SLIDE ── */
+    .slide-grad {
+      display: flex !important;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 36px 80px !important;
+      overflow: hidden;
+      position: relative;
+    }
+    .grad-bg-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(160deg, rgba(31,77,39,0.92) 0%, rgba(15,42,20,0.97) 100%);
+      z-index: 0;
+    }
+    .grad-content { position: relative; z-index: 1; width: 100%; }
+
+    .grad-eyebrow {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 0.72em;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+    .grad-counter-row {
+      display: flex;
+      gap: 0;
+      justify-content: center;
+      margin: 12px 0 18px;
+    }
+    .grad-counter {
+      flex: 1;
+      max-width: 220px;
+      padding: 0 20px;
+      position: relative;
+    }
+    .grad-counter + .grad-counter::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 10%;
+      height: 80%;
+      width: 1px;
+      background: rgba(255,255,255,0.2);
+    }
+    .gc-num {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 3em;
+      color: var(--gold);
+      line-height: 1;
+      display: block;
+    }
+    .gc-label {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.68em;
+      color: rgba(255,255,255,0.7);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 4px;
+    }
+
+    .grad-title {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 2.8em !important;
+      color: #fff !important;
+      line-height: 1.1;
+      margin: 0 0 14px !important;
+      text-shadow: 0 2px 24px rgba(0,0,0,0.4);
+    }
+    .grad-title span { color: var(--gold); }
+
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 8px;
+      margin: 4px 0 18px;
+    }
+    .mod-chip {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 10px;
+      padding: 11px 8px;
+      text-align: center;
+    }
+    .mod-chip .mc-icon { font-size: 1.3em; display: block; margin-bottom: 5px; }
+    .mod-chip .mc-num {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 0.62em;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 2px;
+    }
+    .mod-chip .mc-name {
+      font-size: 0.59em;
+      color: rgba(255,255,255,0.8);
+      line-height: 1.3;
+      font-weight: 600;
+    }
+
+    /* animated confetti dots */
+    .confetti-dot {
+      position: absolute;
+      border-radius: 50%;
+      animation: floatUp 4s ease-in-out infinite;
+      opacity: 0;
+      pointer-events: none;
+    }
+    @keyframes floatUp {
+      0%   { transform: translateY(0) rotate(0deg); opacity: 0; }
+      20%  { opacity: 0.8; }
+      80%  { opacity: 0.6; }
+      100% { transform: translateY(-300px) rotate(360deg); opacity: 0; }
+    }
+
+    /* counter animation */
+    .count-anim { display: inline-block; }
+
+    /* ── YOU ARE NOW SLIDE ── */
+    .slide-hero {
+      display: flex !important;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 48px 80px !important;
+      background: linear-gradient(145deg, var(--dkgreen) 0%, #0f2a14 100%);
+      overflow: hidden;
+    }
+    .hero-label {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.65em;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+    .hero-title {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 2.5em !important;
+      color: #fff !important;
+      margin: 0 0 18px !important;
+      line-height: 1.15;
+    }
+    .hero-title span { color: var(--gold); }
+    .identity-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 7px; }
+    .identity-list li {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 11px 18px;
+      border-left: 5px solid var(--gold);
+    }
+    .identity-list li .il-icon { font-size: 1.35em; min-width: 30px; }
+    .identity-list li .il-text {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.82em;
+      color: rgba(255,255,255,0.92);
+      line-height: 1.35;
+    }
+    .identity-list li .il-text span { color: var(--gold); }
+
+    /* ── FINAL CLOSE SLIDE ── */
+    .slide-final {
+      display: flex !important;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px 80px !important;
+      position: relative;
+      overflow: hidden;
+    }
+    .final-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(160deg, rgba(107,53,39,0.85) 0%, rgba(31,77,39,0.9) 60%, rgba(15,42,20,0.95) 100%);
+      z-index: 0;
+    }
+    .final-content { position: relative; z-index: 1; max-width: 900px; }
+
+    .final-title {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 2.2em !important;
+      color: #fff !important;
+      line-height: 1.2;
+      margin: 0 0 18px !important;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.4);
+    }
+    .final-title span { color: var(--gold); }
+    .final-tagline {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.9em;
+      color: var(--gold);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+      display: block;
+    }
+    .final-message {
+      font-size: 0.92em;
+      line-height: 1.75;
+      color: rgba(255,255,255,0.88);
+      margin: 0 0 22px;
+    }
+    .final-message strong { color: var(--gold); }
+    .final-logos {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 0.8em;
+      color: rgba(255,255,255,0.7);
+      letter-spacing: 0.06em;
+    }
+    .final-logos .sep { opacity: 0.4; font-size: 1.4em; }
+
+    /* ── RULES SLIDE ── */
+    .rules-box {
+      background: linear-gradient(135deg, var(--dkgreen), #0f2a14);
+      border-radius: 16px;
+      padding: 22px 34px;
+      margin-top: 6px;
+    }
+    .rules-box ul { list-style: none; padding: 0; margin: 0; }
+    .rules-box li {
+      font-size: 0.85em;
+      color: rgba(255,255,255,0.9);
+      padding: 9px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      line-height: 1.45;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+    .rules-box li:last-child { border-bottom: none; }
+    .rules-box li .ri { min-width: 28px; font-size: 1.2em; }
+    .rules-quote {
+      margin-top: 14px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      color: var(--amber);
+      font-size: 0.92em;
+      text-align: center;
+      font-style: italic;
+    }
+
+    /* Reveal fragments */
+    .reveal .fragment.fade-up {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    .reveal .fragment.fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal .fragment.zoom-in {
+      opacity: 0;
+      transform: scale(0.85);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    .reveal .fragment.zoom-in.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Confetti pulse animation for grad slide */
+    @keyframes pulse-gold {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(240,180,41,0.4); }
+      50%       { box-shadow: 0 0 0 12px rgba(240,180,41,0); }
+    }
+    .pulsing { animation: pulse-gold 2s ease-in-out infinite; }
+
+    /* Number counter */
+    @keyframes countUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .counter-anim {
+      animation: countUp 0.6s ease forwards;
+    }
+  </style>
+</head>
+<body>
+<div class="reveal">
+  <div class="slides">
+
+    <!-- ── SLIDE 1: COVER ── -->
+    <section
+      data-background-image="../Fotos/20251127/P1001810.JPG"
+      data-background-opacity="0.3"
+      data-background-color="#1F4D27"
+      data-transition="fade">
+      <div class="slide-cover">
+        <div class="cover-logo">☕ Coffee Biochar Academy × Biodiversal</div>
+        <span class="cover-final-badge">✨ Sesión Final del Programa ✨</span>
+        <span class="cover-badge">Módulo 6 · Sesión 2</span>
+        <h1 class="cover-title">Simulacro de<br>Auditoría y<br>Cierre del Programa</h1>
+        <p class="cover-sub">Coffee Biochar Academy × Biodiversal</p>
+      </div>
+    </section>
+
+    <!-- ── SLIDE 2: REGLAS DEL SIMULACRO ── -->
+    <section class="slide-std" data-transition="slide">
+      <div class="slide-label">Actividad central</div>
+      <h2>Reglas del Simulacro 📋</h2>
+      <div class="accent-line"></div>
+      <div class="rules-box fragment fade-up">
+        <ul>
+          <li class="fragment fade-up"><span class="ri">🎭</span><span>El facilitador asume el <strong>rol de auditor CSI</strong> con toda la autoridad del rol.</span></li>
+          <li class="fragment fade-up"><span class="ri">🛡️</span><span>Los participantes <strong>defienden sus registros</strong> como si fuera una auditoría real con consecuencias reales.</span></li>
+          <li class="fragment fade-up"><span class="ri">⚡</span><span>Los escenarios son <strong>situaciones reales</strong> extraídas de auditorías anteriores en proyectos de carbono.</span></li>
+          <li class="fragment fade-up"><span class="ri">🤝</span><span>Se trabaja en grupos. Un miembro presenta — el resto refuerza con argumentos.</span></li>
+          <li class="fragment fade-up"><span class="ri">⏱️</span><span>Cada escenario tiene <strong>5 minutos</strong> de discusión grupal antes de presentar.</span></li>
+        </ul>
+      </div>
+      <p class="rules-quote fragment fade-up">"No hay respuestas perfectas — hay respuestas honestas y bien fundamentadas."</p>
+    </section>
+
+    <!-- ── SLIDE 3: ESCENARIO 1 ── -->
+    <section class="slide-std" data-transition="slide">
+      <div class="slide-label">Simulacro · Escenario 1</div>
+      <h2>Discrepancia de Peso ⚖️</h2>
+      <div class="accent-line"></div>
+      <div class="scenario-header fragment fade-up">
+        <div class="sc-num">01</div>
+        <div class="sc-title">La balanza física no coincide<br>con lo registrado en el sistema</div>
+        <div class="sc-emoji">⚖️</div>
+      </div>
+      <div class="facts-row fragment fade-up">
+        <div class="fact-box">
+          <div class="fb-label">App Planboo registra</div>
+          <div class="fb-val">125 kg · Lote #042</div>
+        </div>
+        <div class="fact-box warn">
+          <div class="fb-label">Balanza física hoy en campo</div>
+          <div class="fb-val">98 kg en almacén</div>
+        </div>
+        <div class="fact-box warn">
+          <div class="fb-label">Diferencia sin explicación</div>
+          <div class="fb-val">27 kg faltantes</div>
+        </div>
+      </div>
+      <div class="questions-box fragment fade-up">
+        <p>
+          🤔 <strong>¿Qué pasó con esos 27 kg?</strong> ¿Hubo una aplicación parcial no registrada? ¿Error en el pesaje original? ¿Pérdida por humedad después del pesaje?<br><br>
+          🛡️ <strong>¿Cómo lo justificas ante el auditor?</strong> ¿Qué documentación respaldatoria puedes presentar?<br><br>
+          🔧 <strong>¿Qué medidas preventivas hubieran evitado esta discrepancia?</strong>
+        </p>
+      </div>
+    </section>
+
+    <!-- ── SLIDE 4: ESCENARIO 2 ── -->
+    <section class="slide-std" data-transition="slide">
+      <div class="slide-label">Simulacro · Escenario 2</div>
+      <h2>Quema No Registrada 🔥</h2>
+      <div class="accent-line"></div>
+      <div class="scenario-header fragment fade-up" style="background:linear-gradient(135deg, #8b1a0e, #5a0e06)">
+        <div class="sc-num">02</div>
+        <div class="sc-title">Reporte comunitario: una quema<br>adicional que no está en el sistema</div>
+        <div class="sc-emoji">🔥</div>
+      </div>
+      <div class="facts-row fragment fade-up">
+        <div class="fact-box">
+          <div class="fb-label">Reporte comunitario</div>
+          <div class="fb-val">Quema extra el 15 Nov</div>
+        </div>
+        <div class="fact-box warn">
+          <div class="fb-label">Estado en Planboo</div>
+          <div class="fb-val">No registrada</div>
+        </div>
+        <div class="fact-box warn">
+          <div class="fb-label">Confirmación del productor</div>
+          <div class="fb-val">"Se me olvidó registrar"</div>
+        </div>
+      </div>
+      <div class="questions-box fragment fade-up">
+        <p>
+          📋 <strong>¿Cuál es el protocolo ante una quema no registrada?</strong> ¿Existe un proceso de corrección retroactiva en Planboo?<br><br>
+          🔄 <strong>¿Se puede recuperar el dato?</strong> ¿Qué evidencias alternativas serían válidas para justificar la quema? (fotos del día, testimonios, residuos físicos)<br><br>
+          💬 <strong>¿Qué le dices al productor Carlos?</strong> ¿Cómo evitamos que esto se repita?
+        </p>
+      </div>
+    </section>
+
+    <!-- ── SLIDE 5: ESCENARIO 3 ── -->
+    <section class="slide-std" data-transition="slide">
+      <div class="slide-label">Simulacro · Escenario 3</div>
+      <h2>Fechas Imposibles 📅</h2>
+      <div class="accent-line"></div>
+      <div class="scenario-header fragment fade-up" style="background:linear-gradient(135deg, var(--teal), #0f4f48)">
+        <div class="sc-num">03</div>
+        <div class="sc-title">La fecha de aplicación es ANTERIOR<br>a la fecha de producción registrada</div>
+        <div class="sc-emoji">📅</div>
+      </div>
+      <div class="facts-row fragment fade-up">
+        <div class="fact-box">
+          <div class="fb-label">Registro en Planboo</div>
+          <div class="fb-val">12 de octubre</div>
+        </div>
+        <div class="fact-box warn">
+          <div class="fb-label">Metadatos de las fotos</div>
+          <div class="fb-val">8 de octubre</div>
+        </div>
+        <div class="fact-box warn">
+          <div class="fb-label">La aplicación fue registrada</div>
+          <div class="fb-val">ANTES de la producción</div>
+        </div>
+      </div>
+      <div class="questions-box fragment fade-up">
+        <p>
+          🔍 <strong>¿Error o fraude?</strong> El sistema detecta que el biochar fue "aplicado" antes de ser "producido". ¿Cuál es la diferencia de consecuencias entre un error humano y una manipulación intencional?<br><br>
+          🗂️ <strong>¿Cómo investigas?</strong> ¿Qué otras fuentes de evidencia existen para reconstruir la cronología real del evento?<br><br>
+          📝 <strong>¿Cómo documentas el proceso de investigación</strong> para que el auditor lo comprenda?
+        </p>
+      </div>
+    </section>
+
+    <!-- ── SLIDE 6: ESCENARIO 4 ── -->
+    <section class="slide-std" data-transition="slide">
+      <div class="slide-label">Simulacro · Escenario 4</div>
+      <h2>Fotos Sin GPS 📸</h2>
+      <div class="accent-line"></div>
+      <div class="scenario-header fragment fade-up" style="background:linear-gradient(135deg, #5a4020, #3a2a10)">
+        <div class="sc-num">04</div>
+        <div class="sc-title">8 fotos del proceso · Ninguna<br>tiene coordenadas GPS en los metadatos</div>
+        <div class="sc-emoji">📸</div>
+      </div>
+      <div class="facts-row fragment fade-up">
+        <div class="fact-box">
+          <div class="fb-label">Registro #031</div>
+          <div class="fb-val">8 fotos subidas</div>
+        </div>
+        <div class="fact-box warn">
+          <div class="fb-label">GPS en metadatos</div>
+          <div class="fb-val">Ninguna · 0 de 8</div>
+        </div>
+        <div class="fact-box">
+          <div class="fb-label">Justificación del productor</div>
+          <div class="fb-val">"No había señal"</div>
+        </div>
+      </div>
+      <div class="questions-box fragment fade-up">
+        <p>
+          📱 <strong>¿Qué opciones tienes para validar la ubicación?</strong> ¿El GPS del teléfono requiere señal celular o funciona sin internet? (Importante: el GPS funciona sin señal — la señal es para mapas, no para coordenadas)<br><br>
+          🗺️ <strong>¿Se puede verificar el lote por otras vías?</strong> ¿Polígonos previos, visitas anteriores, coordenadas del enrolamiento?<br><br>
+          📋 <strong>¿Qué protocolo sigues</strong> para este registro? ¿Válido parcial, inválido, o requiere visita de verificación?
+        </p>
+      </div>
+    </section>
+
+    <!-- ── SLIDE 7: RETROALIMENTACIÓN ── -->
+    <section class="slide-std" data-transition="slide">
+      <div class="slide-label">Reflexión post-simulacro</div>
+      <h2>Retroalimentación del Simulacro 🔄</h2>
+      <div class="accent-line"></div>
+      <div class="retro-grid">
+        <div class="retro-card fragment fade-up">
+          <h4>😤 ¿Respondiste con nervios?</h4>
+          <p>Los nervios ante una auditoría son normales. La diferencia es que <strong>los registros ordenados te dan calma</strong>. No tienes que recordar — tienes que mostrar.</p>
+        </div>
+        <div class="retro-card amber-t fragment fade-up">
+          <h4>😰 ¿Qué te pilló desprevenido?</h4>
+          <p>Identifica exactamente <strong>qué situaciones no sabías responder</strong>. Esas son tus áreas de mejora prioritarias antes del primer ciclo real.</p>
+        </div>
+        <div class="retro-card fragment fade-up">
+          <h4>🏆 ¿Respondiste con calma?</h4>
+          <p>La calma viene de los <strong>registros en tiempo real</strong>. Si documentaste bien, el auditor es tu aliado — no tu adversario.</p>
+        </div>
+        <div class="retro-card amber-t fragment fade-up">
+          <h4>👥 ¿Tu grupo funcionó?</h4>
+          <p>La defensa colectiva es más sólida. <strong>El clúster se audita como equipo</strong> — la fortaleza del grupo depende del eslabón más débil.</p>
+        </div>
+      </div>
+      <div class="quote-block fragment fade-up">
+        <p>"Un extensionista que pasa la auditoría no es el que <span>nunca se equivoca</span> — es el que <span>siempre documenta</span>."</p>
+      </div>
+    </section>
+
+    <!-- ── SLIDE 8: GRADUACIÓN ── -->
+    <section
+      data-background-image="../Fotos/20251127/P1001827.JPG"
+      data-background-opacity="0.18"
+      data-background-color="#0f2a14"
+      data-transition="fade">
+
+      <!-- confetti dots -->
+      <div class="confetti-dot" style="width:12px;height:12px;background:#F0B429;left:8%;top:70%;animation-delay:0s;animation-duration:3.5s;"></div>
+      <div class="confetti-dot" style="width:8px;height:8px;background:#3A7D44;left:15%;top:80%;animation-delay:0.5s;animation-duration:4s;"></div>
+      <div class="confetti-dot" style="width:10px;height:10px;background:#D4881E;left:25%;top:75%;animation-delay:1s;animation-duration:3.8s;"></div>
+      <div class="confetti-dot" style="width:14px;height:14px;background:#F0B429;left:75%;top:72%;animation-delay:0.3s;animation-duration:4.2s;"></div>
+      <div class="confetti-dot" style="width:9px;height:9px;background:#3A7D44;left:85%;top:78%;animation-delay:0.8s;animation-duration:3.6s;"></div>
+      <div class="confetti-dot" style="width:11px;height:11px;background:#1B7A6E;left:90%;top:68%;animation-delay:1.4s;animation-duration:4.4s;"></div>
+      <div class="confetti-dot" style="width:7px;height:7px;background:#F0B429;left:50%;top:82%;animation-delay:0.2s;animation-duration:3.9s;"></div>
+      <div class="confetti-dot" style="width:13px;height:13px;background:#D4881E;left:60%;top:76%;animation-delay:1.1s;animation-duration:4.1s;"></div>
+
+      <div class="slide-grad">
+        <div class="grad-bg-overlay"></div>
+        <div class="grad-content">
+          <div class="grad-eyebrow fragment fade-up">🎓 &nbsp; Graduación Coffee Biochar Academy &nbsp; 🎓</div>
+
+          <h2 class="grad-title fragment fade-up">
+            <span>6 Módulos</span> · <span>16 Semanas</span><br>Y Aquí Estás 🌟
+          </h2>
+
+          <div class="grad-counter-row fragment fade-up">
+            <div class="grad-counter">
+              <span class="gc-num" id="c1">6</span>
+              <div class="gc-label">Módulos completados</div>
+            </div>
+            <div class="grad-counter">
+              <span class="gc-num" id="c2">16</span>
+              <div class="gc-label">Semanas de formación</div>
+            </div>
+            <div class="grad-counter">
+              <span class="gc-num" id="c3">12</span>
+              <div class="gc-label">Sesiones de aprendizaje</div>
+            </div>
+            <div class="grad-counter">
+              <span class="gc-num" id="c4">∞</span>
+              <div class="gc-label">Impacto del carbono capturado</div>
+            </div>
+          </div>
+
+          <div class="modules-grid fragment fade-up">
+            <div class="mod-chip">
+              <span class="mc-icon">🌿</span>
+              <div class="mc-num">Módulo 1</div>
+              <div class="mc-name">Fundamentos del Proyecto</div>
+            </div>
+            <div class="mod-chip">
+              <span class="mc-icon">📊</span>
+              <div class="mc-num">Módulo 2</div>
+              <div class="mc-name">El Modelo y el Dato</div>
+            </div>
+            <div class="mod-chip">
+              <span class="mc-icon">🔥</span>
+              <div class="mc-num">Módulo 3</div>
+              <div class="mc-name">La Ciencia del Biochar</div>
+            </div>
+            <div class="mod-chip">
+              <span class="mc-icon">🌱</span>
+              <div class="mc-num">Módulo 4</div>
+              <div class="mc-name">El Suelo Vivo</div>
+            </div>
+            <div class="mod-chip">
+              <span class="mc-icon">💰</span>
+              <div class="mc-num">Módulo 5</div>
+              <div class="mc-name">Los Beneficios del Carbono</div>
+            </div>
+            <div class="mod-chip" style="background:rgba(240,180,41,0.2); border-color:rgba(240,180,41,0.5);">
+              <span class="mc-icon">✅</span>
+              <div class="mc-num" style="color:#F0B429;">Módulo 6</div>
+              <div class="mc-name" style="color:#F0B429; font-weight:800;">La Disciplina Operativa</div>
+            </div>
+          </div>
+
+          <div class="fragment fade-up" style="font-family:'Montserrat'; font-weight:700; font-size:0.72em; color:rgba(255,255,255,0.55); letter-spacing:0.08em;">
+            ☕ Coffee Biochar Academy × Biodiversal × Cirkular Agro
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SLIDE 9: LO QUE ERES AHORA ── -->
+    <section class="slide-hero" data-transition="slide">
+      <div class="hero-label">Tu nueva identidad profesional</div>
+      <h2 class="hero-title">Lo que Eres <span>Ahora</span> 🌟</h2>
+      <ul class="identity-list">
+        <li class="fragment fade-up">
+          <span class="il-icon">🛡️</span>
+          <span class="il-text">Un <span>guardián del dato de carbono</span> — el primer eslabón de la cadena de confianza del mercado.</span>
+        </li>
+        <li class="fragment fade-up">
+          <span class="il-icon">🔬</span>
+          <span class="il-text">Un <span>experto en biochar y suelos</span> — con conocimiento científico que pocos extensionistas en Colombia tienen.</span>
+        </li>
+        <li class="fragment fade-up">
+          <span class="il-icon">🌍</span>
+          <span class="il-text">Un <span>agente de cambio climático real</span> — no en las palabras, sino en cada quema que documentas.</span>
+        </li>
+        <li class="fragment fade-up">
+          <span class="il-icon">🌉</span>
+          <span class="il-text">Un <span>puente entre la finca y el mercado global de carbono</span> — traductor entre el productor y el inversor internacional.</span>
+        </li>
+        <li class="fragment fade-up">
+          <span class="il-icon">⚡</span>
+          <span class="il-text">La diferencia entre un <span>crédito válido</span> y uno inválido. Entre un pago que llega y uno que no llega.</span>
+        </li>
+        <li class="fragment fade-up">
+          <span class="il-icon">🦸</span>
+          <span class="il-text">El <span>héroe invisible del proyecto</span> — sin tu trabajo, nada de esto existe.</span>
+        </li>
+      </ul>
+    </section>
+
+    <!-- ── SLIDE 10: CIERRE FINAL ── -->
+    <section
+      data-background-image="../Fotos/20250724/IMG_7583.jpg"
+      data-background-opacity="0.22"
+      data-background-color="#3D1F0E"
+      data-transition="fade">
+      <div class="slide-final">
+        <div class="final-overlay"></div>
+        <div class="final-content">
+          <span class="final-tagline fragment fade-up">☕ Coffee Biochar Academy × Biodiversal × Cirkular Agro</span>
+          <h2 class="final-title fragment fade-up">
+            Gracias por ser parte<br>de esta <span>historia</span> 🌱
+          </h2>
+          <p class="final-message fragment fade-up">
+            Cada biochar que documentas es <strong>carbono que no vuelve a la atmósfera</strong>.<br>
+            Cada registro que haces bien es un <strong>pago que llega al productor</strong>.<br>
+            Cada dato limpio es una <strong>comunidad que confía en el sistema</strong>.
+          </p>
+          <p class="final-message fragment fade-up" style="font-family:'Montserrat'; font-weight:700; color:rgba(255,255,255,0.95); font-size:1.0em; margin-bottom:22px;">
+            Juntos estamos <strong style="color: #F0B429;">regenerando el suelo, el clima<br>y las comunidades del café colombiano</strong>.
+          </p>
+          <div class="final-logos fragment fade-up">
+            <span>Coffee Biochar Academy</span>
+            <span class="sep">×</span>
+            <span>Biodiversal</span>
+            <span class="sep">×</span>
+            <span>Cirkular Agro</span>
+          </div>
+          <div class="fragment fade-up" style="margin-top:22px; font-size:2.2em;">🌱 ☕ 🌍</div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    width: 1600,
+    height: 900,
+    margin: 0.04,
+    hash: true,
+    progress: true,
+    slideNumber: 'c/t',
+    transition: 'slide',
+    transitionSpeed: 'default',
+    backgroundTransition: 'fade',
+    plugins: []
+  });
+
+  // Animate confetti dots on graduation slide
+  Reveal.on('slidechanged', function(event) {
+    const slide = event.currentSlide;
+    const dots = slide.querySelectorAll('.confetti-dot');
+    if (dots.length > 0) {
+      dots.forEach(function(dot) {
+        dot.style.opacity = '0';
+        // restart animation by removing and re-adding
+        const clone = dot.cloneNode(true);
+        dot.parentNode.replaceChild(clone, dot);
+      });
+    }
+  });
+</script>
+</body>
+</html>

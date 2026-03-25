@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>S5.3 · Aplicación Correcta del Biochar · Coffee Biochar Academy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/theme/white.css" />
+  <style>
+    :root {
+      --green: #3A7D44;
+      --dark-green: #1F4D27;
+      --brown: #6B3527;
+      --amber: #D4881E;
+      --cream: #F7F3EC;
+      --text: #1C1C1C;
+      --teal: #1B7A6E;
+    }
+
+    .reveal {
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background: var(--cream);
+    }
+
+    .reveal .slides section {
+      text-align: left;
+      padding: 40px 60px;
+      box-sizing: border-box;
+    }
+
+    .reveal h1, .reveal h2, .reveal h3 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      text-transform: none;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 0.3em;
+    }
+
+    /* COVER */
+    .slide-cover {
+      display: flex !important;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: flex-start;
+      padding: 60px 80px !important;
+      min-height: 100%;
+    }
+    .cover-badge {
+      background: var(--brown);
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 0.75em;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 8px 18px;
+      border-radius: 40px;
+      margin-bottom: 20px;
+      display: inline-block;
+    }
+    .cover-title {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 3.2em !important;
+      line-height: 1.05;
+      color: #fff;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+      text-transform: none;
+      margin: 0 0 16px !important;
+    }
+    .cover-sub {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95em;
+      color: rgba(255,255,255,0.88);
+      letter-spacing: 0.04em;
+      margin: 0;
+    }
+    .cover-divider {
+      width: 80px;
+      height: 5px;
+      background: var(--amber);
+      border-radius: 3px;
+      margin: 18px 0;
+    }
+
+    /* LABELS */
+    .section-label {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.65em;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--brown);
+      margin-bottom: 8px;
+    }
+    .slide-title {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 1.85em !important;
+      color: var(--dark-green);
+      text-transform: none;
+      line-height: 1.1;
+      margin: 0 0 18px !important;
+    }
+    .slide-title.brown { color: var(--brown); }
+    .slide-title.amber { color: var(--amber); }
+    .slide-title.teal  { color: var(--teal);  }
+
+    /* HERO NUMBERS */
+    .hero-number {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 4.5em;
+      line-height: 1;
+      color: var(--green);
+      letter-spacing: -0.04em;
+    }
+    .hero-number.amber { color: var(--amber); }
+    .hero-number.brown { color: var(--brown); }
+    .hero-number.teal  { color: var(--teal);  }
+    .hero-label {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.82em;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text);
+      opacity: 0.7;
+      margin-top: 4px;
+    }
+
+    /* CARDS */
+    .cards { display: grid; gap: 16px; }
+    .cards-2 { grid-template-columns: 1fr 1fr; }
+    .cards-3 { grid-template-columns: 1fr 1fr 1fr; }
+    .cards-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 16px 18px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      border-left: 5px solid var(--green);
+    }
+    .card.amber-border { border-left-color: var(--amber); }
+    .card.brown-border { border-left-color: var(--brown); }
+    .card.teal-border  { border-left-color: var(--teal);  }
+    .card.red-border   { border-left-color: #e53935; }
+    .card.green-bg {
+      background: var(--green);
+      color: #fff;
+      border-left-color: var(--dark-green);
+    }
+    .card.amber-bg {
+      background: var(--amber);
+      color: #fff;
+      border-left-color: #a8660e;
+    }
+    .card.dark-bg {
+      background: var(--dark-green);
+      color: #fff;
+      border-left-color: #0d2914;
+    }
+    .card.red-bg {
+      background: #ffebee;
+      border-left-color: #e53935;
+    }
+
+    .card-icon { font-size: 2rem; margin-bottom: 8px; display: block; }
+    .card-title {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 0.82em;
+      text-transform: none;
+      letter-spacing: 0.03em;
+      margin-bottom: 5px;
+    }
+    .card-body { font-size: 0.78em; line-height: 1.55; opacity: 0.9; }
+
+    /* CHIPS */
+    .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+    .chip {
+      background: var(--green);
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.72em;
+      padding: 8px 16px;
+      border-radius: 40px;
+      letter-spacing: 0.04em;
+    }
+    .chip.amber { background: var(--amber); }
+    .chip.brown { background: var(--brown); }
+    .chip.teal  { background: var(--teal);  }
+    .chip.red   { background: #e53935; }
+
+    /* CALLOUTS */
+    .callout {
+      background: linear-gradient(135deg, var(--dark-green), var(--green));
+      color: #fff;
+      border-radius: 16px;
+      padding: 24px 28px;
+      margin-top: 16px;
+      font-size: 0.9em;
+      line-height: 1.55;
+    }
+    .callout strong { color: var(--amber); }
+    .callout.amber-grad { background: linear-gradient(135deg, #a8660e, var(--amber)); }
+    .callout.brown-grad { background: linear-gradient(135deg, var(--brown), #9b4e38); }
+    .callout.teal-grad  { background: linear-gradient(135deg, #134f47, var(--teal));  }
+    .callout.red-alert  {
+      background: linear-gradient(135deg, #b71c1c, #e53935);
+      border-radius: 16px;
+      padding: 18px 24px;
+    }
+
+    /* LAYOUT */
+    .two-col   { display: grid; grid-template-columns: 1fr 1fr;         gap: 28px; align-items: start; }
+    .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr;     gap: 20px; align-items: start; }
+
+    /* METHOD STEPS */
+    .method-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      background: #fff;
+      border-radius: 14px;
+      padding: 16px 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      margin-bottom: 12px;
+    }
+    .step-num {
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--green);
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 0.9em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .step-num.amber { background: var(--amber); }
+    .step-num.teal  { background: var(--teal);  }
+    .step-num.brown { background: var(--brown); }
+    .step-num.red   { background: #e53935; }
+    .step-body { flex: 1; }
+    .step-title {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 0.82em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .step-desc { font-size: 0.78em; line-height: 1.5; color: #555; }
+
+    /* CYCLE VISUAL */
+    .cycle {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+    }
+    .cycle-step {
+      flex: 1;
+      padding: 20px 14px;
+      text-align: center;
+    }
+    .cycle-arrow {
+      font-size: 1.1em;
+      color: var(--amber);
+      flex-shrink: 0;
+      padding: 0 2px;
+    }
+    .cycle-ico  { font-size: 2rem; margin-bottom: 8px; display: block; }
+    .cycle-lbl  {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 0.65em;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    /* ERROR CARDS */
+    .error-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      background: #fff7f7;
+      border: 2px solid #ffcdd2;
+      border-radius: 14px;
+      padding: 14px 18px;
+      margin-bottom: 10px;
+    }
+    .error-icon { font-size: 1.4em; flex-shrink: 0; }
+    .error-title {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 0.78em;
+      text-transform: uppercase;
+      color: #b71c1c;
+      margin-bottom: 4px;
+    }
+    .error-desc { font-size: 0.75em; line-height: 1.5; color: #555; }
+
+    /* DOC ITEM */
+    .doc-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: #fff;
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin-bottom: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      border-left: 4px solid var(--amber);
+    }
+    .doc-num {
+      flex-shrink: 0;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--amber);
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 0.82em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .doc-text { flex: 1; font-size: 0.82em; line-height: 1.5; }
+    .doc-text strong { font-family: 'Montserrat', sans-serif; font-weight: 800; color: var(--dark-green); }
+
+    /* SUMMARY TABLE */
+    .summary-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 20px;
+      border-radius: 12px;
+      margin-bottom: 10px;
+    }
+    .summary-row.green { background: #e8f5eb; border-left: 5px solid var(--green); }
+    .summary-row.teal  { background: #e0f2f0; border-left: 5px solid var(--teal);  }
+    .summary-row.amber { background: #fdf0d8; border-left: 5px solid var(--amber); }
+    .sum-ico { font-size: 1.4em; flex-shrink: 0; }
+    .sum-lbl {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 0.78em;
+      text-transform: uppercase;
+      color: var(--dark-green);
+      flex: 0 0 80px;
+    }
+    .sum-body { flex: 1; font-size: 0.78em; line-height: 1.45; color: #444; }
+
+    /* REVEAL */
+    .reveal .progress { color: var(--amber); height: 5px; }
+    .reveal .slide-number {
+      background: var(--brown);
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.65em;
+      padding: 4px 10px;
+      border-radius: 8px 0 0 0;
+    }
+    .reveal .controls button { color: var(--amber); }
+    .reveal .fragment { transition: all 0.4s ease; }
+    .reveal .fragment.fade-up { transform: translateY(20px); }
+    .reveal .fragment.fade-up.visible { transform: translateY(0); }
+
+    /* BADGE */
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.65em;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .badge.green { background: #e8f5eb; color: var(--dark-green); }
+    .badge.amber { background: #fdf0d8; color: #a8660e; }
+    .badge.star  { background: #fff3cd; color: #7a5800; }
+  </style>
+</head>
+<body>
+<div class="reveal">
+  <div class="slides">
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 1 · COVER
+    ══════════════════════════════════════════ -->
+    <section
+      class="slide-cover"
+      data-background-image="../Fotos/20250724/IMG_7574.jpg"
+      data-background-size="cover"
+      data-background-position="center"
+      data-background-opacity="0.3"
+      data-background-color="#6B3527">
+
+      <div class="cover-badge fragment fade-up">☕ Coffee Biochar Academy × Biodiversal</div>
+      <h1 class="cover-title fragment fade-up">Aplicación<br />Correcta del<br />Biochar</h1>
+      <div class="cover-divider fragment fade-up"></div>
+      <p class="cover-sub fragment fade-up">🌿 Módulo 5 · Sesión 3 &nbsp;·&nbsp; Dosis, Métodos y Documentación</p>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 2 · DOSIS RECOMENDADA
+    ══════════════════════════════════════════ -->
+    <section style="background: var(--cream);">
+      <div class="section-label">Módulo 5 · Sesión 3</div>
+      <h2 class="slide-title">Dosis recomendada</h2>
+
+      <div class="two-col">
+        <div>
+          <div class="fragment fade-up">
+            <div style="text-align:center; background:linear-gradient(135deg,var(--dark-green),var(--green)); border-radius:20px; padding:28px; color:#fff;">
+              <div class="hero-number" style="color:#a8f0b4; font-size:4em;">1–2 t/ha</div>
+              <div class="hero-label" style="color:rgba(255,255,255,0.8);">dosis mínima efectiva</div>
+              <div style="margin-top:14px; background:rgba(255,255,255,0.15); border-radius:10px; padding:10px 16px; font-size:0.75em;">
+                de biochar <strong>seco</strong> — el peso en seco es lo que se certifica
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="cards" style="gap:12px;">
+            <div class="card fragment fade-up">
+              <span class="card-icon">1️⃣</span>
+              <div class="card-title">Una sola aplicación</div>
+              <div class="card-body">No fraccionar. El biochar <strong>permanece siglos en el suelo</strong> — una aplicación bien hecha dura toda la vida productiva del cafetal.</div>
+            </div>
+            <div class="card amber-border fragment fade-up">
+              <span class="card-icon">🔀</span>
+              <div class="card-title">Activación previa</div>
+              <div class="card-body">Mezclar con compost o fertilizante <strong>antes de aplicar</strong>. El biochar "seco" (sin carga microbiana) demora más en mostrar efectos.</div>
+            </div>
+            <div class="card teal-border fragment fade-up">
+              <span class="card-icon">⚖️</span>
+              <div class="card-title">Pesaje obligatorio</div>
+              <div class="card-body">El peso en seco es el dato clave para el crédito de carbono. Sin pesaje no hay certificación posible.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 3 · MÉTODOS DE INCORPORACIÓN
+    ══════════════════════════════════════════ -->
+    <section style="background: #fff;">
+      <div class="section-label">Módulo 5 · Sesión 3</div>
+      <h2 class="slide-title">Métodos de incorporación</h2>
+
+      <div class="two-col">
+        <div>
+          <div class="method-step fragment fade-up">
+            <div class="step-num">⭐</div>
+            <div class="step-body">
+              <div class="step-title" style="color:var(--green);">Mezclado con Compost <span class="badge star">MEJOR</span></div>
+              <div class="step-desc">Máximo contacto con microorganismos y nutrientes desde el primer día. El compost "activa" el biochar — juntos son más que la suma de sus partes.</div>
+            </div>
+          </div>
+          <div class="method-step fragment fade-up">
+            <div class="step-num amber">2</div>
+            <div class="step-body">
+              <div class="step-title">En corona</div>
+              <div class="step-desc">Aplicado en la zona de absorción activa de las raíces, a 20–40 cm del tronco y cubierto con tierra. El agua de lluvia lo incorpora gradualmente.</div>
+            </div>
+          </div>
+          <div class="method-step fragment fade-up">
+            <div class="step-num teal">3</div>
+            <div class="step-body">
+              <div class="step-title">En el hoyo de siembra</div>
+              <div class="step-desc">Ideal para renovación o siembra nueva. El biochar queda exactamente donde las raíces jóvenes van a explorar primero.</div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="fragment fade-up">
+            <div class="callout red-alert" style="margin-bottom:16px; font-size:0.82em;">
+              ❌ <strong style="color:#ffcdd2;">EVITAR:</strong> Aplicar el biochar en <strong style="color:#ffcdd2;">superficie sin incorporar</strong>. Las primeras lluvias fuertes lo arrastran junto con sus beneficios hacia la quebrada.
+            </div>
+          </div>
+
+          <div class="fragment fade-up">
+            <div style="background:var(--cream); border-radius:14px; padding:18px 20px;">
+              <div class="section-label" style="margin-bottom:10px;">🌿 Profundidad ideal</div>
+              <div style="display:flex; flex-direction:column; gap:8px;">
+                <div style="display:flex; align-items:center; gap:10px; font-size:0.82em;">
+                  <span>📏</span><span><strong>10–20 cm</strong> de profundidad — zona de raíces activas del café</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:10px; font-size:0.82em;">
+                  <span>🔄</span><span>Incorporar con palín o azadón — no se necesita maquinaria</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:10px; font-size:0.82em;">
+                  <span>💧</span><span>Aplicar antes de lluvia prevista para activación natural</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="fragment fade-up" style="margin-top:14px;">
+            <div class="card teal-border">
+              <span class="card-icon">📐</span>
+              <div class="card-title">¿Cuánto cubre una tonelada?</div>
+              <div class="card-body">A 1 t/ha: <strong>1 kg cada 10 m²</strong>. En un lote de 1 ha (densidad típica colombiana de 5.000 plantas): ~200 g por árbol al aplicar en corona.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 4 · EL MOMENTO ÓPTIMO: LA ZOCA
+    ══════════════════════════════════════════ -->
+    <section style="background: var(--cream);">
+      <div class="section-label">Módulo 5 · Sesión 3</div>
+      <h2 class="slide-title">El momento óptimo: la zoca ⭐</h2>
+
+      <div class="two-col">
+        <div>
+          <div class="fragment fade-up">
+            <div style="background:linear-gradient(135deg,var(--brown),#9b4e38); border-radius:20px; padding:28px; color:#fff; text-align:center;">
+              <div style="font-size:3.5rem; margin-bottom:12px;">🌿✂️</div>
+              <div style="font-family:'Montserrat',sans-serif; font-weight:900; font-size:1.2em; text-transform:uppercase; line-height:1.2;">La zoca perturba el suelo</div>
+              <div style="font-size:0.82em; opacity:0.9; margin-top:12px; line-height:1.6;">
+                Esa perturbación es una <strong style="color:#ffd4b0;">ventana de oportunidad</strong> para incorporar biochar a profundidad sin esfuerzo adicional.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="section-label fragment fade-up" style="margin-bottom:12px;">♻️ El ciclo cerrado de la finca</div>
+          <div class="cycle fragment fade-up">
+            <div class="cycle-step" style="background:#e8f5eb;">
+              <span class="cycle-ico">🌿</span>
+              <div class="cycle-lbl" style="color:var(--dark-green);">Zoca</div>
+            </div>
+            <div class="cycle-arrow">→</div>
+            <div class="cycle-step" style="background:#fdf0d8;">
+              <span class="cycle-ico">🔥</span>
+              <div class="cycle-lbl" style="color:#a8660e;">Pirólisis</div>
+            </div>
+            <div class="cycle-arrow">→</div>
+            <div class="cycle-step" style="background:#e8f5eb;">
+              <span class="cycle-ico">⬛</span>
+              <div class="cycle-lbl" style="color:var(--dark-green);">Biochar</div>
+            </div>
+            <div class="cycle-arrow">→</div>
+            <div class="cycle-step" style="background:#e0f2f0;">
+              <span class="cycle-ico">🌱</span>
+              <div class="cycle-lbl" style="color:var(--teal);">Al lote</div>
+            </div>
+          </div>
+
+          <div class="fragment fade-up" style="margin-top:14px;">
+            <div class="callout" style="font-size:0.88em; text-align:center; padding:20px 24px;">
+              🔄 <strong>"Cierra el ciclo en la misma finca."</strong><br/>
+              <span style="font-size:0.78em; opacity:0.9;">La biomasa que sale del lote, vuelve al lote como carbono estable.</span>
+            </div>
+          </div>
+
+          <div class="fragment fade-up" style="margin-top:14px;">
+            <div class="card amber-border">
+              <span class="card-icon">📅</span>
+              <div class="card-title">Timing clave</div>
+              <div class="card-body">Zoca → pirólisis → biochar → aplicación en el mismo ciclo de renovación. <strong>No hay que esperar</strong> un momento especial aparte de la zoca.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 5 · ERRORES COMUNES
+    ══════════════════════════════════════════ -->
+    <section style="background: #fff;">
+      <div class="section-label">Módulo 5 · Sesión 3</div>
+      <h2 class="slide-title brown">Errores comunes ⚠️</h2>
+
+      <div class="two-col">
+        <div>
+          <div class="error-card fragment fade-up">
+            <div class="error-icon">❌</div>
+            <div>
+              <div class="error-title">Sin incorporación</div>
+              <div class="error-desc">Biochar en superficie → la escorrentía se lo lleva con la primera lluvia fuerte. Perdés el material y el potencial de carbono.</div>
+            </div>
+          </div>
+          <div class="error-card fragment fade-up">
+            <div class="error-icon">❌</div>
+            <div>
+              <div class="error-title">Sin mezcla con materia orgánica</div>
+              <div class="error-desc">Biochar "seco" es como un hotel vacío. Sin microorganismos ni nutrientes que lo activen, su efecto es mínimo los primeros años.</div>
+            </div>
+          </div>
+          <div class="error-card fragment fade-up">
+            <div class="error-icon">❌</div>
+            <div>
+              <div class="error-title">Dosis muy baja (&lt;0.5 t/ha)</div>
+              <div class="error-desc">El efecto es marginal y no justifica ni el esfuerzo ni el costo. Si no llegás a 1 t/ha, guardá el material hasta poder hacer una aplicación correcta.</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="error-card fragment fade-up">
+            <div class="error-icon">❌</div>
+            <div>
+              <div class="error-title">Aplicar sin registrar</div>
+              <div class="error-desc">El error más costoso. Biochar bien aplicado pero sin documentación = <strong>sin crédito de carbono</strong>. El esfuerzo no se convierte en ingreso.</div>
+            </div>
+          </div>
+
+          <div class="fragment fade-up" style="margin-top:16px;">
+            <div class="callout amber-grad" style="font-size:0.82em;">
+              💡 <strong>Regla de oro:</strong> Antes de aplicar → pesás → tomás GPS → sacás foto. En ese orden. Siempre.
+            </div>
+          </div>
+
+          <div class="fragment fade-up" style="margin-top:14px;">
+            <div style="background:var(--cream); border-radius:14px; padding:16px 20px;">
+              <div class="section-label" style="margin-bottom:8px; color:var(--green);">✅ La secuencia correcta</div>
+              <div style="display:flex; flex-direction:column; gap:6px; font-size:0.78em;">
+                <div>1. Mezclar con compost (24h antes si es posible)</div>
+                <div>2. Pesar el biochar seco → registrar en la app</div>
+                <div>3. Tomar foto GPS del lote</div>
+                <div>4. Incorporar a 10–20 cm de profundidad</div>
+                <div>5. Foto del proceso de aplicación</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 6 · DOCUMENTACIÓN PARA EL CRÉDITO
+    ══════════════════════════════════════════ -->
+    <section style="background: var(--cream);">
+      <div class="section-label">Módulo 5 · Sesión 3</div>
+      <h2 class="slide-title amber">Documentación para el crédito 📱</h2>
+
+      <div class="two-col">
+        <div>
+          <div class="doc-item fragment fade-up">
+            <div class="doc-num">1</div>
+            <div class="doc-text"><strong>Fecha exacta de aplicación</strong><br/>Día, mes y año. La app lo registra automáticamente si se usa en el momento.</div>
+          </div>
+          <div class="doc-item fragment fade-up">
+            <div class="doc-num">2</div>
+            <div class="doc-text"><strong>Peso en seco del biochar</strong><br/>Pesaje obligatorio con balanza antes de mezclar. Es el dato base para calcular el CO₂ secuestrado.</div>
+          </div>
+          <div class="doc-item fragment fade-up">
+            <div class="doc-num">3</div>
+            <div class="doc-text"><strong>Coordenadas GPS del lote</strong><br/>Foto desde la app con geolocalización activa. Identifica exactamente dónde se aplicó.</div>
+          </div>
+          <div class="doc-item fragment fade-up">
+            <div class="doc-num">4</div>
+            <div class="doc-text"><strong>Foto del proceso de aplicación</strong><br/>Una foto del biochar siendo incorporado. Evidencia visual que complementa los datos.</div>
+          </div>
+        </div>
+
+        <div class="fragment fade-up">
+          <div style="background:linear-gradient(135deg,#a8660e,var(--amber)); border-radius:20px; padding:28px; color:#fff;">
+            <div style="font-size:2.8rem; text-align:center; margin-bottom:16px;">📱</div>
+            <div style="font-family:'Montserrat',sans-serif; font-weight:900; font-size:1em; text-transform:uppercase; text-align:center; margin-bottom:16px; line-height:1.2;">
+              La regla de los 4 datos
+            </div>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+              <div style="display:flex; align-items:center; gap:10px; background:rgba(255,255,255,0.2); border-radius:10px; padding:10px 14px;">
+                <span>📅</span><span style="font-size:0.82em;">Fecha</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:10px; background:rgba(255,255,255,0.2); border-radius:10px; padding:10px 14px;">
+                <span>⚖️</span><span style="font-size:0.82em;">Peso en seco (kg)</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:10px; background:rgba(255,255,255,0.2); border-radius:10px; padding:10px 14px;">
+                <span>📍</span><span style="font-size:0.82em;">GPS del lote</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:10px; background:rgba(255,255,255,0.2); border-radius:10px; padding:10px 14px;">
+                <span>📸</span><span style="font-size:0.82em;">Foto del proceso</span>
+              </div>
+            </div>
+          </div>
+          <div class="callout brown-grad fragment fade-up" style="margin-top:14px; font-size:0.82em;">
+            ⚠️ <strong style="color:#ffd4b0;">"Sin foto + GPS + peso = sin crédito."</strong><br/>
+            El biochar bien aplicado y no documentado es biochar perdido.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 7 · REPASO MÓDULO 5
+    ══════════════════════════════════════════ -->
+    <section
+      data-background-image="../Fotos/20251127/P1001795.JPG"
+      data-background-size="cover"
+      data-background-position="center"
+      data-background-opacity="0.18"
+      data-background-color="#1F4D27">
+
+      <div class="section-label" style="color:rgba(255,255,255,0.7);">Módulo 5 · Repaso completo</div>
+      <h2 style="font-family:'Montserrat',sans-serif; font-weight:900; font-size:1.6em; color:#fff; text-transform:none; margin-bottom:24px;">🏆 Ya eres un experto en beneficios del biochar</h2>
+
+      <div class="cards cards-3" style="gap:16px;">
+        <div class="fragment fade-up">
+          <div style="background:rgba(255,255,255,0.95); border-radius:16px; padding:22px; border-top:5px solid var(--green);">
+            <div style="font-family:'Montserrat',sans-serif; font-weight:900; font-size:0.72em; text-transform:uppercase; color:var(--dark-green); margin-bottom:14px; letter-spacing:0.08em;">📗 S5.1 — Nutrientes</div>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span style="font-family:'Montserrat',sans-serif; font-weight:900; color:var(--green); font-size:1em; min-width:48px;">+45%</span>
+                <span style="font-size:0.78em; color:#555;">nutrientes disponibles</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span style="font-family:'Montserrat',sans-serif; font-weight:900; color:var(--green); font-size:1em; min-width:48px;">-30%</span>
+                <span style="font-size:0.78em; color:#555;">necesidad de refertilización</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span style="font-family:'Montserrat',sans-serif; font-weight:900; color:var(--green); font-size:1em; min-width:48px;">+16%</span>
+                <span style="font-size:0.78em; color:#555;">productividad individual</span>
+              </div>
+              <div style="font-size:0.7em; color:var(--brown); margin-top:6px;">💰 Argumento económico + agronómico</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="fragment fade-up">
+          <div style="background:rgba(255,255,255,0.95); border-radius:16px; padding:22px; border-top:5px solid var(--teal);">
+            <div style="font-family:'Montserrat',sans-serif; font-weight:900; font-size:0.72em; text-transform:uppercase; color:var(--teal); margin-bottom:14px; letter-spacing:0.08em;">💧 S5.2 — Clima</div>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span style="font-family:'Montserrat',sans-serif; font-weight:900; color:var(--teal); font-size:1em; min-width:48px;">+15%</span>
+                <span style="font-size:0.78em; color:#555;">retención de agua</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span style="font-family:'Montserrat',sans-serif; font-weight:900; color:var(--teal); font-size:1em; min-width:48px;">+39%</span>
+                <span style="font-size:0.78em; color:#555;">carbono orgánico (SOC)</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span style="font-family:'Montserrat',sans-serif; font-weight:900; color:var(--teal); font-size:1em; min-width:48px;">-29%</span>
+                <span style="font-size:0.78em; color:#555;">metales pesados en café</span>
+              </div>
+              <div style="font-size:0.7em; color:var(--teal); margin-top:6px;">🌍 Resiliencia frente al cambio climático</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="fragment fade-up">
+          <div style="background:rgba(255,255,255,0.95); border-radius:16px; padding:22px; border-top:5px solid var(--amber);">
+            <div style="font-family:'Montserrat',sans-serif; font-weight:900; font-size:0.72em; text-transform:uppercase; color:var(--amber); margin-bottom:14px; letter-spacing:0.08em;">🌿 S5.3 — Aplicación</div>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              <div style="display:flex; align-items:flex-start; gap:8px;">
+                <span style="font-size:0.82em; flex-shrink:0;">⚖️</span>
+                <span style="font-size:0.78em; color:#555;"><strong>1–2 t/ha</strong> en una sola aplicación</span>
+              </div>
+              <div style="display:flex; align-items:flex-start; gap:8px;">
+                <span style="font-size:0.82em; flex-shrink:0;">🔀</span>
+                <span style="font-size:0.78em; color:#555;">Mezclado + incorporado a profundidad</span>
+              </div>
+              <div style="display:flex; align-items:flex-start; gap:8px;">
+                <span style="font-size:0.82em; flex-shrink:0;">⭐</span>
+                <span style="font-size:0.78em; color:#555;">Momento ideal: la zoca</span>
+              </div>
+              <div style="font-size:0.7em; color:var(--amber); margin-top:6px;">📱 Documentar: fecha + peso + GPS + foto</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         SLIDE 8 · EVALUACIÓN + PRÓXIMO
+    ══════════════════════════════════════════ -->
+    <section style="background: var(--dark-green);">
+      <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; min-height:700px; text-align:center; padding:40px;">
+
+        <div class="fragment fade-up" style="margin-bottom:28px;">
+          <div style="font-size:3.5rem; margin-bottom:12px;">🎯</div>
+          <h2 style="font-family:'Montserrat',sans-serif; font-weight:900; color:#fff; font-size:1.8em; margin:0 0 8px; text-transform:none;">Módulo 5 Completado</h2>
+          <p style="color:rgba(255,255,255,0.65); font-size:0.88em;">Nutrientes · Agua · Aplicación</p>
+        </div>
+
+        <div class="fragment fade-up" style="margin-bottom:28px; display:flex; gap:16px; flex-wrap:wrap; justify-content:center;">
+          <div style="background:rgba(255,255,255,0.08); border:2px solid rgba(255,255,255,0.15); border-radius:14px; padding:18px 22px; min-width:160px;">
+            <div style="font-size:1.5rem; margin-bottom:8px;">📝</div>
+            <div style="font-family:'Montserrat',sans-serif; font-weight:800; font-size:0.75em; color:var(--amber); text-transform:uppercase; margin-bottom:6px;">Evaluación</div>
+            <div style="font-size:0.75em; color:rgba(255,255,255,0.75); line-height:1.4;">Módulo 5 — ya disponible en la plataforma</div>
+          </div>
+          <div style="background:rgba(212,136,30,0.2); border:2px solid var(--amber); border-radius:14px; padding:18px 22px; min-width:200px;">
+            <div style="font-size:1.5rem; margin-bottom:8px;">🎯</div>
+            <div style="font-family:'Montserrat',sans-serif; font-weight:800; font-size:0.75em; color:var(--amber); text-transform:uppercase; margin-bottom:6px;">Próximo</div>
+            <div style="font-size:0.75em; color:rgba(255,255,255,0.85); line-height:1.4;"><strong style="color:#fff;">MÓDULO 6</strong><br/>Disciplina Operativa y dMRV</div>
+          </div>
+        </div>
+
+        <div class="fragment fade-up" style="max-width:620px;">
+          <div style="background:linear-gradient(135deg,var(--amber),#a8660e); border-radius:16px; padding:22px 28px; color:#fff;">
+            <div style="font-family:'Montserrat',sans-serif; font-weight:900; font-size:0.88em; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:8px;">
+              El módulo más importante para el crédito de carbono
+            </div>
+            <div style="font-size:0.82em; opacity:0.9; line-height:1.6;">
+              En el Módulo 6 aprendés el sistema completo de documentación digital — el que convierte tu práctica en un crédito certificado y verificable.
+            </div>
+          </div>
+        </div>
+
+        <div class="fragment fade-up" style="margin-top:28px;">
+          <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:0.7em; color:rgba(255,255,255,0.4); letter-spacing:0.12em; text-transform:uppercase;">Coffee Biochar Academy × Biodiversal</div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    width: 1600,
+    height: 900,
+    margin: 0,
+    minScale: 0.2,
+    maxScale: 2.0,
+    controls: true,
+    progress: true,
+    slideNumber: true,
+    hash: true,
+    transition: 'fade',
+    transitionSpeed: 'default',
+    backgroundTransition: 'fade',
+    fragments: true,
+    fragmentInURL: false,
+    autoAnimateEasing: 'ease',
+    autoAnimateDuration: 0.6,
+  });
+</script>
+</body>
+</html>

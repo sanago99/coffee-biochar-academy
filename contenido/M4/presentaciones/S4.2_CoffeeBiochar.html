@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>S4.2 — Química del Suelo | Coffee Biochar Academy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/theme/white.css" />
+  <style>
+    :root {
+      --green:   #3A7D44;
+      --dkgreen: #1F4D27;
+      --brown:   #6B3527;
+      --amber:   #D4881E;
+      --cream:   #F7F3EC;
+      --text:    #1C1C1C;
+      --teal:    #1B7A6E;
+    }
+
+    .reveal-viewport { background: var(--cream); }
+    .reveal { font-family: 'Inter', sans-serif; color: var(--text); }
+    .reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+      font-family: 'Montserrat', sans-serif;
+      text-transform: none;
+      letter-spacing: -0.02em;
+    }
+    .reveal .progress { background: rgba(58,125,68,0.2); height: 5px; }
+    .reveal .progress span { background: var(--amber); }
+    .reveal .slide-number {
+      background: transparent;
+      color: var(--green);
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.7em;
+    }
+
+    /* ── COVER ── */
+    .slide-cover {
+      display: flex !important;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-end;
+      padding: 70px 90px !important;
+      height: 100%;
+      box-sizing: border-box;
+    }
+    .cover-badge {
+      background: var(--amber);
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 0.85em;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 7px 18px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      display: inline-block;
+    }
+    .cover-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 3.4em !important;
+      font-weight: 900;
+      color: #fff !important;
+      line-height: 1.1;
+      margin: 0 0 16px !important;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.4);
+    }
+    .cover-sub {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.1em;
+      color: rgba(255,255,255,0.85);
+      letter-spacing: 0.04em;
+    }
+    .cover-logo {
+      position: absolute;
+      top: 50px;
+      right: 70px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 1.1em;
+      color: rgba(255,255,255,0.9);
+      letter-spacing: 0.05em;
+    }
+
+    /* ── STANDARD ── */
+    .slide-std { padding: 55px 80px !important; text-align: left; overflow: hidden; }
+    .slide-label {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.65em;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 8px;
+    }
+    .slide-std h2 {
+      font-size: 2em !important;
+      font-weight: 900;
+      color: var(--dkgreen);
+      margin: 0 0 16px !important;
+      line-height: 1.15;
+    }
+    .accent-line {
+      width: 60px;
+      height: 5px;
+      background: var(--amber);
+      border-radius: 3px;
+      margin: 0 0 12px;
+    }
+
+    /* ── AGENDA ── */
+    .agenda-grid {
+      display: flex;
+      gap: 18px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+    .agenda-item {
+      flex: 1;
+      min-width: 155px;
+      background: #fff;
+      border-radius: 14px;
+      padding: 22px 20px;
+      box-shadow: 0 3px 16px rgba(0,0,0,0.07);
+      border-top: 5px solid var(--green);
+      text-align: center;
+    }
+    .agenda-item .ag-num {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 1.6em;
+      color: var(--amber);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .agenda-item p { font-size: 0.78em; font-weight: 600; color: var(--dkgreen); margin: 0; line-height: 1.4; }
+
+    /* ── CARDS ── */
+    .cards-row { display: flex; gap: 16px; margin-top: 6px; }
+    .card { flex: 1; border-radius: 14px; padding: 18px 18px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+    .card-green { background: linear-gradient(135deg, #e8f4ea 0%, #d0e9d4 100%); border-top: 5px solid var(--green); }
+    .card-amber { background: linear-gradient(135deg, #fdf3e0 0%, #fae7bf 100%); border-top: 5px solid var(--amber); }
+    .card-brown { background: linear-gradient(135deg, #f5ebe7 0%, #ead5cd 100%); border-top: 5px solid var(--brown); }
+    .card-teal  { background: linear-gradient(135deg, #e0f4f2 0%, #c4eae7 100%); border-top: 5px solid var(--teal); }
+    .card-red   { background: linear-gradient(135deg, #fde0dc 0%, #f8c0b8 100%); border-top: 5px solid #d4341e; }
+    .card h3 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.95em !important;
+      font-weight: 800;
+      color: var(--dkgreen);
+      margin: 0 0 10px !important;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .card p { font-size: 0.8em; line-height: 1.6; color: var(--text); margin: 0; }
+    .card .card-icon { font-size: 1.8em; margin-bottom: 10px; display: block; }
+
+    /* ── pH SCALE ── */
+    .ph-scale-wrap { margin: 10px 0 20px; }
+    .ph-scale {
+      display: flex;
+      height: 38px;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.12);
+    }
+    .ph-seg {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 0.75em;
+      color: #fff;
+    }
+    .ph-seg.acidic  { background: linear-gradient(90deg,#e03e2d,#e05a3d,#d4881e); }
+    .ph-seg.optimal { background: linear-gradient(90deg,#3A7D44,#1F4D27); position: relative; }
+    .ph-seg.optimal::before {
+      content: '★ CAFÉ';
+      font-size: 0.85em;
+      letter-spacing: 0.05em;
+    }
+    .ph-seg.alkaline { background: linear-gradient(90deg,#1B7A6E,#155f55); }
+    .ph-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 8px;
+      font-size: 0.72em;
+      color: #666;
+      font-weight: 600;
+    }
+    .ph-zone-cards {
+      display: flex;
+      gap: 18px;
+      margin-top: 16px;
+    }
+    .ph-zone-card {
+      flex: 1;
+      border-radius: 12px;
+      padding: 18px 16px;
+      font-size: 0.78em;
+      line-height: 1.55;
+    }
+    .ph-acid  { background: #fde0dc; border-top: 4px solid #d4341e; color: #8b1a0e; }
+    .ph-opt   { background: #e8f4ea; border-top: 4px solid var(--green); color: var(--dkgreen); }
+    .ph-alk   { background: #e0f4f2; border-top: 4px solid var(--teal); color: #0e4d47; }
+    .ph-zone-card strong { font-family: 'Montserrat'; font-weight: 900; display: block; font-size: 1.15em; margin-bottom: 4px; }
+
+    /* ── CIC VISUAL ── */
+    .cic-row {
+      display: flex;
+      gap: 20px;
+      margin-top: 12px;
+      align-items: stretch;
+    }
+    .cic-left {
+      flex: 1.4;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .cic-item {
+      background: #fff;
+      border-radius: 12px;
+      padding: 16px 18px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      border-left: 5px solid var(--green);
+      font-size: 0.85em;
+      line-height: 1.5;
+    }
+    .cic-item.high { border-left-color: var(--green); }
+    .cic-item.low  { border-left-color: #d4341e; }
+    .cic-item .ci-icon { font-size: 1.5em; min-width: 28px; }
+    .cic-right {
+      flex: 0.8;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      justify-content: center;
+    }
+
+    /* ── NUTRIENTS TABLE ── */
+    .nut-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px;
+      margin-top: 10px;
+    }
+    .nut-card {
+      border-radius: 12px;
+      padding: 18px 16px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    }
+    .nut-card .nut-sym {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 1.8em;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .nut-card h4 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 0.8em !important;
+      color: var(--dkgreen);
+      margin: 0 0 5px !important;
+    }
+    .nut-card p { font-size: 0.72em; line-height: 1.5; color: #444; margin: 0; }
+    .nut-macro { background: linear-gradient(135deg,#e8f4ea,#d0e9d4); }
+    .nut-macro .nut-sym { color: var(--green); }
+    .nut-sec   { background: linear-gradient(135deg,#e0f4f2,#c4eae7); }
+    .nut-sec .nut-sym   { color: var(--teal); }
+    .nut-micro { background: linear-gradient(135deg,#fdf3e0,#fae7bf); }
+    .nut-micro .nut-sym { color: var(--amber); }
+
+    /* ── BULLET LIST ── */
+    .bullet-list { list-style: none; padding: 0; margin: 0; }
+    .bullet-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      margin-bottom: 7px;
+      font-size: 0.85em;
+      line-height: 1.55;
+      background: #fff;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      border-left: 5px solid var(--green);
+    }
+    .bullet-list li.warn { border-left-color: #d4341e; }
+    .bullet-list li.amber { border-left-color: var(--amber); }
+    .bullet-list li .bi { font-size: 1.3em; min-width: 26px; }
+
+    /* ── DATA BOXES ── */
+    .data-row { display: flex; gap: 16px; margin-top: 8px; }
+    .data-box {
+      flex: 1;
+      background: #fff;
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 3px 16px rgba(0,0,0,0.06);
+      text-align: center;
+      border-top: 5px solid var(--green);
+    }
+    .data-box .num { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 2.2em; color: var(--dkgreen); line-height: 1; }
+    .data-box .unit { font-size: 0.75em; color: var(--amber); font-weight: 700; }
+    .data-box .desc { font-size: 0.72em; color: #555; margin-top: 6px; }
+
+    /* ── SPLIT ── */
+    .split-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 6px; }
+
+    /* ── ANALYSIS CHECKLIST ── */
+    .checklist {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 10px;
+    }
+    .check-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: #fff;
+      border-radius: 12px;
+      padding: 14px 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    .check-row .ck-icon { font-size: 1.3em; min-width: 28px; }
+    .check-row .ck-label {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 0.82em;
+      color: var(--dkgreen);
+      min-width: 130px;
+    }
+    .check-row .ck-val { font-size: 0.8em; color: #555; flex: 1; }
+    .check-row .chip {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.75em;
+      padding: 4px 12px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+    .chip-ok   { background: #d0edda; color: #1a6330; }
+    .chip-info { background: #fdf3e0; color: #7a4e00; }
+
+    /* ── HIGHLIGHT BOXES ── */
+    .highlight-box {
+      background: linear-gradient(90deg, #e8f4ea, #d0e9d4);
+      border-left: 6px solid var(--green);
+      border-radius: 10px;
+      padding: 16px 22px;
+      font-size: 0.85em;
+      color: var(--dkgreen);
+      font-weight: 600;
+      margin-top: 16px;
+    }
+    .highlight-box.amber { background: linear-gradient(90deg, #fdf3e0, #fae7bf); border-left-color: var(--amber); }
+    .highlight-box.warn  { background: linear-gradient(90deg, #fde0dc, #f8c0b8); border-left-color: #d4341e; color: #8b1a0e; }
+
+    /* ── CLOSE SLIDE ── */
+    .slide-close {
+      display: flex !important;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px !important;
+    }
+    .slide-close h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 2.6em !important;
+      font-weight: 900;
+      color: #fff !important;
+      text-shadow: 0 2px 16px rgba(0,0,0,0.4);
+      margin-bottom: 20px !important;
+    }
+    .key-chips { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 32px; }
+    .key-chip {
+      background: rgba(255,255,255,0.92);
+      color: var(--dkgreen);
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.78em;
+      padding: 9px 18px;
+      border-radius: 50px;
+    }
+    .tarea-box {
+      background: rgba(212,136,30,0.9);
+      color: #fff;
+      border-radius: 14px;
+      padding: 18px 36px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.9em;
+    }
+
+    /* ── QUOTE ── */
+    .quote-block {
+      background: linear-gradient(135deg, var(--dkgreen), var(--green));
+      border-radius: 16px;
+      padding: 22px 30px;
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 0.88em;
+      line-height: 1.5;
+      font-style: italic;
+      text-align: center;
+      margin-top: 18px;
+    }
+
+    /* Fragment animation */
+    .reveal .fragment.fade-up {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    .reveal .fragment.fade-up.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+<div class="reveal">
+  <div class="slides">
+
+    <!-- ── SLIDE 1: COVER ── -->
+    <section
+      data-background-image="../Fotos/20250723/IMG_7187.jpg"
+      data-background-opacity="0.3"
+      data-background-color="#1F4D27"
+      data-transition="fade">
+      <div class="slide-cover">
+        <div class="cover-logo">☕ Coffee Biochar Academy × Biodiversal</div>
+        <span class="cover-badge">Módulo 4 · Sesión 2</span>
+        <h1 class="cover-title">Química<br>del Suelo</h1>
+        <p class="cover-sub">pH, CIC, nutrientes esenciales y lixiviación en el cafetal</p>
+      </div>
+    </section>
+
+    <!-- ── SLIDE 2: AGENDA ── -->
+    <section class="slide-std" data-transition="slide">
+      <div class="slide-label">En esta sesión</div>
+      <h2>¿Qué exploramos hoy? 🗺️</h2>
+      <div class="accent-line"></div>
+      <div class="agenda-grid">
+        <div class="agenda-item fragment fade-up">
+          <div class="ag-num">01</div>
+          <p>pH del suelo</p>
+        </div>
+        <div class="agenda-item fragment fade-up" style="border-top-color:var(--teal)">
+          <div class="ag-num">02</div>
+          <p>Capacidad de Intercambio Catiónico (CIC)</p>
+        </div>
+        <div class="agenda-item fragment fade-up" style="border-top-color:var(--green)">
+          <div class="ag-num">03</div>
+          <p>Nutrientes esenciales del café</p>
+        </div>
+        <div class="agenda-item fragment fade-up" style="border-top-color:var(--brown)">
+          <div class="ag-num">04</div>
+          <p>Lixiviación de nutrientes</p>
+        </div>
+        <div class="agenda-item fragment fade-up" style="border-top-color:var(--amber)">
+          <div class="ag-num">05</div>
+          <p>Cómo leer un análisis de suelo</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SLIDE 3: pH ── -->
+    <section class="slide-std" data-transition="slide">
+      <div class="slide-label">Parámetro fundamental</div>
+      <h2>pH del Suelo 🧪</h2>
+      <div class="accent-line"></div>
+      <div class="ph-scale-wrap">
+        <div class="ph-scale">
+          <div class="ph-seg acidic" style="flex:2">⚡ Ácido (0–5.5)</div>
+          <div class="ph-seg optimal" style="flex:1"></div>
+          <div class="ph-seg alkaline" style="flex:1.5">Alcalino (7+)</div>
+        </div>
+        <div class="ph-labels">
+          <span>0 — Muy ácido</span>
+          <span>5.5 – 6.5 = rango óptimo café ☕</span>
+          <span>14 — Muy alcalino</span>
+        </div>
+      </div>
+      <div class="ph-zone-cards">
+        <div class="ph-zone-card ph-acid fragment fade-up">
+          <strong>pH &lt; 5.5 ⚠️</strong>
+          Aluminio y Manganeso tóxicos · Fósforo insoluble (inaccesible) · Menor actividad microbiana
+        </div>
+        <div class="ph-zone-card ph-opt fragment fade-up">
+          <strong>pH 5.5 – 6.5 ✅</strong>
+          Rango óptimo del cafeto · Máxima disponibilidad de nutrientes · Microbiología activa
+        </div>
+        <div class="ph-zone-card ph-alk fragment fade-up">
+          <strong>pH &gt; 7 ⚠️</strong>
+          Fe, Mn, Zn y B poco disponibles · Clorosis en hojas · Reducción de productividad
+        </div>
+      </div>
+      <div class="highlight-box fragment fade-up">
+        🌱 El biochar generalmente sube el pH → <strong>beneficioso en suelos ácidos</strong> típicos de regiones cafeteras del Huila y Tolima.
+      </div>
+    </section>
+
+    <!-- ── SLIDE 4: CIC ── -->
+    <section class="slide-std" data-transition="slide">
+      <div class="slide-label">Capacidad de retención</div>
+      <h2>CIC — Capacidad de Intercambio Catiónico</h2>
+      <div class="accent-line"></div>
+      <div class="cic-row">
+        <div class="cic-left">
+          <div class="cic-item high fragment fade-up">
+            <span class="ci-icon">🏦</span>
+            <span><strong>CIC alta</strong> → el suelo retiene Ca²⁺, Mg²⁺, K⁺, NH₄⁺. Los fertilizantes <strong>se quedan</strong> disponibles para la raíz.</span>
+          </div>
+          <div class="cic-item low fragment fade-up">
+            <span class="ci-icon">🚿</span>
+            <span><strong>CIC baja</strong> → los fertilizantes se van con el agua de lluvia (lixiviación). Dinero perdido en cada aguacero.</span>
+          </div>
+          <div class="cic-item fragment fade-up" style="border-left-color:var(--amber)">
+            <span class="ci-icon">🔬</span>
+            <span>La CIC se mide en <strong>meq/100g</strong>. Arcilla y materia orgánica tienen la CIC más alta.</span>
+          </div>
+        </div>
+        <div class="cic-right">
+          <div class="data-box fragment fade-up" style="border-top-color:var(--amber)">
+            <div class="num" style="color:var(--amber)">40–200</div>
+            <div class="unit">meq/100g</div>
+            <div class="desc">CIC del biochar puro</div>
+          </div>
+          <div class="data-box fragment fade-up" style="border-top-color:var(--green)">
+            <div class="num" style="color:var(--green)">↑ CIC</div>
+            <div class="unit">al suelo</div>
+            <div class="desc">biochar aumenta la CIC total del suelo</div>
+          </div>
+        </div>
+      </div>
+      <div class="quote-block fragment fade-up">
+        La CIC es la 'memoria' del suelo para retener nutrientes cargados positivamente.
+      </div>
+    </section>
+
+    <!-- ── SLIDE 5: NUTRIENTES ── -->
+    <section class="slide-std" data-transition="slide">
+      <div class="slide-label">Nutrición del cafeto</div>
+      <h2>Nutrientes Esenciales del Café ☕</h2>
+      <div class="accent-line"></div>
+      <div class="nut-grid">
+        <div class="nut-card nut-macro fragment fade-up">
+          <div class="nut-sym">N</div>
+          <h4>Nitrógeno</h4>
+          <p>Crecimiento vegetativo · Hojas verdes y vigorosas · Síntesis de clorofila</p>
+        </div>
+        <div class="nut-card nut-macro fragment fade-up">
+          <div class="nut-sym">P</div>
+          <h4>Fósforo</h4>
+          <p>Energía celular (ATP) · Desarrollo radicular · Floración y formación del grano</p>
+        </div>
+        <div class="nut-card nut-macro fragment fade-up">
+          <div class="nut-sym">K</div>
+          <h4>Potasio</h4>
+          <p>Calidad del grano · Resistencia al estrés hídrico · Regulación osmótica</p>
+        </div>
+        <div class="nut-card nut-sec fragment fade-up">
+          <div class="nut-sym">Ca/Mg</div>
+          <h4>Calcio y Magnesio</h4>
+          <p>Estructura de la pared celular · Mg: núcleo de la clorofila · Rigidez del tejido</p>
+        </div>
+        <div class="nut-card nut-sec fragment fade-up">
+          <div class="nut-sym">S</div>
+          <h4>Azufre</h4>
+          <p>Síntesis de proteínas y aminoácidos · Sabor y aroma en la taza del café</p>
+        </div>
+        <div class="nut-card nut-micro fragment fade-up">
+          <div class="nut-sym">B Zn Fe</div>
+          <h4>Micronutrientes</h4>
+          <p>Boro, Zinc, Hierro, Manganeso · Esenciales en pequeñas cantidades · Gran impacto en calidad</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SLIDE 6: LIXIVIACIÓN ── -->
+    <section class="slide-std" data-transition="slide">
+      <div class="slide-label">⚠️ Pérdida de nutrientes</div>
+      <h2>Lixiviación ⚠️</h2>
+      <div class="accent-line"></div>
+      <div class="split-2">
+        <div>
+          <ul class="bullet-list">
+            <li class="warn fragment fade-up"><span class="bi">🌧️</span><span>El agua de lluvia arrastra nutrientes <strong>solubles hacia abajo</strong>, fuera del alcance de las raíces.</span></li>
+            <li class="warn fragment fade-up"><span class="bi">📍</span><span>En Tolima y Huila: hasta <strong>1.800 mm lluvia/año</strong> → alta lixiviación de N y K.</span></li>
+            <li class="fragment fade-up amber"><span class="bi">💰</span><span>Fertilizante lixiviado = inversión perdida. Los nutrientes contaminan acuíferos sin beneficiar al café.</span></li>
+          </ul>
+        </div>
+        <div class="fragment fade-up" style="display:flex; flex-direction:column; gap:16px; justify-content:center;">
+          <div class="data-box" style="border-top-color:var(--brown)">
+            <div class="num" style="color:var(--brown)">1.800</div>
+            <div class="unit">mm lluvia/año</div>
+            <div class="desc">promedio Huila-Tolima = alta pérdida</div>
+          </div>
+          <div class="data-box" style="border-top-color:var(--green)">
+            <div class="num" style="color:var(--green)">+45%</div>
+            <div class="unit">nutrientes retenidos</div>
+            <div class="desc">con biochar vs. suelo sin tratar</div>
+          </div>
+        </div>
+      </div>
+      <div class="highlight-box fragment fade-up">
+        🌱 El biochar retiene nutrientes en sus microporos → <strong>+45% de disponibilidad más duradera</strong> después de cada lluvia.
+      </div>
+    </section>
+
+    <!-- ── SLIDE 7: ANÁLISIS DE SUELO ── -->
+    <section class="slide-std" data-transition="slide">
+      <div class="slide-label">Herramienta de diagnóstico</div>
+      <h2>Cómo Leer un Análisis de Suelo 📋</h2>
+      <div class="accent-line"></div>
+      <div class="checklist">
+        <div class="check-row fragment fade-up">
+          <span class="ck-icon">🧪</span>
+          <span class="ck-label">pH</span>
+          <span class="ck-val">¿Está en el rango 5.5 – 6.5 para café?</span>
+          <span class="chip chip-ok">Ideal 5.5–6.5</span>
+        </div>
+        <div class="check-row fragment fade-up">
+          <span class="ck-icon">⚡</span>
+          <span class="ck-label">CIC</span>
+          <span class="ck-val">Mayor CIC = suelo más fértil y retentivo</span>
+          <span class="chip chip-ok">&gt; 20 meq = bueno</span>
+        </div>
+        <div class="check-row fragment fade-up">
+          <span class="ck-icon">🍂</span>
+          <span class="ck-label">MO %</span>
+          <span class="ck-val">Materia orgánica: base de la fertilidad</span>
+          <span class="chip chip-ok">&gt; 3% = excelente</span>
+        </div>
+        <div class="check-row fragment fade-up">
+          <span class="ck-icon">🔋</span>
+          <span class="ck-label">P disponible</span>
+          <span class="ck-val">¿Fósforo en rango adecuado para café?</span>
+          <span class="chip chip-info">Comparar con tabla</span>
+        </div>
+        <div class="check-row fragment fade-up">
+          <span class="ck-icon">⚖️</span>
+          <span class="ck-label">Ca / Mg / K</span>
+          <span class="ck-val">Relación catiónica equilibrada — evitar deficiencias inducidas</span>
+          <span class="chip chip-info">Revisar relaciones</span>
+        </div>
+      </div>
+      <div class="quote-block fragment fade-up">
+        El análisis de suelo es el médico del cafetal — úsalo cada 2 años.
+      </div>
+    </section>
+
+    <!-- ── SLIDE 8: BIOCHAR Y QUÍMICA ── -->
+    <section class="slide-std" data-transition="slide">
+      <div class="slide-label">Solución integral</div>
+      <h2>Biochar y la Química del Suelo 🔬</h2>
+      <div class="accent-line"></div>
+      <div class="cards-row">
+        <div class="card card-green fragment fade-up">
+          <span class="card-icon">⬆️</span>
+          <h3>Sube el pH</h3>
+          <p>Alcaliniza suelos ácidos de forma <strong>gradual y estable</strong>. Sin encalado excesivo ni impacto negativo.</p>
+        </div>
+        <div class="card card-teal fragment fade-up">
+          <span class="card-icon">🧲</span>
+          <h3>Aumenta CIC</h3>
+          <p>Retiene cationes: Ca, Mg, K y NH₄. Los nutrientes permanecen disponibles más tiempo.</p>
+        </div>
+        <div class="card card-amber fragment fade-up">
+          <span class="card-icon">🛡️</span>
+          <h3>Reduce Lixiviación</h3>
+          <p>Menor pérdida de N y K con el agua. <strong>Más fertilizante en la raíz</strong>, menos en el subsuelo.</p>
+        </div>
+        <div class="card card-brown fragment fade-up">
+          <span class="card-icon">🤝</span>
+          <h3>Sinergía Total</h3>
+          <p><strong>Biochar + fertilizante orgánico</strong> = máximo efecto. El biochar no es fertilizante — es el potenciador.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SLIDE 9: ACTIVIDAD ── -->
+    <section
+      data-background-image="../Fotos/20251126/P1001834.JPG"
+      data-background-opacity="0.3"
+      data-background-color="#1F4D27"
+      data-transition="fade"
+      class="slide-close">
+      <h2>📋 Ejercicio Práctico</h2>
+      <div class="key-chips">
+        <span class="key-chip fragment fade-up">🧪 Revisa el pH del reporte</span>
+        <span class="key-chip fragment fade-up">⚡ ¿CIC alta o baja?</span>
+        <span class="key-chip fragment fade-up">🍂 ¿MO adecuada?</span>
+        <span class="key-chip fragment fade-up">🔍 Identifica limitantes</span>
+      </div>
+      <p style="color:rgba(255,255,255,0.9); font-size:0.95em; margin-bottom:28px; font-family:'Montserrat'; font-weight:600;">
+        Analiza un reporte de suelo real de un productor del proyecto.<br>¿Qué limitantes tiene? ¿Cómo ayudaría el biochar?
+      </p>
+      <div class="tarea-box fragment fade-up">
+        📚 Siguiente sesión → S4.3: Biología del Suelo — el mundo invisible bajo tus pies 🦠
+      </div>
+    </section>
+
+    <!-- ── SLIDE 10: CIERRE ── -->
+    <section class="slide-std" data-transition="slide" style="background:linear-gradient(135deg,var(--dkgreen),var(--teal))">
+      <div style="text-align:center; padding-top:40px">
+        <span style="font-size:3em">🎯</span>
+        <h2 style="color:#fff !important; font-size:2em !important; margin:20px 0 30px !important;">Puntos Clave S4.2</h2>
+        <div style="display:flex; gap:18px; justify-content:center; flex-wrap:wrap; margin-bottom:36px">
+          <div class="fragment fade-up" style="background:rgba(255,255,255,0.15); border-radius:14px; padding:18px 24px; color:#fff; font-family:'Montserrat'; font-weight:700; font-size:0.82em;">🧪 pH 5.5–6.5 ideal para café</div>
+          <div class="fragment fade-up" style="background:rgba(255,255,255,0.15); border-radius:14px; padding:18px 24px; color:#fff; font-family:'Montserrat'; font-weight:700; font-size:0.82em;">🏦 CIC = memoria de nutrientes</div>
+          <div class="fragment fade-up" style="background:rgba(255,255,255,0.15); border-radius:14px; padding:18px 24px; color:#fff; font-family:'Montserrat'; font-weight:700; font-size:0.82em;">🔋 N, P, K = nutrientes clave</div>
+          <div class="fragment fade-up" style="background:rgba(255,255,255,0.15); border-radius:14px; padding:18px 24px; color:#fff; font-family:'Montserrat'; font-weight:700; font-size:0.82em;">🌧️ Lixiviación = pérdida económica</div>
+          <div class="fragment fade-up" style="background:rgba(255,255,255,0.15); border-radius:14px; padding:18px 24px; color:#fff; font-family:'Montserrat'; font-weight:700; font-size:0.82em;">🌱 Biochar potencia el fertilizante</div>
+        </div>
+        <p class="fragment fade-up" style="color:rgba(255,255,255,0.8); font-size:0.95em; font-family:'Montserrat'; font-weight:600;">
+          Próxima sesión → <strong style="color:var(--amber)">Biología del Suelo: el universo invisible bajo el cafetal 🦠</strong>
+        </p>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    width: 1600,
+    height: 900,
+    margin: 0,
+    minScale: 0.2,
+    maxScale: 2.0,
+    controls: true,
+    progress: true,
+    slideNumber: 'c/t',
+    hash: true,
+    transition: 'slide',
+    transitionSpeed: 'default',
+    backgroundTransition: 'fade',
+    fragments: true,
+    fragmentInURL: false,
+    autoAnimateEasing: 'ease',
+    autoAnimateDuration: 0.6,
+  });
+</script>
+</body>
+</html>
